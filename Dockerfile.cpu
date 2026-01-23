@@ -1,0 +1,25 @@
+FROM tensorflow/tensorflow:1.15.0-py3
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# System libs needed by OpenCV + common ML utilities
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git curl wget ca-certificates \
+    build-essential make \
+    libglib2.0-0 libsm6 libxext6 libxrender1 libgl1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Python deps needed by Pixel2Mesh++ (global install so every user can import)
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir \
+    tflearn==0.5.0 \
+    scipy==1.5.4 \
+    tqdm \
+    matplotlib \
+    trimesh \
+    imageio \
+    pyyaml \
+    opencv-python-headless==4.5.5.64
+
+WORKDIR /workspace
+CMD ["bash"]

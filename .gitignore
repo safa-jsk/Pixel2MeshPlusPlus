@@ -4,3 +4,5 @@ logs/*
 ckpt/*
 **__pycache__
 tmp
+.docker_home
+.python_userbase
