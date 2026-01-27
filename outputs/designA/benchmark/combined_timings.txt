@@ -1,0 +1,7 @@
+Combined 2-Stage Pipeline Timing Statistics
+==================================================
+Total samples: 35
+Stage 1 total: 6.56s
+Stage 2 total: 101.95s
+Combined total: 108.51s
+Average per sample: 3.100s
