@@ -1,0 +1,41 @@
+Design A Baseline - System Information
+=======================================
+
+Collection Date: Tue Jan 27 16:44:04 UTC 2026
+
+Environment:
+-------------
+Container: p2mpp:cpu (Docker)
+OS: Ubuntu 18.04.3 LTS
+Kernel: 6.12.54-linuxkit
+
+Python & TensorFlow:
+--------------------
+Python: 3.6.8
+TensorFlow: 1.15.0
+NumPy: 1.17.3
+OpenCV: 4.5.5
+
+CPU Information:
+----------------
+Model name:          13th Gen Intel(R) Core(TM) i5-1335U
+CPU(s):              12
+Thread(s) per core:  1
+Core(s) per socket:  12
+
+Memory:
+--------
+Mem:           3.7G        419M        2.5G         56K        775M        3.0G
+
+GPU (if available):
+-------------------
+No NVIDIA GPU detected (CPU-only evaluation)
+
+Evaluation Configuration:
+-------------------------
+Model: Pixel2Mesh++ (2-stage)
+Stage 1: Coarse MVP2M (checkpoint: 50)
+Stage 2: Refined P2MPP (checkpoint: 10)
+Eval samples: 35
+Categories: 6 (Airplane, Car, Chair, Table, Loudspeaker, Lamp)
+

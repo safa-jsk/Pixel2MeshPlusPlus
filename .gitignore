@@ -11,3 +11,7 @@ data/p2mpp_models.tar.gz
 data/p2mppdata.7z.001
 data/p2mppdata.7z.002
 data/p2mppdata.7z.003
+
+ShapeNet/
+ShapeNetImages/
+p2mppdata/
