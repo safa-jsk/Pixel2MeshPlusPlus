@@ -1,0 +1,9 @@
+Stage 2 (Refined P2MPP) Timing Statistics
+==================================================
+Total samples: 35
+Total time: 101.95s
+Average time: 2.913s
+Median time: 2.899s
+Min time: 2.862s
+Max time: 3.431s
+Std dev: 0.091s
