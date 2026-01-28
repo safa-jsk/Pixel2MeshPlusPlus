@@ -1,0 +1,291 @@
+╔════════════════════════════════════════════╗
+║  Design B Benchmarking (A vs B)            ║
+╚════════════════════════════════════════════╝
+
+Configuration:
+  Config: cfgs/p2mpp.yaml
+  Checkpoint: results/refine_p2mpp
+  Eval list: data/designB_eval_full.txt
+  Output dir: outputs/designB/benchmark
+
+Created eval list with 35 samples: data/designB_eval_full.txt
+First 3 samples:
+02691156_d004d0e86ea3d77a65a6ed5c458f6a32_00.dat
+02691156_d0456644386d9149ce593c35f70d3f_00.dat
+02691156_d05cdbdddb68865d2dcd3faa5a0a5f24_00.dat
+...
+
+═══════════════════════════════════════
+DESIGN A BASELINE (CPU)
+═══════════════════════════════════════
+
+[Design A] Warmup pass (1 sample - not timed)...
+Warmup sample: 02691156_d004d0e86ea3d77a65a6ed5c458f6a32_00.dat
+2026-01-28 07:08:48.170978: I tensorflow/stream_executor/platform/default/dso_loader.cc:49] Successfully opened dynamic library libcudart.so.11.0
+WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/tensorflow/python/compat/v2_compat.py:96: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+Instructions for updating:
+non-resource variables are not supported in the long term
+[WARN] Failed to load custom NNDistance op. Falling back to CPU implementation.
+[WARN] ./external/tf_nndistance_so.so: cannot open shared object file: No such file or directory
+=> set config
+{'batch_size': 1,
+ 'cnn_step': 50,
+ 'coarse_result_data_path': None,
+ 'coarse_result_file_path': None,
+ 'coarse_result_image_path': None,
+ 'coord_dim': 3,
+ 'epochs': 10,
+ 'feat_dim': 2883,
+ 'gpu_id': 0,
+ 'hidden_dim': 192,
+ 'init_epoch': 50,
+ 'is_debug': False,
+ 'is_voxel_input': False,
+ 'load_cnn': True,
+ 'lr': 1e-05,
+ 'name': 'refine_p2mpp',
+ 'pre_trained_cnn_path': 'results/coarse_mvp2m/models',
+ 'restore': True,
+ 'save_path': 'results',
+ 'seed': 123,
+ 'stage2_feat_dim': 339,
+ 'test_data_path': 'data/designA_subset/p2mppdata/test',
+ 'test_epoch': 10,
+ 'test_file_path': 'data/designB_warmup.txt',
+ 'test_image_path': 'data/designA_subset/ShapeNetRendering/rendering_only',
+ 'test_mesh_root': 'outputs/designA/eval_meshes',
+ 'train_data_path': '/home/your_user_name/data/ShapeNetModels/train',
+ 'train_file_path': 'data/train_list.txt',
+ 'train_image_path': '/home/your_user_name/data/ShapeNetImages/ShapeNetRendering',
+ 'train_mesh_root': 'results/coarse_mvp2m/coarse_intermediate/50'}
+=> pre-porcessing
+Traceback (most recent call last):
+  File "test_p2mpp.py", line 119, in <module>
+    main(args)
+  File "test_p2mpp.py", line 26, in main
+    tf.set_random_seed(seed)
+AttributeError: module 'tensorflow' has no attribute 'set_random_seed'
+✓ Warmup complete. Starting benchmarks...
+
+[design_a Run 1] Starting (35 samples)...
+[design_a Run 1] Monitor: tail -f outputs/designB/benchmark/logs/design_a_run_1.log
+2026-01-28 07:08:49.487656: I tensorflow/stream_executor/platform/default/dso_loader.cc:49] Successfully opened dynamic library libcudart.so.11.0
+WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/tensorflow/python/compat/v2_compat.py:96: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+Instructions for updating:
+non-resource variables are not supported in the long term
+[WARN] Failed to load custom NNDistance op. Falling back to CPU implementation.
+[WARN] ./external/tf_nndistance_so.so: cannot open shared object file: No such file or directory
+=> set config
+{'batch_size': 1,
+ 'cnn_step': 50,
+ 'coarse_result_data_path': None,
+ 'coarse_result_file_path': None,
+ 'coarse_result_image_path': None,
+ 'coord_dim': 3,
+ 'epochs': 10,
+ 'feat_dim': 2883,
+ 'gpu_id': 0,
+ 'hidden_dim': 192,
+ 'init_epoch': 50,
+ 'is_debug': False,
+ 'is_voxel_input': False,
+ 'load_cnn': True,
+ 'lr': 1e-05,
+ 'name': 'refine_p2mpp',
+ 'pre_trained_cnn_path': 'results/coarse_mvp2m/models',
+ 'restore': True,
+ 'save_path': 'results',
+ 'seed': 123,
+ 'stage2_feat_dim': 339,
+ 'test_data_path': 'data/designA_subset/p2mppdata/test',
+ 'test_epoch': 10,
+ 'test_file_path': 'data/designB_eval_full.txt',
+ 'test_image_path': 'data/designA_subset/ShapeNetRendering/rendering_only',
+ 'test_mesh_root': 'outputs/designA/eval_meshes',
+ 'train_data_path': '/home/your_user_name/data/ShapeNetModels/train',
+ 'train_file_path': 'data/train_list.txt',
+ 'train_image_path': '/home/your_user_name/data/ShapeNetImages/ShapeNetRendering',
+ 'train_mesh_root': 'results/coarse_mvp2m/coarse_intermediate/50'}
+=> pre-porcessing
+Traceback (most recent call last):
+  File "test_p2mpp.py", line 119, in <module>
+    main(args)
+  File "test_p2mpp.py", line 26, in main
+    tf.set_random_seed(seed)
+AttributeError: module 'tensorflow' has no attribute 'set_random_seed'
+[design_a Run 1] Completed in 1.206463585s
+
+[design_a Run 2] Starting (35 samples)...
+[design_a Run 2] Monitor: tail -f outputs/designB/benchmark/logs/design_a_run_2.log
+2026-01-28 07:08:52.716442: I tensorflow/stream_executor/platform/default/dso_loader.cc:49] Successfully opened dynamic library libcudart.so.11.0
+WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/tensorflow/python/compat/v2_compat.py:96: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+Instructions for updating:
+non-resource variables are not supported in the long term
+[WARN] Failed to load custom NNDistance op. Falling back to CPU implementation.
+[WARN] ./external/tf_nndistance_so.so: cannot open shared object file: No such file or directory
+=> set config
+{'batch_size': 1,
+ 'cnn_step': 50,
+ 'coarse_result_data_path': None,
+ 'coarse_result_file_path': None,
+ 'coarse_result_image_path': None,
+ 'coord_dim': 3,
+ 'epochs': 10,
+ 'feat_dim': 2883,
+ 'gpu_id': 0,
+ 'hidden_dim': 192,
+ 'init_epoch': 50,
+ 'is_debug': False,
+ 'is_voxel_input': False,
+ 'load_cnn': True,
+ 'lr': 1e-05,
+ 'name': 'refine_p2mpp',
+ 'pre_trained_cnn_path': 'results/coarse_mvp2m/models',
+ 'restore': True,
+ 'save_path': 'results',
+ 'seed': 123,
+ 'stage2_feat_dim': 339,
+ 'test_data_path': 'data/designA_subset/p2mppdata/test',
+ 'test_epoch': 10,
+ 'test_file_path': 'data/designB_eval_full.txt',
+ 'test_image_path': 'data/designA_subset/ShapeNetRendering/rendering_only',
+ 'test_mesh_root': 'outputs/designA/eval_meshes',
+ 'train_data_path': '/home/your_user_name/data/ShapeNetModels/train',
+ 'train_file_path': 'data/train_list.txt',
+ 'train_image_path': '/home/your_user_name/data/ShapeNetImages/ShapeNetRendering',
+ 'train_mesh_root': 'results/coarse_mvp2m/coarse_intermediate/50'}
+=> pre-porcessing
+Traceback (most recent call last):
+  File "test_p2mpp.py", line 119, in <module>
+    main(args)
+  File "test_p2mpp.py", line 26, in main
+    tf.set_random_seed(seed)
+AttributeError: module 'tensorflow' has no attribute 'set_random_seed'
+[design_a Run 2] Completed in 1.241039820s
+
+═══════════════════════════════════════
+DESIGN B GPU ACCELERATION (RTX4070)
+═══════════════════════════════════════
+
+[Design B] Warmup pass...
+[design_b Run 1] Starting (35 samples)...
+[design_b Run 1] Monitor: tail -f outputs/designB/benchmark/logs/design_b_run_1.log
+2026-01-28 07:08:57.268324: I tensorflow/stream_executor/platform/default/dso_loader.cc:49] Successfully opened dynamic library libcudart.so.11.0
+WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/tensorflow/python/compat/v2_compat.py:96: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+Instructions for updating:
+non-resource variables are not supported in the long term
+[WARN] Failed to load custom NNDistance op. Falling back to CPU implementation.
+[WARN] ./external/tf_nndistance_so.so: cannot open shared object file: No such file or directory
+=> set config
+{'batch_size': 1,
+ 'cnn_step': 50,
+ 'coarse_result_data_path': None,
+ 'coarse_result_file_path': None,
+ 'coarse_result_image_path': None,
+ 'coord_dim': 3,
+ 'epochs': 10,
+ 'feat_dim': 2883,
+ 'gpu_id': 0,
+ 'hidden_dim': 192,
+ 'init_epoch': 50,
+ 'is_debug': False,
+ 'is_voxel_input': False,
+ 'load_cnn': True,
+ 'lr': 1e-05,
+ 'name': 'refine_p2mpp',
+ 'pre_trained_cnn_path': 'results/coarse_mvp2m/models',
+ 'restore': True,
+ 'save_path': 'results',
+ 'seed': 123,
+ 'stage2_feat_dim': 339,
+ 'test_data_path': 'data/designA_subset/p2mppdata/test',
+ 'test_epoch': 10,
+ 'test_file_path': 'data/designB_eval_full.txt',
+ 'test_image_path': 'data/designA_subset/ShapeNetRendering/rendering_only',
+ 'test_mesh_root': 'outputs/designA/eval_meshes',
+ 'train_data_path': '/home/your_user_name/data/ShapeNetModels/train',
+ 'train_file_path': 'data/train_list.txt',
+ 'train_image_path': '/home/your_user_name/data/ShapeNetImages/ShapeNetRendering',
+ 'train_mesh_root': 'results/coarse_mvp2m/coarse_intermediate/50'}
+=> pre-porcessing
+Traceback (most recent call last):
+  File "test_p2mpp.py", line 119, in <module>
+    main(args)
+  File "test_p2mpp.py", line 26, in main
+    tf.set_random_seed(seed)
+AttributeError: module 'tensorflow' has no attribute 'set_random_seed'
+[design_b Run 1] Completed in 1.200463789s
+
+[design_b Run 2] Starting (35 samples)...
+[design_b Run 2] Monitor: tail -f outputs/designB/benchmark/logs/design_b_run_2.log
+2026-01-28 07:09:00.483640: I tensorflow/stream_executor/platform/default/dso_loader.cc:49] Successfully opened dynamic library libcudart.so.11.0
+WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/tensorflow/python/compat/v2_compat.py:96: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+Instructions for updating:
+non-resource variables are not supported in the long term
+[WARN] Failed to load custom NNDistance op. Falling back to CPU implementation.
+[WARN] ./external/tf_nndistance_so.so: cannot open shared object file: No such file or directory
+=> set config
+{'batch_size': 1,
+ 'cnn_step': 50,
+ 'coarse_result_data_path': None,
+ 'coarse_result_file_path': None,
+ 'coarse_result_image_path': None,
+ 'coord_dim': 3,
+ 'epochs': 10,
+ 'feat_dim': 2883,
+ 'gpu_id': 0,
+ 'hidden_dim': 192,
+ 'init_epoch': 50,
+ 'is_debug': False,
+ 'is_voxel_input': False,
+ 'load_cnn': True,
+ 'lr': 1e-05,
+ 'name': 'refine_p2mpp',
+ 'pre_trained_cnn_path': 'results/coarse_mvp2m/models',
+ 'restore': True,
+ 'save_path': 'results',
+ 'seed': 123,
+ 'stage2_feat_dim': 339,
+ 'test_data_path': 'data/designA_subset/p2mppdata/test',
+ 'test_epoch': 10,
+ 'test_file_path': 'data/designB_eval_full.txt',
+ 'test_image_path': 'data/designA_subset/ShapeNetRendering/rendering_only',
+ 'test_mesh_root': 'outputs/designA/eval_meshes',
+ 'train_data_path': '/home/your_user_name/data/ShapeNetModels/train',
+ 'train_file_path': 'data/train_list.txt',
+ 'train_image_path': '/home/your_user_name/data/ShapeNetImages/ShapeNetRendering',
+ 'train_mesh_root': 'results/coarse_mvp2m/coarse_intermediate/50'}
+=> pre-porcessing
+Traceback (most recent call last):
+  File "test_p2mpp.py", line 119, in <module>
+    main(args)
+  File "test_p2mpp.py", line 26, in main
+    tf.set_random_seed(seed)
+AttributeError: module 'tensorflow' has no attribute 'set_random_seed'
+[design_b Run 2] Completed in 1.306754418s
+
+
+═══════════════════════════════════════
+BENCHMARK RESULTS SUMMARY
+═══════════════════════════════════════
+
+DESIGN_A:
+  Runs: 2
+  Mean time: 1.22s
+  Std dev: 0.02s
+  Min: 1.21s, Max: 1.24s
+
+DESIGN_B:
+  Runs: 2
+  Mean time: 1.25s
+  Std dev: 0.08s
+  Min: 1.20s, Max: 1.31s
+
+SPEEDUP (A→B):
+  Design A (CPU): 1.22s
+  Design B (GPU): 1.25s
+  Speedup factor: 0.98x
+
+Detailed logs saved to: outputs/designB/benchmark/logs/
+GPU monitoring data: outputs/designB/benchmark/gpu_*.txt
+

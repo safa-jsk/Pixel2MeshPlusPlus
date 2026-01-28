@@ -1,0 +1,643 @@
+╔════════════════════════════════════════════╗
+║  Design B Benchmarking (A vs B)            ║
+╚════════════════════════════════════════════╝
+
+Configuration:
+  Config: cfgs/p2mpp.yaml
+  Checkpoint: results/refine_p2mpp
+  Eval list: data/designB_eval_full.txt
+  Output dir: outputs/designB/benchmark
+
+Created eval list with 35 samples: data/designB_eval_full.txt
+First 3 samples:
+02691156_d004d0e86ea3d77a65a6ed5c458f6a32_00.dat
+02691156_d0456644386d9149ce593c35f70d3f_00.dat
+02691156_d05cdbdddb68865d2dcd3faa5a0a5f24_00.dat
+...
+
+═══════════════════════════════════════
+DESIGN A BASELINE (CPU)
+═══════════════════════════════════════
+
+[Design A] Warmup pass (1 sample - not timed)...
+Warmup sample: 02691156_d004d0e86ea3d77a65a6ed5c458f6a32_00.dat
+2026-01-28 08:33:07.734214: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-01-28 08:33:07.834429: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/compat/v2_compat.py:107: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+Instructions for updating:
+non-resource variables are not supported in the long term
+[WARN] Failed to load custom NNDistance op. Falling back to CPU implementation.
+[WARN] ./external/tf_nndistance_so.so: undefined symbol: _ZN10tensorflow6StatusC1ENS_5error4CodeEN4absl12lts_2022062311string_viewENS_14SourceLocationE
+=> set config
+{'batch_size': 1,
+ 'cnn_step': 50,
+ 'coarse_result_data_path': None,
+ 'coarse_result_file_path': None,
+ 'coarse_result_image_path': None,
+ 'coord_dim': 3,
+ 'epochs': 10,
+ 'feat_dim': 2883,
+ 'gpu_id': 0,
+ 'hidden_dim': 192,
+ 'init_epoch': 50,
+ 'is_debug': False,
+ 'is_voxel_input': False,
+ 'load_cnn': True,
+ 'lr': 1e-05,
+ 'name': 'refine_p2mpp',
+ 'pre_trained_cnn_path': 'results/coarse_mvp2m/models',
+ 'restore': True,
+ 'save_path': 'results',
+ 'seed': 123,
+ 'stage2_feat_dim': 339,
+ 'test_data_path': 'data/designA_subset/p2mppdata/test',
+ 'test_epoch': 10,
+ 'test_file_path': 'data/designB_warmup.txt',
+ 'test_image_path': 'data/designA_subset/ShapeNetRendering/rendering_only',
+ 'test_mesh_root': 'outputs/designA/eval_meshes',
+ 'train_data_path': '/home/your_user_name/data/ShapeNetModels/train',
+ 'train_file_path': 'data/train_list.txt',
+ 'train_image_path': '/home/your_user_name/data/ShapeNetImages/ShapeNetRendering',
+ 'train_mesh_root': 'results/coarse_mvp2m/coarse_intermediate/50'}
+=> pre-porcessing
+=> build model
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tflearn/initializations.py:110: calling UniformUnitScaling.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/deprecation.py:561: UniformUnitScaling.__init__ (from tensorflow.python.ops.init_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.initializers.variance_scaling instead with distribution=uniform to get equivalent behavior.
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/dispatch.py:1176: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+WARNING:tensorflow:From /app/modules/losses.py:65: Uniform.__init__ (from tensorflow.python.ops.distributions.uniform) is deprecated and will be removed after 2019-01-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.distributions`.
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/ops/distributions/uniform.py:119: Distribution.__init__ (from tensorflow.python.ops.distributions.distribution) is deprecated and will be removed after 2019-01-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.distributions`.
+WARNING:tensorflow:From /app/modules/losses.py:67: py_func (from tensorflow.python.ops.script_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+tf.py_func is deprecated in TF V2. Instead, there are two
+    options available in V2.
+    - tf.py_function takes a python function which manipulates tf eager
+    tensors instead of numpy arrays. It's easy to convert a tf eager tensor to
+    an ndarray (just call tensor.numpy()) but having access to eager tensors
+    means `tf.py_function`s can use accelerators such as GPUs as well as
+    being differentiable using a gradient tape.
+    - tf.numpy_function maintains the semantics of the deprecated tf.py_func
+    (it is not differentiable, and manipulates numpy arrays). It drops the
+    stateful argument making all functions stateful.
+    
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_5_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_5_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_5_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_9_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_9_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_9_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_10_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_10_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_10_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_13_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_13_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_13_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_11_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_11_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_11_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_12_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_12_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_12_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_4_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_4_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_4_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_2_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_2_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_2_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_1_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_1_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_1_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_4_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_4_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_4_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_2_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_2_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_2_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_3_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_3_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_3_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+=> load data
+=> initialize session
+2026-01-28 08:33:11.456580: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-01-28 08:33:11.468383: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:11.471791: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:11.473027: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:11.879590: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:11.880778: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:11.881909: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:11.882826: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 8124 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 4070, pci bus id: 0000:01:00.0, compute capability: 8.9
+2026-01-28 08:33:11.940253: I tensorflow/compiler/mlir/mlir_graph_optimization_pass.cc:354] MLIR V1 optimization pass is not enabled
+Model restored from file: results/refine_p2mpp/models/meshnet.ckpt-10, epoch 10
+=> start test stage 2
+2026-01-28 08:33:12.830455: I tensorflow/core/util/cuda_solvers.cc:179] Creating GpuSolver handles for stream 0x2cea4080
+2026-01-28 08:33:13.679814: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8100
+2026-01-28 08:33:15.073299: F tensorflow/core/util/cuda_solvers.cc:114] Check failed: cusolverDnCreate(&cusolver_dn_handle) == CUSOLVER_STATUS_SUCCESS Failed to create cuSolverDN instance.
+✓ Warmup complete. Starting benchmarks...
+
+[design_a Run 1] Starting (35 samples)...
+[design_a Run 1] Monitor: tail -f outputs/designB/benchmark/logs/design_a_run_1.log
+2026-01-28 08:33:15.520418: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-01-28 08:33:15.625425: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/compat/v2_compat.py:107: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+Instructions for updating:
+non-resource variables are not supported in the long term
+[WARN] Failed to load custom NNDistance op. Falling back to CPU implementation.
+[WARN] ./external/tf_nndistance_so.so: undefined symbol: _ZN10tensorflow6StatusC1ENS_5error4CodeEN4absl12lts_2022062311string_viewENS_14SourceLocationE
+=> set config
+{'batch_size': 1,
+ 'cnn_step': 50,
+ 'coarse_result_data_path': None,
+ 'coarse_result_file_path': None,
+ 'coarse_result_image_path': None,
+ 'coord_dim': 3,
+ 'epochs': 10,
+ 'feat_dim': 2883,
+ 'gpu_id': 0,
+ 'hidden_dim': 192,
+ 'init_epoch': 50,
+ 'is_debug': False,
+ 'is_voxel_input': False,
+ 'load_cnn': True,
+ 'lr': 1e-05,
+ 'name': 'refine_p2mpp',
+ 'pre_trained_cnn_path': 'results/coarse_mvp2m/models',
+ 'restore': True,
+ 'save_path': 'results',
+ 'seed': 123,
+ 'stage2_feat_dim': 339,
+ 'test_data_path': 'data/designA_subset/p2mppdata/test',
+ 'test_epoch': 10,
+ 'test_file_path': 'data/designB_eval_full.txt',
+ 'test_image_path': 'data/designA_subset/ShapeNetRendering/rendering_only',
+ 'test_mesh_root': 'outputs/designA/eval_meshes',
+ 'train_data_path': '/home/your_user_name/data/ShapeNetModels/train',
+ 'train_file_path': 'data/train_list.txt',
+ 'train_image_path': '/home/your_user_name/data/ShapeNetImages/ShapeNetRendering',
+ 'train_mesh_root': 'results/coarse_mvp2m/coarse_intermediate/50'}
+=> pre-porcessing
+=> build model
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tflearn/initializations.py:110: calling UniformUnitScaling.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/deprecation.py:561: UniformUnitScaling.__init__ (from tensorflow.python.ops.init_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.initializers.variance_scaling instead with distribution=uniform to get equivalent behavior.
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/dispatch.py:1176: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+WARNING:tensorflow:From /app/modules/losses.py:65: Uniform.__init__ (from tensorflow.python.ops.distributions.uniform) is deprecated and will be removed after 2019-01-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.distributions`.
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/ops/distributions/uniform.py:119: Distribution.__init__ (from tensorflow.python.ops.distributions.distribution) is deprecated and will be removed after 2019-01-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.distributions`.
+WARNING:tensorflow:From /app/modules/losses.py:67: py_func (from tensorflow.python.ops.script_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+tf.py_func is deprecated in TF V2. Instead, there are two
+    options available in V2.
+    - tf.py_function takes a python function which manipulates tf eager
+    tensors instead of numpy arrays. It's easy to convert a tf eager tensor to
+    an ndarray (just call tensor.numpy()) but having access to eager tensors
+    means `tf.py_function`s can use accelerators such as GPUs as well as
+    being differentiable using a gradient tape.
+    - tf.numpy_function maintains the semantics of the deprecated tf.py_func
+    (it is not differentiable, and manipulates numpy arrays). It drops the
+    stateful argument making all functions stateful.
+    
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_5_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_5_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_5_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_9_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_9_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_9_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_10_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_10_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_10_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_13_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_13_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_13_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_11_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_11_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_11_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_12_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_12_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_12_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_4_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_4_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_4_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_2_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_2_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_2_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_1_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_1_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_1_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_4_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_4_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_4_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_2_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_2_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_2_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_3_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_3_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_3_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+=> load data
+=> initialize session
+2026-01-28 08:33:19.035024: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-01-28 08:33:19.051330: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:19.056415: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:19.058265: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:19.502996: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:19.504037: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:19.504988: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:19.505864: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 8250 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 4070, pci bus id: 0000:01:00.0, compute capability: 8.9
+2026-01-28 08:33:19.566679: I tensorflow/compiler/mlir/mlir_graph_optimization_pass.cc:354] MLIR V1 optimization pass is not enabled
+Model restored from file: results/refine_p2mpp/models/meshnet.ckpt-10, epoch 10
+=> start test stage 2
+2026-01-28 08:33:20.879440: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8100
+2026-01-28 08:33:21.461123: W tensorflow/stream_executor/gpu/asm_compiler.cc:230] Falling back to the CUDA driver for PTX compilation; ptxas does not support CC 8.9
+2026-01-28 08:33:21.461158: W tensorflow/stream_executor/gpu/asm_compiler.cc:233] Used ptxas at ptxas
+2026-01-28 08:33:21.461257: W tensorflow/stream_executor/gpu/redzone_allocator.cc:314] UNIMPLEMENTED: ptxas ptxas too old. Falling back to the driver to compile.
+Relying on driver to perform ptx compilation. 
+Modify $PATH to customize ptxas location.
+This message will be only logged once.
+2026-01-28 08:33:21.907001: I tensorflow/core/util/cuda_solvers.cc:179] Creating GpuSolver handles for stream 0x46914770
+2026-01-28 08:33:22.127642: F tensorflow/core/util/cuda_solvers.cc:114] Check failed: cusolverDnCreate(&cusolver_dn_handle) == CUSOLVER_STATUS_SUCCESS Failed to create cuSolverDN instance.
+[design_a Run 1] Completed in 7.046925265s
+
+[design_a Run 2] Starting (35 samples)...
+[design_a Run 2] Monitor: tail -f outputs/designB/benchmark/logs/design_a_run_2.log
+2026-01-28 08:33:24.570219: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-01-28 08:33:24.664038: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/compat/v2_compat.py:107: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+Instructions for updating:
+non-resource variables are not supported in the long term
+[WARN] Failed to load custom NNDistance op. Falling back to CPU implementation.
+[WARN] ./external/tf_nndistance_so.so: undefined symbol: _ZN10tensorflow6StatusC1ENS_5error4CodeEN4absl12lts_2022062311string_viewENS_14SourceLocationE
+=> set config
+{'batch_size': 1,
+ 'cnn_step': 50,
+ 'coarse_result_data_path': None,
+ 'coarse_result_file_path': None,
+ 'coarse_result_image_path': None,
+ 'coord_dim': 3,
+ 'epochs': 10,
+ 'feat_dim': 2883,
+ 'gpu_id': 0,
+ 'hidden_dim': 192,
+ 'init_epoch': 50,
+ 'is_debug': False,
+ 'is_voxel_input': False,
+ 'load_cnn': True,
+ 'lr': 1e-05,
+ 'name': 'refine_p2mpp',
+ 'pre_trained_cnn_path': 'results/coarse_mvp2m/models',
+ 'restore': True,
+ 'save_path': 'results',
+ 'seed': 123,
+ 'stage2_feat_dim': 339,
+ 'test_data_path': 'data/designA_subset/p2mppdata/test',
+ 'test_epoch': 10,
+ 'test_file_path': 'data/designB_eval_full.txt',
+ 'test_image_path': 'data/designA_subset/ShapeNetRendering/rendering_only',
+ 'test_mesh_root': 'outputs/designA/eval_meshes',
+ 'train_data_path': '/home/your_user_name/data/ShapeNetModels/train',
+ 'train_file_path': 'data/train_list.txt',
+ 'train_image_path': '/home/your_user_name/data/ShapeNetImages/ShapeNetRendering',
+ 'train_mesh_root': 'results/coarse_mvp2m/coarse_intermediate/50'}
+=> pre-porcessing
+=> build model
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tflearn/initializations.py:110: calling UniformUnitScaling.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/deprecation.py:561: UniformUnitScaling.__init__ (from tensorflow.python.ops.init_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.initializers.variance_scaling instead with distribution=uniform to get equivalent behavior.
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/dispatch.py:1176: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+WARNING:tensorflow:From /app/modules/losses.py:65: Uniform.__init__ (from tensorflow.python.ops.distributions.uniform) is deprecated and will be removed after 2019-01-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.distributions`.
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/ops/distributions/uniform.py:119: Distribution.__init__ (from tensorflow.python.ops.distributions.distribution) is deprecated and will be removed after 2019-01-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.distributions`.
+WARNING:tensorflow:From /app/modules/losses.py:67: py_func (from tensorflow.python.ops.script_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+tf.py_func is deprecated in TF V2. Instead, there are two
+    options available in V2.
+    - tf.py_function takes a python function which manipulates tf eager
+    tensors instead of numpy arrays. It's easy to convert a tf eager tensor to
+    an ndarray (just call tensor.numpy()) but having access to eager tensors
+    means `tf.py_function`s can use accelerators such as GPUs as well as
+    being differentiable using a gradient tape.
+    - tf.numpy_function maintains the semantics of the deprecated tf.py_func
+    (it is not differentiable, and manipulates numpy arrays). It drops the
+    stateful argument making all functions stateful.
+    
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_5_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_5_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_5_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_9_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_9_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_9_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_10_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_10_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_10_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_13_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_13_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_13_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_11_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_11_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_11_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_12_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_12_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_12_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_4_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_4_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_4_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_2_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_2_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_2_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_1_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_1_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_1_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_4_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_4_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_4_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_2_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_2_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_2_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_3_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_3_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_3_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+=> load data
+=> initialize session
+2026-01-28 08:33:28.028487: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-01-28 08:33:28.056454: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:28.062078: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:28.065522: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:28.491864: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:28.492957: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:28.493916: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:28.494882: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 8154 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 4070, pci bus id: 0000:01:00.0, compute capability: 8.9
+2026-01-28 08:33:28.548020: I tensorflow/compiler/mlir/mlir_graph_optimization_pass.cc:354] MLIR V1 optimization pass is not enabled
+Model restored from file: results/refine_p2mpp/models/meshnet.ckpt-10, epoch 10
+=> start test stage 2
+2026-01-28 08:33:29.377780: I tensorflow/core/util/cuda_solvers.cc:179] Creating GpuSolver handles for stream 0xa660a30
+2026-01-28 08:33:30.010999: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8100
+2026-01-28 08:33:30.946638: W tensorflow/stream_executor/gpu/asm_compiler.cc:230] Falling back to the CUDA driver for PTX compilation; ptxas does not support CC 8.9
+2026-01-28 08:33:30.946659: W tensorflow/stream_executor/gpu/asm_compiler.cc:233] Used ptxas at ptxas
+2026-01-28 08:33:30.946708: W tensorflow/stream_executor/gpu/redzone_allocator.cc:314] UNIMPLEMENTED: ptxas ptxas too old. Falling back to the driver to compile.
+Relying on driver to perform ptx compilation. 
+Modify $PATH to customize ptxas location.
+This message will be only logged once.
+2026-01-28 08:33:31.001540: F tensorflow/core/util/cuda_solvers.cc:114] Check failed: cusolverDnCreate(&cusolver_dn_handle) == CUSOLVER_STATUS_SUCCESS Failed to create cuSolverDN instance.
+[design_a Run 2] Completed in 6.879356190s
+
+═══════════════════════════════════════
+DESIGN B GPU ACCELERATION (RTX4070)
+═══════════════════════════════════════
+
+[Design B] Warmup pass...
+[design_b Run 1] Starting (35 samples)...
+[design_b Run 1] Monitor: tail -f outputs/designB/benchmark/logs/design_b_run_1.log
+2026-01-28 08:33:35.097751: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-01-28 08:33:35.193315: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/compat/v2_compat.py:107: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+Instructions for updating:
+non-resource variables are not supported in the long term
+[WARN] Failed to load custom NNDistance op. Falling back to CPU implementation.
+[WARN] ./external/tf_nndistance_so.so: undefined symbol: _ZN10tensorflow6StatusC1ENS_5error4CodeEN4absl12lts_2022062311string_viewENS_14SourceLocationE
+=> set config
+{'batch_size': 1,
+ 'cnn_step': 50,
+ 'coarse_result_data_path': None,
+ 'coarse_result_file_path': None,
+ 'coarse_result_image_path': None,
+ 'coord_dim': 3,
+ 'epochs': 10,
+ 'feat_dim': 2883,
+ 'gpu_id': 0,
+ 'hidden_dim': 192,
+ 'init_epoch': 50,
+ 'is_debug': False,
+ 'is_voxel_input': False,
+ 'load_cnn': True,
+ 'lr': 1e-05,
+ 'name': 'refine_p2mpp',
+ 'pre_trained_cnn_path': 'results/coarse_mvp2m/models',
+ 'restore': True,
+ 'save_path': 'results',
+ 'seed': 123,
+ 'stage2_feat_dim': 339,
+ 'test_data_path': 'data/designA_subset/p2mppdata/test',
+ 'test_epoch': 10,
+ 'test_file_path': 'data/designB_eval_full.txt',
+ 'test_image_path': 'data/designA_subset/ShapeNetRendering/rendering_only',
+ 'test_mesh_root': 'outputs/designA/eval_meshes',
+ 'train_data_path': '/home/your_user_name/data/ShapeNetModels/train',
+ 'train_file_path': 'data/train_list.txt',
+ 'train_image_path': '/home/your_user_name/data/ShapeNetImages/ShapeNetRendering',
+ 'train_mesh_root': 'results/coarse_mvp2m/coarse_intermediate/50'}
+=> pre-porcessing
+=> build model
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tflearn/initializations.py:110: calling UniformUnitScaling.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/deprecation.py:561: UniformUnitScaling.__init__ (from tensorflow.python.ops.init_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.initializers.variance_scaling instead with distribution=uniform to get equivalent behavior.
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/dispatch.py:1176: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+WARNING:tensorflow:From /app/modules/losses.py:65: Uniform.__init__ (from tensorflow.python.ops.distributions.uniform) is deprecated and will be removed after 2019-01-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.distributions`.
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/ops/distributions/uniform.py:119: Distribution.__init__ (from tensorflow.python.ops.distributions.distribution) is deprecated and will be removed after 2019-01-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.distributions`.
+WARNING:tensorflow:From /app/modules/losses.py:67: py_func (from tensorflow.python.ops.script_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+tf.py_func is deprecated in TF V2. Instead, there are two
+    options available in V2.
+    - tf.py_function takes a python function which manipulates tf eager
+    tensors instead of numpy arrays. It's easy to convert a tf eager tensor to
+    an ndarray (just call tensor.numpy()) but having access to eager tensors
+    means `tf.py_function`s can use accelerators such as GPUs as well as
+    being differentiable using a gradient tape.
+    - tf.numpy_function maintains the semantics of the deprecated tf.py_func
+    (it is not differentiable, and manipulates numpy arrays). It drops the
+    stateful argument making all functions stateful.
+    
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_5_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_5_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_5_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_9_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_9_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_9_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_10_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_10_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_10_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_13_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_13_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_13_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_11_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_11_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_11_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_12_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_12_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_12_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_4_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_4_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_4_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_2_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_2_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_2_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_1_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_1_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_1_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_4_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_4_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_4_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_2_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_2_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_2_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_3_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_3_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_3_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+=> load data
+=> initialize session
+2026-01-28 08:33:38.441329: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-01-28 08:33:38.458959: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:38.466227: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:38.469684: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:38.890656: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:38.891921: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:38.892903: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:38.893850: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 8271 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 4070, pci bus id: 0000:01:00.0, compute capability: 8.9
+2026-01-28 08:33:38.945478: I tensorflow/compiler/mlir/mlir_graph_optimization_pass.cc:354] MLIR V1 optimization pass is not enabled
+Model restored from file: results/refine_p2mpp/models/meshnet.ckpt-10, epoch 10
+=> start test stage 2
+2026-01-28 08:33:39.711044: I tensorflow/core/util/cuda_solvers.cc:179] Creating GpuSolver handles for stream 0x36b8b930
+2026-01-28 08:33:40.580175: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8100
+2026-01-28 08:33:41.276464: F tensorflow/core/util/cuda_solvers.cc:114] Check failed: cusolverDnCreate(&cusolver_dn_handle) == CUSOLVER_STATUS_SUCCESS Failed to create cuSolverDN instance.
+[design_b Run 1] Completed in 6.614349253s
+
+[design_b Run 2] Starting (35 samples)...
+[design_b Run 2] Monitor: tail -f outputs/designB/benchmark/logs/design_b_run_2.log
+2026-01-28 08:33:43.733585: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-01-28 08:33:43.838075: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/compat/v2_compat.py:107: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+Instructions for updating:
+non-resource variables are not supported in the long term
+[WARN] Failed to load custom NNDistance op. Falling back to CPU implementation.
+[WARN] ./external/tf_nndistance_so.so: undefined symbol: _ZN10tensorflow6StatusC1ENS_5error4CodeEN4absl12lts_2022062311string_viewENS_14SourceLocationE
+=> set config
+{'batch_size': 1,
+ 'cnn_step': 50,
+ 'coarse_result_data_path': None,
+ 'coarse_result_file_path': None,
+ 'coarse_result_image_path': None,
+ 'coord_dim': 3,
+ 'epochs': 10,
+ 'feat_dim': 2883,
+ 'gpu_id': 0,
+ 'hidden_dim': 192,
+ 'init_epoch': 50,
+ 'is_debug': False,
+ 'is_voxel_input': False,
+ 'load_cnn': True,
+ 'lr': 1e-05,
+ 'name': 'refine_p2mpp',
+ 'pre_trained_cnn_path': 'results/coarse_mvp2m/models',
+ 'restore': True,
+ 'save_path': 'results',
+ 'seed': 123,
+ 'stage2_feat_dim': 339,
+ 'test_data_path': 'data/designA_subset/p2mppdata/test',
+ 'test_epoch': 10,
+ 'test_file_path': 'data/designB_eval_full.txt',
+ 'test_image_path': 'data/designA_subset/ShapeNetRendering/rendering_only',
+ 'test_mesh_root': 'outputs/designA/eval_meshes',
+ 'train_data_path': '/home/your_user_name/data/ShapeNetModels/train',
+ 'train_file_path': 'data/train_list.txt',
+ 'train_image_path': '/home/your_user_name/data/ShapeNetImages/ShapeNetRendering',
+ 'train_mesh_root': 'results/coarse_mvp2m/coarse_intermediate/50'}
+=> pre-porcessing
+=> build model
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tflearn/initializations.py:110: calling UniformUnitScaling.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/deprecation.py:561: UniformUnitScaling.__init__ (from tensorflow.python.ops.init_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.initializers.variance_scaling instead with distribution=uniform to get equivalent behavior.
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/dispatch.py:1176: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+WARNING:tensorflow:From /app/modules/losses.py:65: Uniform.__init__ (from tensorflow.python.ops.distributions.uniform) is deprecated and will be removed after 2019-01-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.distributions`.
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/ops/distributions/uniform.py:119: Distribution.__init__ (from tensorflow.python.ops.distributions.distribution) is deprecated and will be removed after 2019-01-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.distributions`.
+WARNING:tensorflow:From /app/modules/losses.py:67: py_func (from tensorflow.python.ops.script_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+tf.py_func is deprecated in TF V2. Instead, there are two
+    options available in V2.
+    - tf.py_function takes a python function which manipulates tf eager
+    tensors instead of numpy arrays. It's easy to convert a tf eager tensor to
+    an ndarray (just call tensor.numpy()) but having access to eager tensors
+    means `tf.py_function`s can use accelerators such as GPUs as well as
+    being differentiable using a gradient tape.
+    - tf.numpy_function maintains the semantics of the deprecated tf.py_func
+    (it is not differentiable, and manipulates numpy arrays). It drops the
+    stateful argument making all functions stateful.
+    
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_5_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_5_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_5_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_9_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_9_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_9_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_10_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_10_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_10_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_13_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_13_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_13_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_11_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_11_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_11_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_12_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_12_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_12_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_4_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_4_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_4_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/concat_2_grad/sub:0", shape=(?,), dtype=int32), values=Tensor("gradients/concat_2_grad/tuple/control_dependency:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/concat_2_grad/Shape:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_1_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_1_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_1_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_4_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_4_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_4_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_2_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_2_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_2_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+/usr/local/lib/python3.8/dist-packages/tensorflow/python/framework/indexed_slices.py:444: UserWarning: Converting sparse IndexedSlices(IndexedSlices(indices=Tensor("gradients/GatherV2_3_grad/Reshape_1:0", shape=(?,), dtype=int32), values=Tensor("gradients/GatherV2_3_grad/Reshape:0", shape=(?, 3), dtype=float32), dense_shape=Tensor("gradients/GatherV2_3_grad/Cast:0", shape=(2,), dtype=int32))) to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  warnings.warn(
+=> load data
+=> initialize session
+2026-01-28 08:33:47.124203: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-01-28 08:33:47.178066: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:47.183052: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:47.185474: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:47.614071: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:47.615302: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:47.616341: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-01-28 08:33:47.617194: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 8273 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 4070, pci bus id: 0000:01:00.0, compute capability: 8.9
+2026-01-28 08:33:47.669544: I tensorflow/compiler/mlir/mlir_graph_optimization_pass.cc:354] MLIR V1 optimization pass is not enabled
+Model restored from file: results/refine_p2mpp/models/meshnet.ckpt-10, epoch 10
+=> start test stage 2
+2026-01-28 08:33:48.491157: I tensorflow/core/util/cuda_solvers.cc:179] Creating GpuSolver handles for stream 0x39afd540
+2026-01-28 08:33:49.363477: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8100
+2026-01-28 08:33:49.806931: F tensorflow/core/util/cuda_solvers.cc:114] Check failed: cusolverDnCreate(&cusolver_dn_handle) == CUSOLVER_STATUS_SUCCESS Failed to create cuSolverDN instance.
+[design_b Run 2] Completed in 6.513066168s
+
+
+═══════════════════════════════════════
+BENCHMARK RESULTS SUMMARY
+═══════════════════════════════════════
+
+DESIGN_A:
+  Runs: 2
+  Mean time: 6.96s
+  Std dev: 0.12s
+  Min: 6.88s, Max: 7.05s
+
+DESIGN_B:
+  Runs: 2
+  Mean time: 6.56s
+  Std dev: 0.07s
+  Min: 6.51s, Max: 6.61s
+
+SPEEDUP (A→B):
+  Design A (CPU): 6.96s
+  Design B (GPU): 6.56s
+  Speedup factor: 1.06x
+
+Detailed logs saved to: outputs/designB/benchmark/logs/
+GPU monitoring data: outputs/designB/benchmark/gpu_*.txt
+

@@ -1,0 +1,94 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.14kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+#2 DONE 1.9s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/6] FROM docker.io/pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime@sha256:82e0d379a5dedd6303c89eda57bcc434c40be11f249ddfadfd5673b84351e806
+#4 resolve docker.io/pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime@sha256:82e0d379a5dedd6303c89eda57bcc434c40be11f249ddfadfd5673b84351e806 done
+#4 DONE 0.0s
+
+#5 [2/6] RUN apt-get update && apt-get install -y     build-essential     git     wget     curl     vim     bc     libgl1-mesa-glx     libglib2.0-0     && rm -rf /var/lib/apt/lists/*
+#5 CACHED
+
+#6 [3/6] RUN pip install --upgrade pip &&     pip install     scipy>=1.7     matplotlib>=3.5     scikit-image>=0.19     Pillow>=9.0     tqdm>=4.60     pyyaml>=5.4     opencv-python-headless>=4.5     trimesh>=3.9     "numpy>=1.19,<1.24"
+#6 0.324 Requirement already satisfied: pip in /opt/conda/lib/python3.10/site-packages (23.0.1)
+#6 0.538 Collecting pip
+#6 0.742   Downloading pip-25.3-py3-none-any.whl (1.8 MB)
+#6 1.437      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 2.6 MB/s eta 0:00:00
+#6 1.610 Installing collected packages: pip
+#6 1.610   Attempting uninstall: pip
+#6 1.610     Found existing installation: pip 23.0.1
+#6 1.611     Uninstalling pip-23.0.1:
+#6 1.902       Successfully uninstalled pip-23.0.1
+#6 2.300 Successfully installed pip-25.3
+#6 2.300 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#6 172.1 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#6 DONE 172.4s
+
+#7 [4/6] RUN pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable"
+#7 0.335 Collecting git+https://github.com/facebookresearch/pytorch3d.git@stable
+#7 0.336   Cloning https://github.com/facebookresearch/pytorch3d.git (to revision stable) to /tmp/pip-req-build-ye90r4pe
+#7 0.342   Running command git clone --filter=blob:none --quiet https://github.com/facebookresearch/pytorch3d.git /tmp/pip-req-build-ye90r4pe
+#7 45.88   Running command git checkout -q 75ebeeaea0908c5527e7b1e305fbc7681382db47
+#7 49.86   Resolved https://github.com/facebookresearch/pytorch3d.git to commit 75ebeeaea0908c5527e7b1e305fbc7681382db47
+#7 49.86   Installing build dependencies: started
+#7 51.54   Installing build dependencies: finished with status 'done'
+#7 51.54   Getting requirements to build wheel: started
+#7 51.69   Getting requirements to build wheel: finished with status 'error'
+#7 51.70   error: subprocess-exited-with-error
+#7 51.70   
+#7 51.70   × Getting requirements to build wheel did not run successfully.
+#7 51.70   │ exit code: 1
+#7 51.70   ╰─> [17 lines of output]
+#7 51.70       Traceback (most recent call last):
+#7 51.70         File "/opt/conda/lib/python3.10/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+#7 51.70           main()
+#7 51.70         File "/opt/conda/lib/python3.10/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+#7 51.70           json_out["return_val"] = hook(**hook_input["kwargs"])
+#7 51.70         File "/opt/conda/lib/python3.10/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 143, in get_requires_for_build_wheel
+#7 51.70           return hook(config_settings)
+#7 51.70         File "/tmp/pip-build-env-yan4z51y/overlay/lib/python3.10/site-packages/setuptools/build_meta.py", line 333, in get_requires_for_build_wheel
+#7 51.70           return self._get_build_requires(config_settings, requirements=[])
+#7 51.70         File "/tmp/pip-build-env-yan4z51y/overlay/lib/python3.10/site-packages/setuptools/build_meta.py", line 301, in _get_build_requires
+#7 51.70           self.run_setup()
+#7 51.70         File "/tmp/pip-build-env-yan4z51y/overlay/lib/python3.10/site-packages/setuptools/build_meta.py", line 518, in run_setup
+#7 51.70           super().run_setup(setup_script=setup_script)
+#7 51.70         File "/tmp/pip-build-env-yan4z51y/overlay/lib/python3.10/site-packages/setuptools/build_meta.py", line 317, in run_setup
+#7 51.70           exec(code, locals())
+#7 51.70         File "<string>", line 15, in <module>
+#7 51.70       ModuleNotFoundError: No module named 'torch'
+#7 51.70       [end of output]
+#7 51.70   
+#7 51.70   note: This error originates from a subprocess, and is likely not a problem with pip.
+#7 51.70 ERROR: Failed to build 'git+https://github.com/facebookresearch/pytorch3d.git@stable' when getting requirements to build wheel
+#7 ERROR: process "/bin/sh -c pip install \"git+https://github.com/facebookresearch/pytorch3d.git@stable\"" did not complete successfully: exit code: 1
+------
+ > [4/6] RUN pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable":
+51.70         File "/tmp/pip-build-env-yan4z51y/overlay/lib/python3.10/site-packages/setuptools/build_meta.py", line 518, in run_setup
+51.70           super().run_setup(setup_script=setup_script)
+51.70         File "/tmp/pip-build-env-yan4z51y/overlay/lib/python3.10/site-packages/setuptools/build_meta.py", line 317, in run_setup
+51.70           exec(code, locals())
+51.70         File "<string>", line 15, in <module>
+51.70       ModuleNotFoundError: No module named 'torch'
+51.70       [end of output]
+51.70   
+51.70   note: This error originates from a subprocess, and is likely not a problem with pip.
+51.70 ERROR: Failed to build 'git+https://github.com/facebookresearch/pytorch3d.git@stable' when getting requirements to build wheel
+------
+Dockerfile:34
+--------------------
+  32 |     
+  33 |     # PyTorch3D for 3D operations (chamfer distance built-in)
+  34 | >>> RUN pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable"
+  35 |     
+  36 |     WORKDIR /workspace
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c pip install \"git+https://github.com/facebookresearch/pytorch3d.git@stable\"" did not complete successfully: exit code: 1

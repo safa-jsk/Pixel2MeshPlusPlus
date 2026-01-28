@@ -1,0 +1,25 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.75kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/tensorflow/tensorflow:2.10.1-gpu
+#2 DONE 0.9s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 1.41kB done
+#4 DONE 0.0s
+
+#5 [ 1/10] FROM docker.io/tensorflow/tensorflow:2.10.1-gpu@sha256:087210b1d2537872f44c82e6c941e0c83a9a7c4e156873b9e1088918318accc5
+#5 resolve docker.io/tensorflow/tensorflow:2.10.1-gpu@sha256:087210b1d2537872f44c82e6c941e0c83a9a7c4e156873b9e1088918318accc5 done
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 212.86MB / 650.55MB 0.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 204.47MB / 1.91GB 0.2s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 225.44MB / 650.55MB 5.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 216.01MB / 1.91GB 5.3s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 238.03MB / 650.55MB 10.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 228.59MB / 1.91GB 10.4s

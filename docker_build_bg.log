@@ -1,0 +1,715 @@
+nohup: ignoring input
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.75kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/tensorflow/tensorflow:2.10.1-gpu
+#2 DONE 0.4s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 1.41kB done
+#4 DONE 0.0s
+
+#5 [ 1/10] FROM docker.io/tensorflow/tensorflow:2.10.1-gpu@sha256:087210b1d2537872f44c82e6c941e0c83a9a7c4e156873b9e1088918318accc5
+#5 resolve docker.io/tensorflow/tensorflow:2.10.1-gpu@sha256:087210b1d2537872f44c82e6c941e0c83a9a7c4e156873b9e1088918318accc5 done
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 240.12MB / 650.55MB 0.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 230.69MB / 1.91GB 0.2s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 245.37MB / 650.55MB 5.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 238.03MB / 1.91GB 5.3s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 249.56MB / 650.55MB 10.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 245.37MB / 1.91GB 10.4s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 257.95MB / 650.55MB 15.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 249.56MB / 1.91GB 15.5s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 268.44MB / 650.55MB 20.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 251.66MB / 1.91GB 20.6s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 275.78MB / 650.55MB 25.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 256.90MB / 1.91GB 25.7s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 282.07MB / 650.55MB 30.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 263.19MB / 1.91GB 30.8s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 289.41MB / 650.55MB 35.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 267.39MB / 1.91GB 35.9s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 295.70MB / 650.55MB 41.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 274.73MB / 1.91GB 41.0s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 299.89MB / 650.55MB 46.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 282.07MB / 1.91GB 46.1s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 305.14MB / 650.55MB 51.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 290.46MB / 1.91GB 51.2s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 311.43MB / 650.55MB 56.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 296.75MB / 1.91GB 56.3s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 317.72MB / 650.55MB 61.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 303.04MB / 1.91GB 61.4s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 326.11MB / 650.55MB 66.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 307.23MB / 1.91GB 66.5s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 334.50MB / 650.55MB 71.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 311.43MB / 1.91GB 71.6s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 340.79MB / 650.55MB 76.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 316.67MB / 1.91GB 76.7s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 346.03MB / 650.55MB 81.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 324.01MB / 1.91GB 81.8s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 352.32MB / 650.55MB 86.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 331.35MB / 1.91GB 86.9s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 358.61MB / 650.55MB 92.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 337.64MB / 1.91GB 92.0s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 364.90MB / 650.55MB 97.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 342.88MB / 1.91GB 97.1s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 371.20MB / 650.55MB 102.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 349.18MB / 1.91GB 102.2s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 377.49MB / 650.55MB 107.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 355.47MB / 1.91GB 107.3s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 382.73MB / 650.55MB 112.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 362.81MB / 1.91GB 112.4s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 389.02MB / 650.55MB 117.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 369.10MB / 1.91GB 117.5s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 395.31MB / 650.55MB 122.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 375.39MB / 1.91GB 122.6s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 401.60MB / 650.55MB 127.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 381.68MB / 1.91GB 127.7s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 407.90MB / 650.55MB 132.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 387.97MB / 1.91GB 132.8s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 414.19MB / 650.55MB 137.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 394.26MB / 1.91GB 137.9s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 419.43MB / 650.55MB 143.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 400.56MB / 1.91GB 143.0s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 426.77MB / 650.55MB 148.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 405.80MB / 1.91GB 148.1s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 433.06MB / 650.55MB 153.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 412.09MB / 1.91GB 153.2s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 438.30MB / 650.55MB 158.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 420.48MB / 1.91GB 158.3s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 441.45MB / 650.55MB 163.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 428.87MB / 1.91GB 163.4s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 447.74MB / 650.55MB 168.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 436.21MB / 1.91GB 168.5s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 454.03MB / 650.55MB 173.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 442.50MB / 1.91GB 173.6s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 459.28MB / 650.55MB 178.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 448.79MB / 1.91GB 178.7s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 465.57MB / 650.55MB 183.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 455.08MB / 1.91GB 183.8s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 471.86MB / 650.55MB 188.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 461.37MB / 1.91GB 188.9s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 477.10MB / 650.55MB 194.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 468.71MB / 1.91GB 194.0s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 483.39MB / 650.55MB 199.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 473.96MB / 1.91GB 199.1s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 489.68MB / 650.55MB 204.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 480.25MB / 1.91GB 204.2s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 495.98MB / 650.55MB 209.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 486.54MB / 1.91GB 209.3s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 502.27MB / 650.55MB 214.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 492.83MB / 1.91GB 214.4s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 508.56MB / 650.55MB 219.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 499.12MB / 1.91GB 219.5s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 514.85MB / 650.55MB 224.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 505.41MB / 1.91GB 224.6s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 521.14MB / 650.55MB 229.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 511.71MB / 1.91GB 229.7s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 527.43MB / 650.55MB 234.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 518.00MB / 1.91GB 234.8s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 533.73MB / 650.55MB 239.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 524.29MB / 1.91GB 239.9s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 538.97MB / 650.55MB 245.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 531.63MB / 1.91GB 245.0s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 545.26MB / 650.55MB 250.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 536.87MB / 1.91GB 250.1s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 552.60MB / 650.55MB 255.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 543.16MB / 1.91GB 255.2s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 558.89MB / 650.55MB 260.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 549.45MB / 1.91GB 260.3s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 565.18MB / 650.55MB 265.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 555.75MB / 1.91GB 265.4s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 569.38MB / 650.55MB 270.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 563.09MB / 1.91GB 270.5s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 574.62MB / 650.55MB 275.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 570.43MB / 1.91GB 275.6s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 580.91MB / 650.55MB 280.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 577.77MB / 1.91GB 280.7s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 587.20MB / 650.55MB 285.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 584.06MB / 1.91GB 285.8s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 593.49MB / 650.55MB 290.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 590.35MB / 1.91GB 290.9s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 599.79MB / 650.55MB 296.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 596.64MB / 1.91GB 296.0s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 606.08MB / 650.55MB 301.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 602.93MB / 1.91GB 301.1s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 612.37MB / 650.55MB 306.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 608.17MB / 1.91GB 306.2s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 617.61MB / 650.55MB 311.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 615.51MB / 1.91GB 311.3s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 623.90MB / 650.55MB 316.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 621.81MB / 1.91GB 316.4s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 630.19MB / 650.55MB 321.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 628.10MB / 1.91GB 321.5s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 636.49MB / 650.55MB 326.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 634.39MB / 1.91GB 326.6s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 641.73MB / 650.55MB 331.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 640.68MB / 1.91GB 331.7s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 644.87MB / 650.55MB 336.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 650.12MB / 1.91GB 336.8s
+#5 sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 650.55MB / 650.55MB 340.7s done
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 658.51MB / 1.91GB 341.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 671.09MB / 1.91GB 347.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 683.67MB / 1.91GB 352.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 696.25MB / 1.91GB 357.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 708.84MB / 1.91GB 362.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 721.42MB / 1.91GB 367.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 734.00MB / 1.91GB 372.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 746.59MB / 1.91GB 377.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 759.17MB / 1.91GB 382.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 771.75MB / 1.91GB 387.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 784.33MB / 1.91GB 392.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 796.92MB / 1.91GB 398.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 809.50MB / 1.91GB 403.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 822.08MB / 1.91GB 408.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 834.67MB / 1.91GB 413.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 847.25MB / 1.91GB 418.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 859.83MB / 1.91GB 423.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 872.42MB / 1.91GB 428.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 885.00MB / 1.91GB 433.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 897.58MB / 1.91GB 438.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 909.12MB / 1.91GB 443.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 921.70MB / 1.91GB 449.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 934.28MB / 1.91GB 454.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 946.86MB / 1.91GB 459.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 959.45MB / 1.91GB 464.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 972.03MB / 1.91GB 469.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 984.61MB / 1.91GB 474.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 997.20MB / 1.91GB 479.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.01GB / 1.91GB 484.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.02GB / 1.91GB 489.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.03GB / 1.91GB 494.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.05GB / 1.91GB 500.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.06GB / 1.91GB 505.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.07GB / 1.91GB 510.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.09GB / 1.91GB 515.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.10GB / 1.91GB 520.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.11GB / 1.91GB 525.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.12GB / 1.91GB 530.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.14GB / 1.91GB 535.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.15GB / 1.91GB 540.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.16GB / 1.91GB 545.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.17GB / 1.91GB 551.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.19GB / 1.91GB 556.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.20GB / 1.91GB 561.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.21GB / 1.91GB 566.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.22GB / 1.91GB 571.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.24GB / 1.91GB 576.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.25GB / 1.91GB 581.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.26GB / 1.91GB 586.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.27GB / 1.91GB 591.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.29GB / 1.91GB 596.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.30GB / 1.91GB 602.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.31GB / 1.91GB 607.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.32GB / 1.91GB 612.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.34GB / 1.91GB 617.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.35GB / 1.91GB 622.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.36GB / 1.91GB 627.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.37GB / 1.91GB 632.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.39GB / 1.91GB 637.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.40GB / 1.91GB 642.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.41GB / 1.91GB 647.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.43GB / 1.91GB 653.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.44GB / 1.91GB 658.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.45GB / 1.91GB 663.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.46GB / 1.91GB 668.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.48GB / 1.91GB 673.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.49GB / 1.91GB 678.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.50GB / 1.91GB 683.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.51GB / 1.91GB 688.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.53GB / 1.91GB 693.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.54GB / 1.91GB 698.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.55GB / 1.91GB 704.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.56GB / 1.91GB 709.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.58GB / 1.91GB 714.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.59GB / 1.91GB 719.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.60GB / 1.91GB 724.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.61GB / 1.91GB 729.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.63GB / 1.91GB 734.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.64GB / 1.91GB 739.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.65GB / 1.91GB 744.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.66GB / 1.91GB 749.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.68GB / 1.91GB 755.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.69GB / 1.91GB 760.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.70GB / 1.91GB 765.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.71GB / 1.91GB 770.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.73GB / 1.91GB 775.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.74GB / 1.91GB 780.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.75GB / 1.91GB 785.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.76GB / 1.91GB 790.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.78GB / 1.91GB 795.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.79GB / 1.91GB 800.9s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.80GB / 1.91GB 806.0s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.81GB / 1.91GB 811.1s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.83GB / 1.91GB 816.2s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.84GB / 1.91GB 821.3s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.85GB / 1.91GB 826.4s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.86GB / 1.91GB 831.5s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.88GB / 1.91GB 836.6s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.89GB / 1.91GB 841.7s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.90GB / 1.91GB 846.8s
+#5 sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 1.91GB / 1.91GB 850.0s done
+#5 extracting sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7
+#5 extracting sha256:7bf023eb24e1707dc56a984a7b2fb61a6fd96c1baedc6c05d2e63880599227f7 12.9s done
+#5 DONE 863.2s
+
+#5 [ 1/10] FROM docker.io/tensorflow/tensorflow:2.10.1-gpu@sha256:087210b1d2537872f44c82e6c941e0c83a9a7c4e156873b9e1088918318accc5
+#5 extracting sha256:86ddbb160b1d4fdab349fc3f2a3f4f61473473cd460f4f9855523c777d6a7788
+#5 extracting sha256:86ddbb160b1d4fdab349fc3f2a3f4f61473473cd460f4f9855523c777d6a7788 7.3s done
+#5 DONE 870.5s
+
+#5 [ 1/10] FROM docker.io/tensorflow/tensorflow:2.10.1-gpu@sha256:087210b1d2537872f44c82e6c941e0c83a9a7c4e156873b9e1088918318accc5
+#5 extracting sha256:99dc85f60e170e908b247f63c8c0392df086a2014bea330994f7231f4c55c80a
+#5 extracting sha256:99dc85f60e170e908b247f63c8c0392df086a2014bea330994f7231f4c55c80a 5.1s done
+#5 DONE 875.6s
+
+#5 [ 1/10] FROM docker.io/tensorflow/tensorflow:2.10.1-gpu@sha256:087210b1d2537872f44c82e6c941e0c83a9a7c4e156873b9e1088918318accc5
+#5 extracting sha256:34eb1a77b7bf36a98c3c16eb1cb1f5815216ac5e433e9efb30c3474d7e0ce1a0
+#5 extracting sha256:34eb1a77b7bf36a98c3c16eb1cb1f5815216ac5e433e9efb30c3474d7e0ce1a0 6.4s done
+#5 DONE 882.0s
+
+#5 [ 1/10] FROM docker.io/tensorflow/tensorflow:2.10.1-gpu@sha256:087210b1d2537872f44c82e6c941e0c83a9a7c4e156873b9e1088918318accc5
+#5 extracting sha256:f95ddf392b1285190dbbd2bab2af614eede8e206ed82d3459cb39fb3922db9d1
+#5 extracting sha256:f95ddf392b1285190dbbd2bab2af614eede8e206ed82d3459cb39fb3922db9d1 5.0s done
+#5 DONE 887.0s
+
+#5 [ 1/10] FROM docker.io/tensorflow/tensorflow:2.10.1-gpu@sha256:087210b1d2537872f44c82e6c941e0c83a9a7c4e156873b9e1088918318accc5
+#5 extracting sha256:513131f5ea46b1700023ad97fa38b8193c3994b920e11a82b932691e211de65d
+#5 extracting sha256:513131f5ea46b1700023ad97fa38b8193c3994b920e11a82b932691e211de65d 7.3s done
+#5 DONE 894.3s
+
+#5 [ 1/10] FROM docker.io/tensorflow/tensorflow:2.10.1-gpu@sha256:087210b1d2537872f44c82e6c941e0c83a9a7c4e156873b9e1088918318accc5
+#5 extracting sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9
+#5 extracting sha256:00109ab89b686cd25ab053f6442c3b16546b9a04fb8a0c0788168634e88f69c9 5.3s done
+#5 DONE 899.6s
+
+#5 [ 1/10] FROM docker.io/tensorflow/tensorflow:2.10.1-gpu@sha256:087210b1d2537872f44c82e6c941e0c83a9a7c4e156873b9e1088918318accc5
+#5 extracting sha256:f96cf07c18482a395382de21e20391e7622968694ca54f85b76ca8bf13ba8d10 done
+#5 extracting sha256:0be56d5808079d1724f54f4cfb3390d354989691cbb98768c6b6fd4f06ced472 done
+#5 DONE 899.6s
+
+#6 [ 2/10] RUN rm -f /etc/apt/sources.list.d/cuda.list /etc/apt/sources.list.d/nvidia-ml.list || true
+#6 DONE 11.7s
+
+#7 [ 3/10] RUN apt-get update && apt-get install -y     build-essential     git     wget     curl     vim     bc     && rm -rf /var/lib/apt/lists/*
+#7 1.470 Hit:1 http://archive.ubuntu.com/ubuntu focal InRelease
+#7 1.470 Get:2 http://security.ubuntu.com/ubuntu focal-security InRelease [128 kB]
+#7 1.705 Get:3 http://archive.ubuntu.com/ubuntu focal-updates InRelease [128 kB]
+#7 2.863 Get:4 http://archive.ubuntu.com/ubuntu focal-backports InRelease [128 kB]
+#7 2.869 Get:5 http://security.ubuntu.com/ubuntu focal-security/universe amd64 Packages [1308 kB]
+#7 3.325 Get:6 http://archive.ubuntu.com/ubuntu focal-updates/multiverse amd64 Packages [36.8 kB]
+#7 3.383 Get:7 http://archive.ubuntu.com/ubuntu focal-updates/restricted amd64 Packages [4998 kB]
+#7 5.280 Get:9 http://security.ubuntu.com/ubuntu focal-security/restricted amd64 Packages [4801 kB]
+#7 6.550 Ign:8 https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64  InRelease
+#7 7.291 Get:10 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [4920 kB]
+#7 9.605 Hit:11 https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64  Release
+#7 10.33 Get:13 http://security.ubuntu.com/ubuntu focal-security/multiverse amd64 Packages [33.1 kB]
+#7 10.39 Get:14 http://security.ubuntu.com/ubuntu focal-security/main amd64 Packages [4432 kB]
+#7 10.89 Get:15 http://archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [1599 kB]
+#7 11.56 Get:16 http://archive.ubuntu.com/ubuntu focal-backports/universe amd64 Packages [28.6 kB]
+#7 11.56 Get:17 http://archive.ubuntu.com/ubuntu focal-backports/main amd64 Packages [55.2 kB]
+#7 14.24 Fetched 22.6 MB in 13s (1690 kB/s)
+#7 14.24 Reading package lists...
+#7 14.87 Reading package lists...
+#7 15.44 Building dependency tree...
+#7 15.57 Reading state information...
+#7 15.66 build-essential is already the newest version (12.8ubuntu1.1).
+#7 15.66 The following additional packages will be installed:
+#7 15.66   alsa-topology-conf alsa-ucm-conf git-man less libasound2 libasound2-data
+#7 15.66   libbsd0 libcanberra0 libcbor0.6 libcurl3-gnutls libcurl4 libedit2
+#7 15.66   liberror-perl libfido2-1 libgpm2 libltdl7 libogg0 libtdb1 libvorbis0a
+#7 15.66   libvorbisfile3 libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 libxext6
+#7 15.66   libxmuu1 openssh-client sound-theme-freedesktop vim-common vim-runtime xauth
+#7 15.66   xxd
+#7 15.66 Suggested packages:
+#7 15.66   gettext-base git-daemon-run | git-daemon-sysvinit git-doc git-el git-email
+#7 15.66   git-gui gitk gitweb git-cvs git-mediawiki git-svn libasound2-plugins
+#7 15.66   alsa-utils libcanberra-gtk0 libcanberra-pulse gpm keychain libpam-ssh
+#7 15.66   monkeysphere ssh-askpass ctags vim-doc vim-scripts
+#7 15.74 The following NEW packages will be installed:
+#7 15.74   alsa-topology-conf alsa-ucm-conf bc git git-man less libasound2
+#7 15.74   libasound2-data libbsd0 libcanberra0 libcbor0.6 libcurl3-gnutls libedit2
+#7 15.74   liberror-perl libfido2-1 libgpm2 libltdl7 libogg0 libtdb1 libvorbis0a
+#7 15.74   libvorbisfile3 libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 libxext6
+#7 15.74   libxmuu1 openssh-client sound-theme-freedesktop vim vim-common vim-runtime
+#7 15.74   wget xauth xxd
+#7 15.74 The following packages will be upgraded:
+#7 15.74   curl libcurl4
+#7 16.24 2 upgraded, 36 newly installed, 0 to remove and 155 not upgraded.
+#7 16.24 Need to get 16.7 MB of archives.
+#7 16.24 After this operation, 88.2 MB of additional disk space will be used.
+#7 16.24 Get:1 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 less amd64 551-1ubuntu0.3 [123 kB]
+#7 17.26 Get:2 http://archive.ubuntu.com/ubuntu focal/main amd64 libbsd0 amd64 0.10.0-1 [45.4 kB]
+#7 17.32 Get:3 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 xxd amd64 2:8.1.2269-1ubuntu5.32 [50.0 kB]
+#7 17.39 Get:4 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 vim-common all 2:8.1.2269-1ubuntu5.32 [84.9 kB]
+#7 17.55 Get:5 http://archive.ubuntu.com/ubuntu focal/main amd64 libcbor0.6 amd64 0.6.0-0ubuntu1 [21.1 kB]
+#7 17.58 Get:6 http://archive.ubuntu.com/ubuntu focal/main amd64 libedit2 amd64 3.1-20191231-1 [87.0 kB]
+#7 17.69 Get:7 http://archive.ubuntu.com/ubuntu focal/main amd64 libfido2-1 amd64 1.3.1-1ubuntu2 [47.9 kB]
+#7 17.74 Get:8 http://archive.ubuntu.com/ubuntu focal/main amd64 libxau6 amd64 1:1.0.9-0ubuntu1 [7488 B]
+#7 17.75 Get:9 http://archive.ubuntu.com/ubuntu focal/main amd64 libxdmcp6 amd64 1:1.1.3-0ubuntu1 [10.6 kB]
+#7 17.75 Get:10 http://archive.ubuntu.com/ubuntu focal/main amd64 libxcb1 amd64 1.14-2 [44.7 kB]
+#7 17.78 Get:11 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libx11-data all 2:1.6.9-2ubuntu1.6 [114 kB]
+#7 17.85 Get:12 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libx11-6 amd64 2:1.6.9-2ubuntu1.6 [577 kB]
+#7 18.09 Get:13 http://archive.ubuntu.com/ubuntu focal/main amd64 libxext6 amd64 2:1.3.4-0ubuntu1 [29.1 kB]
+#7 18.10 Get:14 http://archive.ubuntu.com/ubuntu focal/main amd64 libxmuu1 amd64 2:1.1.3-0ubuntu1 [9728 B]
+#7 18.10 Get:15 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 openssh-client amd64 1:8.2p1-4ubuntu0.13 [670 kB]
+#7 18.56 Get:16 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 wget amd64 1.20.3-1ubuntu2.1 [349 kB]
+#7 18.67 Get:17 http://archive.ubuntu.com/ubuntu focal/main amd64 xauth amd64 1:1.1-0ubuntu1 [25.0 kB]
+#7 18.67 Get:18 http://archive.ubuntu.com/ubuntu focal/main amd64 alsa-topology-conf all 1.2.2-1 [7364 B]
+#7 18.67 Get:19 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 alsa-ucm-conf all 1.2.2-1ubuntu0.13 [27.0 kB]
+#7 18.67 Get:20 http://archive.ubuntu.com/ubuntu focal/main amd64 bc amd64 1.07.1-2build1 [86.3 kB]
+#7 18.68 Get:21 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 curl amd64 7.68.0-1ubuntu2.25 [162 kB]
+#7 19.00 Get:22 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcurl4 amd64 7.68.0-1ubuntu2.25 [235 kB]
+#7 19.00 Get:23 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcurl3-gnutls amd64 7.68.0-1ubuntu2.25 [233 kB]
+#7 19.01 Get:24 http://archive.ubuntu.com/ubuntu focal/main amd64 liberror-perl all 0.17029-1 [26.5 kB]
+#7 19.01 Get:25 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 git-man all 1:2.25.1-1ubuntu3.14 [887 kB]
+#7 20.43 Get:26 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 git amd64 1:2.25.1-1ubuntu3.14 [4613 kB]
+#7 21.67 Get:27 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libasound2-data all 1.2.2-2.1ubuntu2.5 [20.1 kB]
+#7 21.68 Get:28 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libasound2 amd64 1.2.2-2.1ubuntu2.5 [335 kB]
+#7 22.08 Get:29 http://archive.ubuntu.com/ubuntu focal/main amd64 libltdl7 amd64 2.4.6-14 [38.5 kB]
+#7 22.09 Get:30 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libtdb1 amd64 1.4.5-0ubuntu0.20.04.1 [44.2 kB]
+#7 22.10 Get:31 http://archive.ubuntu.com/ubuntu focal/main amd64 libogg0 amd64 1.3.4-0ubuntu1 [24.0 kB]
+#7 22.11 Get:32 http://archive.ubuntu.com/ubuntu focal/main amd64 libvorbis0a amd64 1.3.6-2ubuntu1 [87.0 kB]
+#7 22.13 Get:33 http://archive.ubuntu.com/ubuntu focal/main amd64 libvorbisfile3 amd64 1.3.6-2ubuntu1 [16.1 kB]
+#7 22.14 Get:34 http://archive.ubuntu.com/ubuntu focal/main amd64 sound-theme-freedesktop all 0.8-2ubuntu1 [384 kB]
+#7 22.28 Get:35 http://archive.ubuntu.com/ubuntu focal/main amd64 libcanberra0 amd64 0.30-7ubuntu1 [38.1 kB]
+#7 22.28 Get:36 http://archive.ubuntu.com/ubuntu focal/main amd64 libgpm2 amd64 1.20.7-5 [15.1 kB]
+#7 22.28 Get:37 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 vim-runtime all 2:8.1.2269-1ubuntu5.32 [5876 kB]
+#7 25.24 Get:38 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 vim amd64 2:8.1.2269-1ubuntu5.32 [1241 kB]
+#7 25.62 debconf: delaying package configuration, since apt-utils is not installed
+#7 25.65 Fetched 16.7 MB in 10s (1706 kB/s)
+#7 25.67 Selecting previously unselected package less.
+#7 25.67 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 19688 files and directories currently installed.)
+#7 25.70 Preparing to unpack .../00-less_551-1ubuntu0.3_amd64.deb ...
+#7 25.70 Unpacking less (551-1ubuntu0.3) ...
+#7 25.73 Selecting previously unselected package libbsd0:amd64.
+#7 25.73 Preparing to unpack .../01-libbsd0_0.10.0-1_amd64.deb ...
+#7 25.73 Unpacking libbsd0:amd64 (0.10.0-1) ...
+#7 25.75 Selecting previously unselected package xxd.
+#7 25.75 Preparing to unpack .../02-xxd_2%3a8.1.2269-1ubuntu5.32_amd64.deb ...
+#7 25.75 Unpacking xxd (2:8.1.2269-1ubuntu5.32) ...
+#7 25.77 Selecting previously unselected package vim-common.
+#7 25.77 Preparing to unpack .../03-vim-common_2%3a8.1.2269-1ubuntu5.32_all.deb ...
+#7 25.78 Unpacking vim-common (2:8.1.2269-1ubuntu5.32) ...
+#7 25.81 Selecting previously unselected package libcbor0.6:amd64.
+#7 25.81 Preparing to unpack .../04-libcbor0.6_0.6.0-0ubuntu1_amd64.deb ...
+#7 25.81 Unpacking libcbor0.6:amd64 (0.6.0-0ubuntu1) ...
+#7 25.83 Selecting previously unselected package libedit2:amd64.
+#7 25.83 Preparing to unpack .../05-libedit2_3.1-20191231-1_amd64.deb ...
+#7 25.83 Unpacking libedit2:amd64 (3.1-20191231-1) ...
+#7 25.86 Selecting previously unselected package libfido2-1:amd64.
+#7 25.86 Preparing to unpack .../06-libfido2-1_1.3.1-1ubuntu2_amd64.deb ...
+#7 25.86 Unpacking libfido2-1:amd64 (1.3.1-1ubuntu2) ...
+#7 25.88 Selecting previously unselected package libxau6:amd64.
+#7 25.88 Preparing to unpack .../07-libxau6_1%3a1.0.9-0ubuntu1_amd64.deb ...
+#7 25.88 Unpacking libxau6:amd64 (1:1.0.9-0ubuntu1) ...
+#7 25.90 Selecting previously unselected package libxdmcp6:amd64.
+#7 25.90 Preparing to unpack .../08-libxdmcp6_1%3a1.1.3-0ubuntu1_amd64.deb ...
+#7 25.90 Unpacking libxdmcp6:amd64 (1:1.1.3-0ubuntu1) ...
+#7 25.93 Selecting previously unselected package libxcb1:amd64.
+#7 25.93 Preparing to unpack .../09-libxcb1_1.14-2_amd64.deb ...
+#7 25.93 Unpacking libxcb1:amd64 (1.14-2) ...
+#7 25.95 Selecting previously unselected package libx11-data.
+#7 25.95 Preparing to unpack .../10-libx11-data_2%3a1.6.9-2ubuntu1.6_all.deb ...
+#7 25.96 Unpacking libx11-data (2:1.6.9-2ubuntu1.6) ...
+#7 26.00 Selecting previously unselected package libx11-6:amd64.
+#7 26.00 Preparing to unpack .../11-libx11-6_2%3a1.6.9-2ubuntu1.6_amd64.deb ...
+#7 26.00 Unpacking libx11-6:amd64 (2:1.6.9-2ubuntu1.6) ...
+#7 26.04 Selecting previously unselected package libxext6:amd64.
+#7 26.04 Preparing to unpack .../12-libxext6_2%3a1.3.4-0ubuntu1_amd64.deb ...
+#7 26.04 Unpacking libxext6:amd64 (2:1.3.4-0ubuntu1) ...
+#7 26.06 Selecting previously unselected package libxmuu1:amd64.
+#7 26.06 Preparing to unpack .../13-libxmuu1_2%3a1.1.3-0ubuntu1_amd64.deb ...
+#7 26.06 Unpacking libxmuu1:amd64 (2:1.1.3-0ubuntu1) ...
+#7 26.08 Selecting previously unselected package openssh-client.
+#7 26.08 Preparing to unpack .../14-openssh-client_1%3a8.2p1-4ubuntu0.13_amd64.deb ...
+#7 26.09 Unpacking openssh-client (1:8.2p1-4ubuntu0.13) ...
+#7 26.14 Selecting previously unselected package wget.
+#7 26.14 Preparing to unpack .../15-wget_1.20.3-1ubuntu2.1_amd64.deb ...
+#7 26.14 Unpacking wget (1.20.3-1ubuntu2.1) ...
+#7 26.17 Selecting previously unselected package xauth.
+#7 26.17 Preparing to unpack .../16-xauth_1%3a1.1-0ubuntu1_amd64.deb ...
+#7 26.17 Unpacking xauth (1:1.1-0ubuntu1) ...
+#7 26.19 Selecting previously unselected package alsa-topology-conf.
+#7 26.19 Preparing to unpack .../17-alsa-topology-conf_1.2.2-1_all.deb ...
+#7 26.19 Unpacking alsa-topology-conf (1.2.2-1) ...
+#7 26.21 Selecting previously unselected package alsa-ucm-conf.
+#7 26.21 Preparing to unpack .../18-alsa-ucm-conf_1.2.2-1ubuntu0.13_all.deb ...
+#7 26.21 Unpacking alsa-ucm-conf (1.2.2-1ubuntu0.13) ...
+#7 26.25 Selecting previously unselected package bc.
+#7 26.25 Preparing to unpack .../19-bc_1.07.1-2build1_amd64.deb ...
+#7 26.25 Unpacking bc (1.07.1-2build1) ...
+#7 26.27 Preparing to unpack .../20-curl_7.68.0-1ubuntu2.25_amd64.deb ...
+#7 26.28 Unpacking curl (7.68.0-1ubuntu2.25) over (7.68.0-1ubuntu2.14) ...
+#7 26.31 Preparing to unpack .../21-libcurl4_7.68.0-1ubuntu2.25_amd64.deb ...
+#7 26.31 Unpacking libcurl4:amd64 (7.68.0-1ubuntu2.25) over (7.68.0-1ubuntu2.14) ...
+#7 26.36 Selecting previously unselected package libcurl3-gnutls:amd64.
+#7 26.36 Preparing to unpack .../22-libcurl3-gnutls_7.68.0-1ubuntu2.25_amd64.deb ...
+#7 26.37 Unpacking libcurl3-gnutls:amd64 (7.68.0-1ubuntu2.25) ...
+#7 26.39 Selecting previously unselected package liberror-perl.
+#7 26.39 Preparing to unpack .../23-liberror-perl_0.17029-1_all.deb ...
+#7 26.39 Unpacking liberror-perl (0.17029-1) ...
+#7 26.41 Selecting previously unselected package git-man.
+#7 26.41 Preparing to unpack .../24-git-man_1%3a2.25.1-1ubuntu3.14_all.deb ...
+#7 26.41 Unpacking git-man (1:2.25.1-1ubuntu3.14) ...
+#7 26.47 Selecting previously unselected package git.
+#7 26.47 Preparing to unpack .../25-git_1%3a2.25.1-1ubuntu3.14_amd64.deb ...
+#7 26.48 Unpacking git (1:2.25.1-1ubuntu3.14) ...
+#7 26.73 Selecting previously unselected package libasound2-data.
+#7 26.73 Preparing to unpack .../26-libasound2-data_1.2.2-2.1ubuntu2.5_all.deb ...
+#7 26.73 Unpacking libasound2-data (1.2.2-2.1ubuntu2.5) ...
+#7 26.76 Selecting previously unselected package libasound2:amd64.
+#7 26.76 Preparing to unpack .../27-libasound2_1.2.2-2.1ubuntu2.5_amd64.deb ...
+#7 26.76 Unpacking libasound2:amd64 (1.2.2-2.1ubuntu2.5) ...
+#7 26.79 Selecting previously unselected package libltdl7:amd64.
+#7 26.79 Preparing to unpack .../28-libltdl7_2.4.6-14_amd64.deb ...
+#7 26.79 Unpacking libltdl7:amd64 (2.4.6-14) ...
+#7 26.81 Selecting previously unselected package libtdb1:amd64.
+#7 26.81 Preparing to unpack .../29-libtdb1_1.4.5-0ubuntu0.20.04.1_amd64.deb ...
+#7 26.81 Unpacking libtdb1:amd64 (1.4.5-0ubuntu0.20.04.1) ...
+#7 26.84 Selecting previously unselected package libogg0:amd64.
+#7 26.84 Preparing to unpack .../30-libogg0_1.3.4-0ubuntu1_amd64.deb ...
+#7 26.84 Unpacking libogg0:amd64 (1.3.4-0ubuntu1) ...
+#7 26.86 Selecting previously unselected package libvorbis0a:amd64.
+#7 26.86 Preparing to unpack .../31-libvorbis0a_1.3.6-2ubuntu1_amd64.deb ...
+#7 26.86 Unpacking libvorbis0a:amd64 (1.3.6-2ubuntu1) ...
+#7 26.88 Selecting previously unselected package libvorbisfile3:amd64.
+#7 26.88 Preparing to unpack .../32-libvorbisfile3_1.3.6-2ubuntu1_amd64.deb ...
+#7 26.89 Unpacking libvorbisfile3:amd64 (1.3.6-2ubuntu1) ...
+#7 26.90 Selecting previously unselected package sound-theme-freedesktop.
+#7 26.90 Preparing to unpack .../33-sound-theme-freedesktop_0.8-2ubuntu1_all.deb ...
+#7 26.91 Unpacking sound-theme-freedesktop (0.8-2ubuntu1) ...
+#7 26.94 Selecting previously unselected package libcanberra0:amd64.
+#7 26.94 Preparing to unpack .../34-libcanberra0_0.30-7ubuntu1_amd64.deb ...
+#7 26.94 Unpacking libcanberra0:amd64 (0.30-7ubuntu1) ...
+#7 26.96 Selecting previously unselected package libgpm2:amd64.
+#7 26.96 Preparing to unpack .../35-libgpm2_1.20.7-5_amd64.deb ...
+#7 26.97 Unpacking libgpm2:amd64 (1.20.7-5) ...
+#7 26.98 Selecting previously unselected package vim-runtime.
+#7 26.98 Preparing to unpack .../36-vim-runtime_2%3a8.1.2269-1ubuntu5.32_all.deb ...
+#7 26.99 Adding 'diversion of /usr/share/vim/vim81/doc/help.txt to /usr/share/vim/vim81/doc/help.txt.vim-tiny by vim-runtime'
+#7 27.00 Adding 'diversion of /usr/share/vim/vim81/doc/tags to /usr/share/vim/vim81/doc/tags.vim-tiny by vim-runtime'
+#7 27.00 Unpacking vim-runtime (2:8.1.2269-1ubuntu5.32) ...
+#7 27.36 Selecting previously unselected package vim.
+#7 27.37 Preparing to unpack .../37-vim_2%3a8.1.2269-1ubuntu5.32_amd64.deb ...
+#7 27.37 Unpacking vim (2:8.1.2269-1ubuntu5.32) ...
+#7 27.45 Setting up libxau6:amd64 (1:1.0.9-0ubuntu1) ...
+#7 27.46 Setting up libgpm2:amd64 (1.20.7-5) ...
+#7 27.46 Setting up libogg0:amd64 (1.3.4-0ubuntu1) ...
+#7 27.47 Setting up wget (1.20.3-1ubuntu2.1) ...
+#7 27.47 Setting up alsa-ucm-conf (1.2.2-1ubuntu0.13) ...
+#7 27.48 Setting up libtdb1:amd64 (1.4.5-0ubuntu0.20.04.1) ...
+#7 27.48 Setting up less (551-1ubuntu0.3) ...
+#7 27.49 Setting up bc (1.07.1-2build1) ...
+#7 27.50 Setting up libcurl3-gnutls:amd64 (7.68.0-1ubuntu2.25) ...
+#7 27.50 Setting up libcbor0.6:amd64 (0.6.0-0ubuntu1) ...
+#7 27.51 Setting up xxd (2:8.1.2269-1ubuntu5.32) ...
+#7 27.51 Setting up liberror-perl (0.17029-1) ...
+#7 27.52 Setting up libasound2-data (1.2.2-2.1ubuntu2.5) ...
+#7 27.52 Setting up vim-common (2:8.1.2269-1ubuntu5.32) ...
+#7 27.53 Setting up libx11-data (2:1.6.9-2ubuntu1.6) ...
+#7 27.53 Setting up libvorbis0a:amd64 (1.3.6-2ubuntu1) ...
+#7 27.54 Setting up libltdl7:amd64 (2.4.6-14) ...
+#7 27.54 Setting up alsa-topology-conf (1.2.2-1) ...
+#7 27.55 Setting up sound-theme-freedesktop (0.8-2ubuntu1) ...
+#7 27.55 Setting up libasound2:amd64 (1.2.2-2.1ubuntu2.5) ...
+#7 27.55 Setting up libcurl4:amd64 (7.68.0-1ubuntu2.25) ...
+#7 27.56 Setting up git-man (1:2.25.1-1ubuntu3.14) ...
+#7 27.56 Setting up curl (7.68.0-1ubuntu2.25) ...
+#7 27.57 Setting up vim-runtime (2:8.1.2269-1ubuntu5.32) ...
+#7 27.63 Setting up libfido2-1:amd64 (1.3.1-1ubuntu2) ...
+#7 27.64 Setting up libbsd0:amd64 (0.10.0-1) ...
+#7 27.64 Setting up libxdmcp6:amd64 (1:1.1.3-0ubuntu1) ...
+#7 27.64 Setting up libxcb1:amd64 (1.14-2) ...
+#7 27.65 Setting up libedit2:amd64 (3.1-20191231-1) ...
+#7 27.65 Setting up libvorbisfile3:amd64 (1.3.6-2ubuntu1) ...
+#7 27.66 Setting up git (1:2.25.1-1ubuntu3.14) ...
+#7 27.68 Setting up libx11-6:amd64 (2:1.6.9-2ubuntu1.6) ...
+#7 27.68 Setting up libxmuu1:amd64 (2:1.1.3-0ubuntu1) ...
+#7 27.69 Setting up libcanberra0:amd64 (0.30-7ubuntu1) ...
+#7 27.69 Setting up vim (2:8.1.2269-1ubuntu5.32) ...
+#7 27.70 update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/vim (vim) in auto mode
+#7 27.70 update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/vimdiff (vimdiff) in auto mode
+#7 27.70 update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/rvim (rvim) in auto mode
+#7 27.70 update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/rview (rview) in auto mode
+#7 27.70 update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/vi (vi) in auto mode
+#7 27.70 update-alternatives: warning: skip creation of /usr/share/man/da/man1/vi.1.gz because associated file /usr/share/man/da/man1/vim.1.gz (of link group vi) doesn't exist
+#7 27.70 update-alternatives: warning: skip creation of /usr/share/man/de/man1/vi.1.gz because associated file /usr/share/man/de/man1/vim.1.gz (of link group vi) doesn't exist
+#7 27.70 update-alternatives: warning: skip creation of /usr/share/man/fr/man1/vi.1.gz because associated file /usr/share/man/fr/man1/vim.1.gz (of link group vi) doesn't exist
+#7 27.70 update-alternatives: warning: skip creation of /usr/share/man/it/man1/vi.1.gz because associated file /usr/share/man/it/man1/vim.1.gz (of link group vi) doesn't exist
+#7 27.70 update-alternatives: warning: skip creation of /usr/share/man/ja/man1/vi.1.gz because associated file /usr/share/man/ja/man1/vim.1.gz (of link group vi) doesn't exist
+#7 27.70 update-alternatives: warning: skip creation of /usr/share/man/pl/man1/vi.1.gz because associated file /usr/share/man/pl/man1/vim.1.gz (of link group vi) doesn't exist
+#7 27.70 update-alternatives: warning: skip creation of /usr/share/man/ru/man1/vi.1.gz because associated file /usr/share/man/ru/man1/vim.1.gz (of link group vi) doesn't exist
+#7 27.70 update-alternatives: warning: skip creation of /usr/share/man/man1/vi.1.gz because associated file /usr/share/man/man1/vim.1.gz (of link group vi) doesn't exist
+#7 27.71 update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/view (view) in auto mode
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/da/man1/view.1.gz because associated file /usr/share/man/da/man1/vim.1.gz (of link group view) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/de/man1/view.1.gz because associated file /usr/share/man/de/man1/vim.1.gz (of link group view) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/fr/man1/view.1.gz because associated file /usr/share/man/fr/man1/vim.1.gz (of link group view) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/it/man1/view.1.gz because associated file /usr/share/man/it/man1/vim.1.gz (of link group view) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/ja/man1/view.1.gz because associated file /usr/share/man/ja/man1/vim.1.gz (of link group view) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/pl/man1/view.1.gz because associated file /usr/share/man/pl/man1/vim.1.gz (of link group view) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/ru/man1/view.1.gz because associated file /usr/share/man/ru/man1/vim.1.gz (of link group view) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/man1/view.1.gz because associated file /usr/share/man/man1/vim.1.gz (of link group view) doesn't exist
+#7 27.71 update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/ex (ex) in auto mode
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/da/man1/ex.1.gz because associated file /usr/share/man/da/man1/vim.1.gz (of link group ex) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/de/man1/ex.1.gz because associated file /usr/share/man/de/man1/vim.1.gz (of link group ex) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/fr/man1/ex.1.gz because associated file /usr/share/man/fr/man1/vim.1.gz (of link group ex) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/it/man1/ex.1.gz because associated file /usr/share/man/it/man1/vim.1.gz (of link group ex) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/ja/man1/ex.1.gz because associated file /usr/share/man/ja/man1/vim.1.gz (of link group ex) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/pl/man1/ex.1.gz because associated file /usr/share/man/pl/man1/vim.1.gz (of link group ex) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/ru/man1/ex.1.gz because associated file /usr/share/man/ru/man1/vim.1.gz (of link group ex) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/man1/ex.1.gz because associated file /usr/share/man/man1/vim.1.gz (of link group ex) doesn't exist
+#7 27.71 update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/editor (editor) in auto mode
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/da/man1/editor.1.gz because associated file /usr/share/man/da/man1/vim.1.gz (of link group editor) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/de/man1/editor.1.gz because associated file /usr/share/man/de/man1/vim.1.gz (of link group editor) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/fr/man1/editor.1.gz because associated file /usr/share/man/fr/man1/vim.1.gz (of link group editor) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/it/man1/editor.1.gz because associated file /usr/share/man/it/man1/vim.1.gz (of link group editor) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/ja/man1/editor.1.gz because associated file /usr/share/man/ja/man1/vim.1.gz (of link group editor) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/pl/man1/editor.1.gz because associated file /usr/share/man/pl/man1/vim.1.gz (of link group editor) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/ru/man1/editor.1.gz because associated file /usr/share/man/ru/man1/vim.1.gz (of link group editor) doesn't exist
+#7 27.71 update-alternatives: warning: skip creation of /usr/share/man/man1/editor.1.gz because associated file /usr/share/man/man1/vim.1.gz (of link group editor) doesn't exist
+#7 27.72 Setting up openssh-client (1:8.2p1-4ubuntu0.13) ...
+#7 27.77 Setting up libxext6:amd64 (2:1.3.4-0ubuntu1) ...
+#7 27.77 Setting up xauth (1:1.1-0ubuntu1) ...
+#7 27.78 Processing triggers for libc-bin (2.31-0ubuntu9.9) ...
+#7 27.82 Processing triggers for mime-support (3.64ubuntu1) ...
+#7 DONE 27.9s
+
+#8 [ 4/10] COPY env/gpu/requirements_gpu.txt /tmp/requirements_gpu.txt
+#8 DONE 0.0s
+
+#9 [ 5/10] RUN grep -v "tensorflow" /tmp/requirements_gpu.txt > /tmp/requirements_extra.txt &&     pip install --upgrade pip &&     pip install -r /tmp/requirements_extra.txt &&     pip install tflearn opencv-python-headless==4.5.5.64
+#9 0.554 Collecting pip
+#9 0.789   Downloading pip-25.0.1-py3-none-any.whl (1.8 MB)
+#9 1.782 Installing collected packages: pip
+#9 1.782   Attempting uninstall: pip
+#9 1.782     Found existing installation: pip 20.2.4
+#9 1.862     Uninstalling pip-20.2.4:
+#9 2.045       Successfully uninstalled pip-20.2.4
+#9 2.496 Successfully installed pip-25.0.1
+#9 3.475 Collecting numpy==1.16.6 (from -r /tmp/requirements_extra.txt (line 8))
+#9 3.779   Downloading numpy-1.16.6.zip (5.1 MB)
+#9 5.829      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.1/5.1 MB 2.5 MB/s eta 0:00:00
+#9 6.003   Preparing metadata (setup.py): started
+#9 6.204   Preparing metadata (setup.py): finished with status 'done'
+#9 6.349 Collecting scipy==1.1.0 (from -r /tmp/requirements_extra.txt (line 9))
+#9 6.399   Downloading scipy-1.1.0.tar.gz (15.6 MB)
+#9 18.70      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 15.6/15.6 MB 1.3 MB/s eta 0:00:00
+#9 19.37   Preparing metadata (setup.py): started
+#9 19.65   Preparing metadata (setup.py): finished with status 'done'
+#9 19.80 Collecting matplotlib==3.0.3 (from -r /tmp/requirements_extra.txt (line 10))
+#9 19.85   Downloading matplotlib-3.0.3.tar.gz (36.6 MB)
+#9 42.20      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 36.6/36.6 MB 1.6 MB/s eta 0:00:00
+#9 43.07   Preparing metadata (setup.py): started
+#9 43.42   Preparing metadata (setup.py): finished with status 'done'
+#9 43.53 Collecting scikit-image==0.14.5 (from -r /tmp/requirements_extra.txt (line 11))
+#9 43.58   Downloading scikit-image-0.14.5.tar.gz (28.3 MB)
+#9 55.44      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 28.3/28.3 MB 2.4 MB/s eta 0:00:00
+#9 56.04   Preparing metadata (setup.py): started
+#9 56.27   Preparing metadata (setup.py): finished with status 'error'
+#9 56.27   error: subprocess-exited-with-error
+#9 56.27   
+#9 56.27   × python setup.py egg_info did not run successfully.
+#9 56.27   │ exit code: 1
+#9 56.27   ╰─> [62 lines of output]
+#9 56.27       /tmp/pip-install-rorrh0bj/scikit-image_60e3f35b687b4523b76fb40ec22ec470/setup.py:78: DeprecationWarning:
+#9 56.27       
+#9 56.27         `numpy.distutils` is deprecated since NumPy 1.23.0, as a result
+#9 56.27         of the deprecation of `distutils` itself. It will be removed for
+#9 56.27         Python >= 3.12. For older Python versions it will remain present.
+#9 56.27         It is recommended to use `setuptools < 60.0` for those Python versions.
+#9 56.27         For more details, see:
+#9 56.27           https://numpy.org/devdocs/reference/distutils_status_migration.html
+#9 56.27       
+#9 56.27       
+#9 56.27         from numpy.distutils.core import setup
+#9 56.27       /usr/local/lib/python3.8/dist-packages/setuptools/config/setupcfg.py:508: SetuptoolsDeprecationWarning: The license_file parameter is deprecated, use license_files instead.
+#9 56.27         warnings.warn(msg, warning_class)
+#9 56.27       /usr/local/lib/python3.8/dist-packages/setuptools/config/setupcfg.py:508: SetuptoolsDeprecationWarning: The license_file parameter is deprecated, use license_files instead.
+#9 56.27         warnings.warn(msg, warning_class)
+#9 56.27       Partial import of skimage during the build process.
+#9 56.27       Traceback (most recent call last):
+#9 56.27         File "/tmp/pip-install-rorrh0bj/scikit-image_60e3f35b687b4523b76fb40ec22ec470/skimage/_build.py", line 30, in cython
+#9 56.27           from Cython import __version__
+#9 56.27       ModuleNotFoundError: No module named 'Cython'
+#9 56.27       
+#9 56.27       During handling of the above exception, another exception occurred:
+#9 56.27       
+#9 56.27       Traceback (most recent call last):
+#9 56.27         File "<string>", line 2, in <module>
+#9 56.27         File "<pip-setuptools-caller>", line 34, in <module>
+#9 56.27         File "/tmp/pip-install-rorrh0bj/scikit-image_60e3f35b687b4523b76fb40ec22ec470/setup.py", line 111, in <module>
+#9 56.27           setup(
+#9 56.27         File "/usr/local/lib/python3.8/dist-packages/numpy/distutils/core.py", line 135, in setup
+#9 56.27           config = configuration()
+#9 56.27         File "/tmp/pip-install-rorrh0bj/scikit-image_60e3f35b687b4523b76fb40ec22ec470/setup.py", line 70, in configuration
+#9 56.27           config.add_subpackage('skimage')
+#9 56.27         File "/usr/local/lib/python3.8/dist-packages/numpy/distutils/misc_util.py", line 1050, in add_subpackage
+#9 56.27           config_list = self.get_subpackage(subpackage_name, subpackage_path,
+#9 56.27         File "/usr/local/lib/python3.8/dist-packages/numpy/distutils/misc_util.py", line 1016, in get_subpackage
+#9 56.27           config = self._get_configuration_from_setup_py(
+#9 56.27         File "/usr/local/lib/python3.8/dist-packages/numpy/distutils/misc_util.py", line 958, in _get_configuration_from_setup_py
+#9 56.27           config = setup_module.configuration(*args)
+#9 56.27         File "/tmp/pip-install-rorrh0bj/scikit-image_60e3f35b687b4523b76fb40ec22ec470/skimage/setup.py", line 14, in configuration
+#9 56.27           config.add_subpackage('feature')
+#9 56.27         File "/usr/local/lib/python3.8/dist-packages/numpy/distutils/misc_util.py", line 1050, in add_subpackage
+#9 56.27           config_list = self.get_subpackage(subpackage_name, subpackage_path,
+#9 56.27         File "/usr/local/lib/python3.8/dist-packages/numpy/distutils/misc_util.py", line 1016, in get_subpackage
+#9 56.27           config = self._get_configuration_from_setup_py(
+#9 56.27         File "/usr/local/lib/python3.8/dist-packages/numpy/distutils/misc_util.py", line 958, in _get_configuration_from_setup_py
+#9 56.27           config = setup_module.configuration(*args)
+#9 56.27         File "/tmp/pip-install-rorrh0bj/scikit-image_60e3f35b687b4523b76fb40ec22ec470/skimage/feature/setup.py", line 22, in configuration
+#9 56.27           cython(['_haar.pyx'], working_path=base_path)
+#9 56.27         File "/tmp/pip-install-rorrh0bj/scikit-image_60e3f35b687b4523b76fb40ec22ec470/skimage/_build.py", line 41, in cython
+#9 56.27           raise RuntimeError('Cython >= %s is required to build scikit-image from git checkout' \
+#9 56.27       RuntimeError: Cython >= 0.23.4 is required to build scikit-image from git checkout
+#9 56.27       Cython >= 0.23.4 not found; falling back to pre-built geometry.c
+#9 56.27       Cython >= 0.23.4 not found; falling back to pre-built transform.c
+#9 56.27       Cython >= 0.23.4 not found; falling back to pre-built interpolation.c
+#9 56.27       Cython >= 0.23.4 not found; falling back to pre-built _draw.c
+#9 56.27       Cython >= 0.23.4 not found; falling back to pre-built corner_cy.c
+#9 56.27       Cython >= 0.23.4 not found; falling back to pre-built censure_cy.c
+#9 56.27       Cython >= 0.23.4 not found; falling back to pre-built orb_cy.c
+#9 56.27       Cython >= 0.23.4 not found; falling back to pre-built brief_cy.c
+#9 56.27       Cython >= 0.23.4 not found; falling back to pre-built _texture.c
+#9 56.27       Cython >= 0.23.4 not found; falling back to pre-built _hessian_det_appx.c
+#9 56.27       Cython >= 0.23.4 not found; falling back to pre-built _hoghistogram.c
+#9 56.27       [end of output]
+#9 56.27   
+#9 56.27   note: This error originates from a subprocess, and is likely not a problem with pip.
+#9 56.27 error: metadata-generation-failed
+#9 56.27 
+#9 56.27 × Encountered error while generating package metadata.
+#9 56.27 ╰─> See above for output.
+#9 56.27 
+#9 56.27 note: This is an issue with the package mentioned above, not pip.
+#9 56.27 hint: See above for details.
+#9 ERROR: process "/bin/bash -c grep -v \"tensorflow\" /tmp/requirements_gpu.txt > /tmp/requirements_extra.txt &&     pip install --upgrade pip &&     pip install -r /tmp/requirements_extra.txt &&     pip install tflearn opencv-python-headless==4.5.5.64" did not complete successfully: exit code: 1
+------
+ > [ 5/10] RUN grep -v "tensorflow" /tmp/requirements_gpu.txt > /tmp/requirements_extra.txt &&     pip install --upgrade pip &&     pip install -r /tmp/requirements_extra.txt &&     pip install tflearn opencv-python-headless==4.5.5.64:
+56.27       [end of output]
+56.27   
+56.27   note: This error originates from a subprocess, and is likely not a problem with pip.
+56.27 error: metadata-generation-failed
+56.27 
+56.27 × Encountered error while generating package metadata.
+56.27 ╰─> See above for output.
+56.27 
+56.27 note: This is an issue with the package mentioned above, not pip.
+56.27 hint: See above for details.
+------
+Dockerfile:31
+--------------------
+  30 |     # Install additional Python packages (skip tensorflow-gpu, add tflearn)
+  31 | >>> RUN grep -v "tensorflow" /tmp/requirements_gpu.txt > /tmp/requirements_extra.txt && \
+  32 | >>>     pip install --upgrade pip && \
+  33 | >>>     pip install -r /tmp/requirements_extra.txt && \
+  34 | >>>     pip install tflearn opencv-python-headless==4.5.5.64
+  35 |     
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/bash -c grep -v \"tensorflow\" /tmp/requirements_gpu.txt > /tmp/requirements_extra.txt &&     pip install --upgrade pip &&     pip install -r /tmp/requirements_extra.txt &&     pip install tflearn opencv-python-headless==4.5.5.64" did not complete successfully: exit code: 1
