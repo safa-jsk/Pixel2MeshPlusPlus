@@ -7,6 +7,10 @@ tmp
 .docker_home
 .python_userbase
 
+# Build and benchmark logs
+**/*.log
+*.log
+
 data/p2mpp_models.tar.gz
 data/p2mppdata.7z.001
 data/p2mppdata.7z.002
