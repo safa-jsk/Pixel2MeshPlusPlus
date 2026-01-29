@@ -20,3 +20,15 @@ ShapeNet/
 ShapeNetImages/
 ShapeNetRendering/
 p2mppdata/
+
+# Mesh files
+*.obj
+*.ply
+*.off
+*.stl
+*.mesh
+*.xyz
+
+# Output directories
+outputs/designA/eval_meshes/
+outputs/designB/

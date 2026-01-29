@@ -1,0 +1,129 @@
+WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/tensorflow_core/python/compat/v2_compat.py:68: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+Instructions for updating:
+non-resource variables are not supported in the long term
+WARNING:tensorflow:From tf_timing_full2.py:30: The name tf.placeholder is deprecated. Please use tf.compat.v1.placeholder instead.
+
+WARNING:tensorflow:From tf_timing_full2.py:33: The name tf.sparse_placeholder is deprecated. Please use tf.compat.v1.sparse_placeholder instead.
+
+WARNING:tensorflow:From tf_timing_full2.py:40: The name tf.placeholder_with_default is deprecated. Please use tf.compat.v1.placeholder_with_default instead.
+
+WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/tflearn/initializations.py:110: calling UniformUnitScaling.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/tensorflow_core/python/util/deprecation.py:507: UniformUnitScaling.__init__ (from tensorflow.python.ops.init_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.initializers.variance_scaling instead with distribution=uniform to get equivalent behavior.
+WARNING:tensorflow:From /workspace/modules/layers.py:173: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+WARNING:tensorflow:From /workspace/modules/losses.py:65: Uniform.__init__ (from tensorflow.python.ops.distributions.uniform) is deprecated and will be removed after 2019-01-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.distributions`.
+WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/tensorflow_core/python/ops/distributions/uniform.py:131: Distribution.__init__ (from tensorflow.python.ops.distributions.distribution) is deprecated and will be removed after 2019-01-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.distributions`.
+WARNING:tensorflow:From /workspace/modules/losses.py:67: py_func (from tensorflow.python.ops.script_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+tf.py_func is deprecated in TF V2. Instead, there are two
+    options available in V2.
+    - tf.py_function takes a python function which manipulates tf eager
+    tensors instead of numpy arrays. It's easy to convert a tf eager tensor to
+    an ndarray (just call tensor.numpy()) but having access to eager tensors
+    means `tf.py_function`s can use accelerators such as GPUs as well as
+    being differentiable using a gradient tape.
+    - tf.numpy_function maintains the semantics of the deprecated tf.py_func
+    (it is not differentiable, and manipulates numpy arrays). It drops the
+    stateful argument making all functions stateful.
+    
+WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/tensorflow_core/python/ops/array_grad.py:202: where (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/framework/indexed_slices.py:424: UserWarning: Converting sparse IndexedSlices to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  "Converting sparse IndexedSlices to a dense Tensor of unknown shape. "
+/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/framework/indexed_slices.py:424: UserWarning: Converting sparse IndexedSlices to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  "Converting sparse IndexedSlices to a dense Tensor of unknown shape. "
+/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/framework/indexed_slices.py:424: UserWarning: Converting sparse IndexedSlices to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  "Converting sparse IndexedSlices to a dense Tensor of unknown shape. "
+/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/framework/indexed_slices.py:424: UserWarning: Converting sparse IndexedSlices to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  "Converting sparse IndexedSlices to a dense Tensor of unknown shape. "
+/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/framework/indexed_slices.py:424: UserWarning: Converting sparse IndexedSlices to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  "Converting sparse IndexedSlices to a dense Tensor of unknown shape. "
+/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/framework/indexed_slices.py:424: UserWarning: Converting sparse IndexedSlices to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  "Converting sparse IndexedSlices to a dense Tensor of unknown shape. "
+WARNING:tensorflow:From tf_timing_full2.py:51: The name tf.ConfigProto is deprecated. Please use tf.compat.v1.ConfigProto instead.
+
+WARNING:tensorflow:From tf_timing_full2.py:54: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+2026-01-29 01:22:55.546230: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+2026-01-29 01:22:55.558110: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 3700180000 Hz
+2026-01-29 01:22:55.560355: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x115573e0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2026-01-29 01:22:55.560394: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2026-01-29 01:22:55.562344: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/lib/python3.6/dist-packages/cv2/../../lib64:
+2026-01-29 01:22:55.562372: E tensorflow/stream_executor/cuda/cuda_driver.cc:318] failed call to cuInit: UNKNOWN ERROR (303)
+2026-01-29 01:22:55.562395: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:163] no NVIDIA GPU device is present: /dev/nvidia0 does not exist
+WARNING:tensorflow:From tf_timing_full2.py:55: The name tf.global_variables_initializer is deprecated. Please use tf.compat.v1.global_variables_initializer instead.
+
+2026-01-29 01:23:08.946329: W tensorflow/core/framework/cpu_allocator_impl.cc:81] Allocation of 142515072 exceeds 10% of system memory.
+2026-01-29 01:23:08.988642: W tensorflow/core/framework/cpu_allocator_impl.cc:81] Allocation of 142515072 exceeds 10% of system memory.
+2026-01-29 01:23:09.044690: W tensorflow/core/framework/cpu_allocator_impl.cc:81] Allocation of 143787528 exceeds 10% of system memory.
+2026-01-29 01:23:10.374649: W tensorflow/core/framework/cpu_allocator_impl.cc:81] Allocation of 142515072 exceeds 10% of system memory.
+2026-01-29 01:23:10.423310: W tensorflow/core/framework/cpu_allocator_impl.cc:81] Allocation of 142515072 exceeds 10% of system memory.
+[WARN] Failed to load custom NNDistance op. Falling back to CPU implementation.
+[WARN] libcudart.so.11.0: cannot open shared object file: No such file or directory
+Model restored from file: results/coarse_mvp2m/models/meshnetmvp2m.ckpt-50, epoch 50
+Model restored from file: results/refine_p2mpp/models/meshnet.ckpt-10, epoch 10
+Models restored
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/client/session.py", line 1365, in _do_call
+    return fn(*args)
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/client/session.py", line 1350, in _run_fn
+    target_list, run_metadata)
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/client/session.py", line 1443, in _call_tf_sessionrun
+    run_metadata)
+tensorflow.python.framework.errors_impl.InvalidArgumentError: Cannot multiply A and B because inner dimension does not match: 156 vs. 2466.  Did you forget a transpose?  Dimensions of A: [156, 156).  Dimensions of B: [2466,192]
+	 [[{{node graph_conv_blk1_1_layer_1/SparseTensorDenseMatMul_1/SparseTensorDenseMatMul}}]]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "tf_timing_full2.py", line 96, in <module>
+    output1, output3 = sess.run([model1.output1, model1.output3], feed_dict=feed_dict)
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/client/session.py", line 956, in run
+    run_metadata_ptr)
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/client/session.py", line 1180, in _run
+    feed_dict_tensor, options, run_metadata)
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/client/session.py", line 1359, in _do_run
+    run_metadata)
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/client/session.py", line 1384, in _do_call
+    raise type(e)(node_def, op, message)
+tensorflow.python.framework.errors_impl.InvalidArgumentError: Cannot multiply A and B because inner dimension does not match: 156 vs. 2466.  Did you forget a transpose?  Dimensions of A: [156, 156).  Dimensions of B: [2466,192]
+	 [[node graph_conv_blk1_1_layer_1/SparseTensorDenseMatMul_1/SparseTensorDenseMatMul (defined at /usr/local/lib/python3.6/dist-packages/tensorflow_core/python/framework/ops.py:1748) ]]
+
+Original stack trace for 'graph_conv_blk1_1_layer_1/SparseTensorDenseMatMul_1/SparseTensorDenseMatMul':
+  File "tf_timing_full2.py", line 48, in <module>
+    model1 = MVP2MNet(placeholders, logging=True, args=cfg)
+  File "/workspace/modules/models_mvp2m.py", line 95, in __init__
+    self.build()
+  File "/workspace/modules/models_mvp2m.py", line 229, in build
+    hidden = layer(self.activations[-1])
+  File "/workspace/modules/layers.py", line 78, in __call__
+    outputs = self._call(inputs)
+  File "/workspace/modules/layers.py", line 182, in _call
+    support = dot(self.support[i], pre_sup, sparse=True)
+  File "/workspace/modules/layers.py", line 36, in dot
+    res = tf.sparse_tensor_dense_matmul(x, y)
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/ops/sparse_ops.py", line 2405, in sparse_tensor_dense_matmul
+    adjoint_b=adjoint_b)
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/ops/gen_sparse_ops.py", line 3063, in sparse_tensor_dense_mat_mul
+    adjoint_b=adjoint_b, name=name)
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/framework/op_def_library.py", line 794, in _apply_op_helper
+    op_def=op_def)
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/util/deprecation.py", line 507, in new_func
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/framework/ops.py", line 3357, in create_op
+    attrs, op_def, compute_device)
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/framework/ops.py", line 3426, in _create_op_internal
+    op_def=op_def)
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow_core/python/framework/ops.py", line 1748, in __init__
+    self._traceback = tf_stack.extract_stack()
+

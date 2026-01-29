@@ -1,4 +1,5 @@
 # Design B: GPU Acceleration Report
+
 ## Pixel2Mesh++ on NVIDIA RTX 4070
 
 **Date:** January 28, 2026  
@@ -10,9 +11,10 @@
 
 ## Executive Summary
 
-This report documents the implementation and benchmarking of GPU-accelerated inference for Pixel2Mesh++ 3D mesh reconstruction on the NVIDIA RTX 4070 GPU. 
+This report documents the implementation and benchmarking of GPU-accelerated inference for Pixel2Mesh++ 3D mesh reconstruction on the NVIDIA RTX 4070 GPU.
 
 **Key Results:**
+
 - ✅ **24.85× speedup** achieved over CPU baseline
 - ✅ Inference time reduced from 6.96s to 0.28s (35 samples)
 - ✅ Throughput increased from 5 to 125 samples/second
@@ -23,29 +25,32 @@ This report documents the implementation and benchmarking of GPU-accelerated inf
 ## 1. Hardware & Software Configuration
 
 ### Hardware Specifications
-| Component | Specification |
-|-----------|--------------|
-| GPU | NVIDIA GeForce RTX 4070 |
-| Architecture | Ada Lovelace (Compute Capability 8.9) |
-| VRAM | 12.4 GB |
-| Release Date | 2023 |
-| Driver Version | 590.48.01 |
+
+| Component      | Specification                         |
+| -------------- | ------------------------------------- |
+| GPU            | NVIDIA GeForce RTX 4070               |
+| Architecture   | Ada Lovelace (Compute Capability 8.9) |
+| VRAM           | 12.4 GB                               |
+| Release Date   | 2023                                  |
+| Driver Version | 590.48.01                             |
 
 ### Software Stack (Final Implementation)
-| Component | Version | Notes |
-|-----------|---------|-------|
-| Framework | PyTorch 2.0.1 | Native RTX 4070 support |
-| CUDA | 11.7 | With cuDNN 8 |
-| Python | 3.10 | |
-| PyTorch3D | 0.7.4 | Pre-built wheel (20.2 MB) |
-| Key Libraries | scipy≥1.7, matplotlib≥3.5, scikit-image≥0.19, numpy≥1.19,<1.24 | |
-| Docker Image | p2mpp-pytorch:gpu | 11.6 GB |
+
+| Component     | Version                                                        | Notes                     |
+| ------------- | -------------------------------------------------------------- | ------------------------- |
+| Framework     | PyTorch 2.0.1                                                  | Native RTX 4070 support   |
+| CUDA          | 11.7                                                           | With cuDNN 8              |
+| Python        | 3.10                                                           |                           |
+| PyTorch3D     | 0.7.4                                                          | Pre-built wheel (20.2 MB) |
+| Key Libraries | scipy≥1.7, matplotlib≥3.5, scikit-image≥0.19, numpy≥1.19,<1.24 |                           |
+| Docker Image  | p2mpp-pytorch:gpu                                              | 11.6 GB                   |
 
 ---
 
 ## 2. Performance Comparison
 
 ### Benchmark Configuration
+
 - **Test Dataset:** 35 samples
 - **Input:** 224×224 RGB images
 - **Output:** 2562-vertex meshes
@@ -54,15 +59,16 @@ This report documents the implementation and benchmarking of GPU-accelerated inf
 
 ### Results Summary
 
-| Design | Framework | Platform | Time (35 samples) | Avg/Sample | Throughput | Speedup |
-|--------|-----------|----------|-------------------|------------|------------|---------|
-| **Design A** | TensorFlow 1.15.0 | CPU | 6.96s ± 0.12s | 199ms | 5 samples/s | 1.0× (baseline) |
-| **Design B (Failed)** | TensorFlow 2.6-2.10 | GPU (attempted) | 6.56s ± 0.07s | 187ms | 5.3 samples/s | 1.06× |
-| **Design B (Success)** | PyTorch 2.0.1 | **RTX 4070 GPU** | **0.28s** | **8ms** | **125 samples/s** | **24.85×** |
+| Design                 | Framework           | Platform         | Time (35 samples) | Avg/Sample | Throughput        | Speedup         |
+| ---------------------- | ------------------- | ---------------- | ----------------- | ---------- | ----------------- | --------------- |
+| **Design A**           | TensorFlow 1.15.0   | CPU              | 6.96s ± 0.12s     | 199ms      | 5 samples/s       | 1.0× (baseline) |
+| **Design B (Failed)**  | TensorFlow 2.6-2.10 | GPU (attempted)  | 6.56s ± 0.07s     | 187ms      | 5.3 samples/s     | 1.06×           |
+| **Design B (Success)** | PyTorch 2.0.1       | **RTX 4070 GPU** | **0.28s**         | **8ms**    | **125 samples/s** | **24.85×**      |
 
 ### Detailed PyTorch GPU Results
 
 **Run 1:**
+
 ```
 Processing 35 samples...
   Processed 10/35 samples (avg: 8.48ms/sample)
@@ -72,6 +78,7 @@ Total: 0.29s, Average: 8.16ms/sample
 ```
 
 **Run 2:**
+
 ```
 Processing 35 samples...
   Processed 10/35 samples (avg: 7.79ms/sample)
@@ -81,6 +88,7 @@ Total: 0.27s, Average: 7.85ms/sample
 ```
 
 **Final Statistics:**
+
 - Mean time: 0.28s (±0.01s)
 - Mean per-sample: 8.00ms
 - Throughput: 124.97 samples/second
@@ -93,6 +101,7 @@ Total: 0.27s, Average: 7.85ms/sample
 ### Challenge 1: TensorFlow Compatibility Issues
 
 #### Initial Problem (TensorFlow 1.15.0)
+
 ```
 ModuleNotFoundError: No module named 'tensorflow.contrib'
 ```
@@ -106,9 +115,10 @@ ModuleNotFoundError: No module named 'tensorflow.contrib'
 ### Challenge 2: cuSolver Initialization Failure (Critical Blocker)
 
 #### Persistent Error Across All TensorFlow Versions
+
 ```
-E tensorflow/stream_executor/cuda/cuda_solver.cc:66] 
-cusolverDnCreate(&cusolver_dn_handle) == CUSOLVER_STATUS_SUCCESS 
+E tensorflow/stream_executor/cuda/cuda_solver.cc:66]
+cusolverDnCreate(&cusolver_dn_handle) == CUSOLVER_STATUS_SUCCESS
 Failed to create cuSolverDN instance
 ```
 
@@ -120,12 +130,14 @@ Failed to create cuSolverDN instance
 | 2.10.1 | 11.8 | ❌ Immediate crash | 6.56s | 1.06× |
 
 **Root Cause Analysis:**
+
 - RTX 4070 uses Ada Lovelace architecture (compute capability 8.9, released 2023)
 - TensorFlow Docker images (2.4-2.10) use cuSolver libraries compiled for older architectures
 - Hardware-library incompatibility prevents GPU linear algebra operations
 - All matrix operations fall back to CPU, nullifying GPU acceleration
 
 **Attempted Workarounds:**
+
 - Environment variables (`TF_DISABLE_CUDA_SOLVER=1`) - ❌ Ineffective
 - Upgrading CUDA versions (11.0→11.2→11.8) - ❌ All failed
 - Custom CUDA ops compilation (C++11, C++14) - ❌ Compiled but unusable
@@ -140,6 +152,7 @@ Failed to create cuSolverDN instance
 ### Challenge 3: PyTorch Docker Build Issues
 
 #### Issue 3a: Shell Redirect Error
+
 ```bash
 /bin/sh: 1: cannot open 1.24: No such file
 ```
@@ -147,6 +160,7 @@ Failed to create cuSolverDN instance
 **Cause:** Unquoted version specifier `numpy>=1.19,<1.24` - shell interpreted `<` as file redirect.
 
 **Solution:**
+
 ```dockerfile
 # Before:
 RUN pip install numpy>=1.19,<1.24
@@ -160,6 +174,7 @@ RUN pip install "numpy>=1.19,<1.24"
 ---
 
 #### Issue 3b: PyTorch3D Source Compilation Failure
+
 ```
 ModuleNotFoundError: No module named 'torch'
 ERROR: Failed to build 'git+https://github.com/facebookresearch/pytorch3d.git@stable'
@@ -168,6 +183,7 @@ ERROR: Failed to build 'git+https://github.com/facebookresearch/pytorch3d.git@st
 **Cause:** PyTorch3D `setup.py` imports `torch` before it's available in pip build environment.
 
 **Solution:** Switched from source compilation to pre-built wheel:
+
 ```dockerfile
 # Before:
 RUN pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable"
@@ -190,6 +206,7 @@ RUN pip install --no-index --no-cache-dir pytorch3d \
 ### Architecture Overview
 
 **Model Components:**
+
 1. **Image Encoder:** ResNet50 (pretrained on ImageNet)
    - Input: 224×224 RGB images
    - Output: 2048-dimensional feature vectors
@@ -209,19 +226,20 @@ RUN pip install --no-index --no-cache-dir pytorch3d \
 
 ### Key Files Created
 
-| File | Lines | Purpose |
-|------|-------|---------|
-| `pytorch_impl/env/gpu/Dockerfile` | 48 | Docker environment configuration |
-| `pytorch_impl/modules/models_p2mpp_pytorch.py` | 268 | Main model architecture |
-| `pytorch_impl/modules/chamfer_pytorch.py` | 60 | Chamfer distance implementation |
-| `pytorch_impl/test_p2mpp_pytorch.py` | 198 | Inference script |
-| `pytorch_impl/test_gpu_speed.py` | 114 | Benchmark script |
-| `pytorch_impl/benchmark_pytorch.sh` | 100+ | Full benchmark orchestration |
-| `pytorch_impl/cfgs/p2mpp_pytorch.yaml` | 50+ | Configuration parameters |
+| File                                           | Lines | Purpose                          |
+| ---------------------------------------------- | ----- | -------------------------------- |
+| `pytorch_impl/env/gpu/Dockerfile`              | 48    | Docker environment configuration |
+| `pytorch_impl/modules/models_p2mpp_pytorch.py` | 268   | Main model architecture          |
+| `pytorch_impl/modules/chamfer_pytorch.py`      | 60    | Chamfer distance implementation  |
+| `pytorch_impl/test_p2mpp_pytorch.py`           | 198   | Inference script                 |
+| `pytorch_impl/test_gpu_speed.py`               | 114   | Benchmark script                 |
+| `pytorch_impl/benchmark_pytorch.sh`            | 100+  | Full benchmark orchestration     |
+| `pytorch_impl/cfgs/p2mpp_pytorch.yaml`         | 50+   | Configuration parameters         |
 
 ### Code Highlights
 
 **Graph Convolution Layer:**
+
 ```python
 class GraphConvolution(nn.Module):
     def __init__(self, in_features, out_features, support_num=2):
@@ -232,7 +250,7 @@ class GraphConvolution(nn.Module):
         ])
         self.bias = nn.Parameter(torch.FloatTensor(out_features))
         self.reset_parameters()
-    
+
     def forward(self, x, supports):
         outputs = []
         for i, support in enumerate(supports):
@@ -241,19 +259,20 @@ class GraphConvolution(nn.Module):
 ```
 
 **Chamfer Distance (Naive Implementation):**
+
 ```python
 def chamfer_distance_naive(pred_points, gt_points):
     """Compute bidirectional chamfer distance"""
     pred_exp = pred_points.unsqueeze(2)  # [B, N, 1, 3]
     gt_exp = gt_points.unsqueeze(1)      # [B, 1, M, 3]
     distances = torch.sum((pred_exp - gt_exp) ** 2, dim=-1)  # [B, N, M]
-    
+
     # Forward: pred -> gt
     forward_dist = torch.min(distances, dim=2)[0].mean()
-    
+
     # Backward: gt -> pred
     backward_dist = torch.min(distances, dim=1)[0].mean()
-    
+
     return forward_dist + backward_dist
 ```
 
@@ -262,6 +281,7 @@ def chamfer_distance_naive(pred_points, gt_points):
 ## 5. Verification Tests
 
 ### Test 1: Basic PyTorch + CUDA
+
 ```bash
 $ docker run --rm --gpus all p2mpp-pytorch:gpu python -c "
 import torch
@@ -276,6 +296,7 @@ print(f'✓ GPU computation successful!')
 ```
 
 **Output:**
+
 ```
 PyTorch: 2.0.1
 CUDA available: True
@@ -283,11 +304,13 @@ GPU: NVIDIA GeForce RTX 4070
 GPU Memory: 12.4 GB
 ✓ GPU computation successful!
 ```
+
 ✅ **Pass**
 
 ---
 
 ### Test 2: Chamfer Distance on GPU
+
 ```bash
 $ docker run --rm --gpus all -v "$(pwd)/pytorch_impl":/workspace \
     -w /workspace p2mpp-pytorch:gpu python -c "
@@ -302,22 +325,26 @@ print(f'✓ Result is on GPU: {loss.is_cuda}')
 ```
 
 **Output:**
+
 ```
 ✓ Chamfer distance computed: 0.177430
 ✓ Result is on GPU: True
 ✓ Chamfer distance implementation works!
 ```
+
 ✅ **Pass**
 
 ---
 
 ### Test 3: Full Model Inference Speed
+
 ```bash
 $ docker run --rm --gpus all -v "$(pwd)/pytorch_impl":/workspace \
     -w /workspace p2mpp-pytorch:gpu python test_gpu_speed.py 35 2
 ```
 
 **Output:**
+
 ```
 === PyTorch GPU Speed Test ===
 Device: NVIDIA GeForce RTX 4070
@@ -343,6 +370,7 @@ Speedup: 24.85x
 
 ✓ EXCELLENT GPU acceleration achieved!
 ```
+
 ✅ **Pass** - **24.85× speedup confirmed**
 
 ---
@@ -351,22 +379,24 @@ Speedup: 24.85x
 
 ### Speed Improvement Breakdown
 
-| Metric | CPU (Design A) | GPU (Design B) | Improvement |
-|--------|----------------|----------------|-------------|
-| **Total Time (35 samples)** | 6.96s | 0.28s | **96% reduction** |
-| **Per-Sample Time** | 199ms | 8ms | **96% reduction** |
-| **Throughput** | 5 samples/s | 125 samples/s | **25× increase** |
-| **Processing Efficiency** | Baseline | 24.85× faster | **2,385% gain** |
+| Metric                      | CPU (Design A) | GPU (Design B) | Improvement       |
+| --------------------------- | -------------- | -------------- | ----------------- |
+| **Total Time (35 samples)** | 6.96s          | 0.28s          | **96% reduction** |
+| **Per-Sample Time**         | 199ms          | 8ms            | **96% reduction** |
+| **Throughput**              | 5 samples/s    | 125 samples/s  | **25× increase**  |
+| **Processing Efficiency**   | Baseline       | 24.85× faster  | **2,385% gain**   |
 
 ### GPU Utilization
 
 **Memory Usage:**
+
 - Available: 12.4 GB
 - Model size: ~200 MB (ResNet50 + GCN layers)
 - Per-batch usage: ~500 MB (batch_size=1, 2562 vertices)
 - Utilization: ~6% of total VRAM (single-sample inference)
 
 **Compute Utilization:**
+
 - Graph convolutions: Full GPU acceleration ✅
 - Matrix multiplications: Full GPU acceleration ✅
 - ResNet50 forward pass: Full GPU acceleration ✅
@@ -402,12 +432,14 @@ Speedup: 24.85x
 ### Recommendations
 
 **For Thesis Design B:**
+
 - ✅ Use PyTorch implementation for all GPU-accelerated experiments
 - ✅ Document TensorFlow cuSolver incompatibility as lesson learned
 - ✅ Leverage 24.85× speedup for large-scale dataset processing
 - ✅ Consider batch_size > 1 for further throughput optimization
 
 **For Future Work:**
+
 - **Mixed Precision Training:** FP16 inference could provide 2× additional speedup
 - **Multi-GPU Scaling:** Data parallelism for massive datasets (>100k samples)
 - **TorchScript Compilation:** Production deployment optimization
@@ -415,13 +447,13 @@ Speedup: 24.85x
 
 ### Success Metrics Summary
 
-| Requirement | Target | Achieved | Status |
-|-------------|--------|----------|--------|
-| GPU Acceleration | 3-10× speedup | 24.85× | ✅ Exceeded |
-| RTX 4070 Support | Full utilization | 12.4GB detected, no errors | ✅ Success |
-| Reproducibility | Docker environment | 11.6GB image ready | ✅ Complete |
-| Performance Data | Comparative benchmarks | Detailed timing logs | ✅ Documented |
-| Thesis Ready | Implementation complete | All code tested | ✅ Ready |
+| Requirement      | Target                  | Achieved                   | Status        |
+| ---------------- | ----------------------- | -------------------------- | ------------- |
+| GPU Acceleration | 3-10× speedup           | 24.85×                     | ✅ Exceeded   |
+| RTX 4070 Support | Full utilization        | 12.4GB detected, no errors | ✅ Success    |
+| Reproducibility  | Docker environment      | 11.6GB image ready         | ✅ Complete   |
+| Performance Data | Comparative benchmarks  | Detailed timing logs       | ✅ Documented |
+| Thesis Ready     | Implementation complete | All code tested            | ✅ Ready      |
 
 ---
 
@@ -430,15 +462,17 @@ Speedup: 24.85x
 ### A. Build Commands
 
 **PyTorch Docker Image:**
+
 ```bash
 cd pytorch_impl
 docker build -f env/gpu/Dockerfile -t p2mpp-pytorch:gpu .
 ```
 
 **Verify Installation:**
+
 ```bash
 docker run --rm --gpus all p2mpp-pytorch:gpu python -c "
-import torch; 
+import torch;
 print(f'PyTorch {torch.__version__}, CUDA: {torch.cuda.is_available()}')
 "
 ```
@@ -446,6 +480,7 @@ print(f'PyTorch {torch.__version__}, CUDA: {torch.cuda.is_available()}')
 ### B. Benchmark Reproduction
 
 **Quick Test (35 samples, 2 runs):**
+
 ```bash
 docker run --rm --gpus all \
     -v "$(pwd)/pytorch_impl":/workspace \
@@ -455,6 +490,7 @@ docker run --rm --gpus all \
 ```
 
 **Extended Benchmark (100 samples, 5 runs):**
+
 ```bash
 docker run --rm --gpus all \
     -v "$(pwd)/pytorch_impl":/workspace \
@@ -493,6 +529,7 @@ p2mpp-pytorch       gpu    8f6aac9f9a0c  11.6GB    Jan 28, 2026
 **Base Image:** `pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime`
 
 **Installed Packages:**
+
 - PyTorch 2.0.1 (CUDA 11.7)
 - PyTorch3D 0.7.4 (pre-built wheel, 20.2 MB)
 - scipy ≥1.7, matplotlib ≥3.5, scikit-image ≥0.19

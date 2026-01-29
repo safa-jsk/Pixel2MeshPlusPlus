@@ -1,0 +1,17 @@
+Design A Baseline Performance Summary
+==================================================
+Evaluation Date: 2026-01-28 20:58:18
+Number of samples: 35
+
+Timing Statistics (per sample):
+--------------------------------------------------
+  Average Stage 1: 0.085s ± 0.076s
+  Average Stage 2: 1.713s ± 0.072s
+  Average Total:   1.799s ± 0.146s
+  Min time:        1.715s
+  Max time:        2.635s
+
+Total Processing:
+--------------------------------------------------
+  Total time: 62.96s (1.05 minutes)
+==================================================

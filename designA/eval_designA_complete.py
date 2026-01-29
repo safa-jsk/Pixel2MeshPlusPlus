@@ -58,11 +58,11 @@ def main(eval_list_file, output_dir):
         'sample_adj': [tf.placeholder(tf.float32, shape=(43, 43)) for _ in range(num_supports)],
     }
 
-    # Paths (relative to project root)
+    # Paths (relative to project root - running from designA/ folder)
     model1_dir = '../results/coarse_mvp2m/models'
     model2_dir = '../results/refine_p2mpp/models'
-    data_root = '../data/p2mppdata/test'
-    image_root = '../data/ShapeNetImages/ShapeNetRendering'
+    data_root = '../data/designA_subset/p2mppdata/test'
+    image_root = '../data/designA_subset/ShapeNetRendering/rendering_only'
     
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -107,14 +107,15 @@ def main(eval_list_file, output_dir):
     print('=> Loading mesh template...')
     pkl = pickle.load(open('../data/iccv_p2mpp.dat', 'rb'))
     feed_dict = construct_feed_dict(pkl, placeholders)
+    initial_coords = pkl['coord']  # Save initial ellipsoid coordinates (156, 3)
     
     # ---------------------------------------------------------------
     test_number = data.number
     tflearn.is_training(False, sess)
     
-    print('=' * 70)
-    print('Starting 2-stage inference on {} samples'.format(test_number))
-    print('=' * 70)
+    print('=' * 70, flush=True)
+    print('Starting 2-stage inference on {} samples'.format(test_number), flush=True)
+    print('=' * 70, flush=True)
     
     timing_results = []
     stage1_times = []
@@ -123,6 +124,10 @@ def main(eval_list_file, output_dir):
     for iters in range(test_number):
         # Fetch data
         img_all_view, labels, poses, data_id, _ = data.fetch()
+        
+        # Reset features to initial ellipsoid for Stage 1
+        # (This is crucial - otherwise Stage 2 output from previous iteration persists)
+        feed_dict.update({placeholders['features']: initial_coords})
         feed_dict.update({placeholders['img_inp']: img_all_view})
         feed_dict.update({placeholders['labels']: labels})
         feed_dict.update({placeholders['cameras']: poses})
@@ -163,7 +168,7 @@ def main(eval_list_file, output_dir):
         np.savetxt(obj_path, mesh_data, fmt='%s', delimiter=' ')
         
         print('[{:2d}/{:2d}] {} | Stage1: {:.2f}s | Stage2: {:.2f}s | Total: {:.2f}s'.format(
-            iters + 1, test_number, data_id[:40], t1_elapsed, t2_elapsed, total_elapsed))
+            iters + 1, test_number, data_id[:40], t1_elapsed, t2_elapsed, total_elapsed), flush=True)
     
     # ---------------------------------------------------------------
     data.shutdown()
