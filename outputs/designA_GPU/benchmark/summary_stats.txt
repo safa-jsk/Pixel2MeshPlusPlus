@@ -1,0 +1,41 @@
+======================================================================
+DESIGN A - GPU ENABLED - EVALUATION SUMMARY
+======================================================================
+Configuration:
+  GPU Enabled: YES
+  GPU ID: 0
+  Framework: TensorFlow 2.12.0
+  Eval List: ../data/designA_eval_1000.txt
+  Number of samples: 1000
+  Metric threshold tau: 0.0001
+
+Timing Statistics (per sample):
+----------------------------------------------------------------------
+  Average Stage 1: 8.94ms ± 0.51ms
+  Average Stage 2: 83.77ms ± 2.22ms
+  Average Total:   92.71ms ± 2.29ms
+  Min time:        87.58ms
+  Max time:        104.81ms
+  Throughput:      10.79 samples/sec
+
+Quality Metrics:
+----------------------------------------------------------------------
+  Chamfer Distance: 0.00040574 ± 0.00049364
+  Chamfer (x10^-3): 0.4057
+  F1@tau:           66.50%
+  F1@2tau:          80.33%
+
+Per-Category Metrics:
+----------------------------------------------------------------------
+  02691156 (plane   ): CD=0.000230  F1@tau=81.98%  F1@2tau=89.98%  (n=167)
+  02958343 (car     ): CD=0.000254  F1@tau=66.25%  F1@2tau=82.47%  (n=167)
+  03001627 (chair   ): CD=0.000393  F1@tau=61.39%  F1@2tau=77.34%  (n=167)
+  03636649 (lamp    ): CD=0.000567  F1@tau=65.13%  F1@2tau=77.40%  (n=166)
+  03691459 (speaker ): CD=0.000586  F1@tau=54.42%  F1@2tau=71.84%  (n=166)
+  04379243 (table   ): CD=0.000406  F1@tau=69.76%  F1@2tau=82.90%  (n=167)
+
+Total Processing:
+----------------------------------------------------------------------
+  Total wall time: 136.43s (2.27 minutes)
+  Sum of sample times: 92.71s (1.55 minutes)
+======================================================================

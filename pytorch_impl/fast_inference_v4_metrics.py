@@ -14,6 +14,9 @@ Safe optimizations that don't affect accuracy:
 4. Pre-allocated buffers
 5. Extended warmup
 6. torch.inference_mode()
+7. AMP autocast (optional, enabled by default)
+8. torch.compile (optional, disabled by default)
+9. CUDA Chamfer extension (preferred over PyTorch fallback)
 """
 
 import argparse
@@ -40,12 +43,107 @@ from modules.models_p2mpp_exact import MeshNetPyTorch
 
 
 # ============================================================================
-# Pure PyTorch Chamfer Distance (GPU-accelerated, no custom CUDA kernel needed)
+# CUDA Chamfer Distance Extension (with safe fallback)
 # ============================================================================
 
-def chamfer_distance_pytorch(pred_pts, gt_pts):
+# Global flag to track which backend is in use
+_CHAMFER_BACKEND = None
+_CHAMFER_CUDA_MODULE = None
+
+
+def _try_load_cuda_chamfer():
     """
-    Compute Chamfer Distance using pure PyTorch.
+    Attempt to load the CUDA Chamfer extension.
+    Returns the module if successful, None otherwise.
+    
+    Note: The .so file must match the Python version. If compiled for Python 3.8
+    but running Python 3.10, import will fail. Rebuild with:
+        cd external/chamfer && python setup.py build_ext --inplace
+    """
+    global _CHAMFER_CUDA_MODULE
+    if _CHAMFER_CUDA_MODULE is not None:
+        return _CHAMFER_CUDA_MODULE
+    
+    # Try to import pre-built extension
+    try:
+        # Find the project root (parent of pytorch_impl)
+        this_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(this_dir)  # Pixel2MeshPlusPlus root
+        chamfer_dir = os.path.join(project_root, 'external', 'chamfer')
+        
+        # Also try workspace-relative path (for Docker)
+        if not os.path.exists(chamfer_dir):
+            chamfer_dir = '/workspace/external/chamfer'
+        
+        if os.path.exists(chamfer_dir):
+            # Look for .so file in the chamfer directory
+            so_files = [f for f in os.listdir(chamfer_dir) if f.endswith('.so')]
+            if so_files:
+                sys.path.insert(0, chamfer_dir)
+            
+            # Also check build directory
+            build_dir = os.path.join(chamfer_dir, 'build')
+            if os.path.exists(build_dir):
+                for subdir in os.listdir(build_dir):
+                    if subdir.startswith('lib'):
+                        sys.path.insert(0, os.path.join(build_dir, subdir))
+        
+        import chamfer as chamfer_cuda
+        _CHAMFER_CUDA_MODULE = chamfer_cuda
+        return chamfer_cuda
+    except ImportError as e:
+        # Common case: .so compiled for different Python version
+        return None
+    except Exception as e:
+        return None
+
+
+def chamfer_distance_cuda(pred_pts, gt_pts):
+    """
+    Compute Chamfer Distance using CUDA extension.
+    
+    Args:
+        pred_pts: (N, 3) predicted point cloud (CUDA tensor)
+        gt_pts: (M, 3) ground truth point cloud (CUDA tensor)
+    
+    Returns:
+        cd: scalar Chamfer distance
+        d1: (N,) squared distances from pred to gt
+        d2: (M,) squared distances from gt to pred
+    """
+    chamfer_cuda = _try_load_cuda_chamfer()
+    if chamfer_cuda is None:
+        raise RuntimeError("CUDA Chamfer extension not available")
+    
+    # The CUDA kernel expects (B, N, 3) format
+    pred_batch = pred_pts.unsqueeze(0).contiguous()  # (1, N, 3)
+    gt_batch = gt_pts.unsqueeze(0).contiguous()      # (1, M, 3)
+    
+    n = pred_pts.shape[0]
+    m = gt_pts.shape[0]
+    
+    # Pre-allocate output tensors
+    dist1 = torch.zeros(1, n, device=pred_pts.device, dtype=torch.float32)
+    dist2 = torch.zeros(1, m, device=pred_pts.device, dtype=torch.float32)
+    idx1 = torch.zeros(1, n, device=pred_pts.device, dtype=torch.int32)
+    idx2 = torch.zeros(1, m, device=pred_pts.device, dtype=torch.int32)
+    
+    # Call CUDA kernel
+    chamfer_cuda.forward(pred_batch, gt_batch, dist1, dist2, idx1, idx2)
+    
+    # Remove batch dimension
+    d1 = dist1.squeeze(0)  # (N,)
+    d2 = dist2.squeeze(0)  # (M,)
+    
+    # Chamfer distance is mean of both directions
+    cd = d1.mean() + d2.mean()
+    
+    return cd, d1, d2
+
+
+def chamfer_distance_pytorch_fallback(pred_pts, gt_pts):
+    """
+    Compute Chamfer Distance using pure PyTorch (fallback).
     
     Args:
         pred_pts: (N, 3) predicted point cloud
@@ -84,6 +182,49 @@ def chamfer_distance_pytorch(pred_pts, gt_pts):
     return cd, d1, d2
 
 
+def chamfer_distance_auto(pred_pts, gt_pts, force_cuda=True):
+    """
+    Compute Chamfer Distance with automatic backend selection.
+    
+    Args:
+        pred_pts: (N, 3) predicted point cloud
+        gt_pts: (M, 3) ground truth point cloud
+        force_cuda: If True and CUDA extension unavailable, raise error
+    
+    Returns:
+        cd: scalar Chamfer distance
+        d1: (N,) distances from pred to gt
+        d2: (M,) distances from gt to pred
+    """
+    global _CHAMFER_BACKEND
+    
+    # Check if CUDA extension is available
+    cuda_available = _try_load_cuda_chamfer() is not None
+    tensors_on_cuda = pred_pts.is_cuda and gt_pts.is_cuda
+    
+    if cuda_available and tensors_on_cuda:
+        if _CHAMFER_BACKEND != 'CUDA':
+            _CHAMFER_BACKEND = 'CUDA'
+        return chamfer_distance_cuda(pred_pts.float(), gt_pts.float())
+    else:
+        if force_cuda and tensors_on_cuda:
+            raise RuntimeError(
+                "CUDA Chamfer extension not available but --force-chamfer-cuda is True.\n"
+                "To build the extension, run:\n"
+                "  cd external/chamfer && python setup.py build_ext --inplace\n"
+                "Or set --no-force-chamfer-cuda to use PyTorch fallback."
+            )
+        if _CHAMFER_BACKEND != 'PyTorch':
+            _CHAMFER_BACKEND = 'PyTorch'
+        return chamfer_distance_pytorch_fallback(pred_pts.float(), gt_pts.float())
+
+
+def get_chamfer_backend():
+    """Return the currently active Chamfer backend name."""
+    global _CHAMFER_BACKEND
+    return _CHAMFER_BACKEND or 'uninitialized'
+
+
 def compute_f1_score(d1, d2, threshold):
     """
     Compute F1-score at a given threshold.
@@ -107,10 +248,22 @@ def compute_f1_score(d1, d2, threshold):
 # ============================================================================
 
 class MaxSpeedInferenceEngine:
-    """Maximum speed inference with safe optimizations"""
+    """Maximum speed inference with safe optimizations
     
-    def __init__(self, stage1_checkpoint, stage2_checkpoint, mesh_data_path, device='cuda'):
+    Supports:
+      - AMP autocast (FP16 mixed precision) via use_amp flag
+      - torch.compile optimization (optional) via use_compile flag
+      - CUDA Chamfer extension (external/chamfer/)
+      - Configurable warmup iterations
+    """
+    
+    def __init__(self, stage1_checkpoint, stage2_checkpoint, mesh_data_path, device='cuda',
+                 use_amp=True, use_compile=False, compile_mode='reduce-overhead', warmup_iters=15):
         self.device = torch.device(device)
+        self.use_amp = use_amp
+        self.use_compile = use_compile
+        self.compile_mode = compile_mode
+        self.warmup_iters = warmup_iters
         
         print('Loading mesh data...')
         with open(mesh_data_path, 'rb') as f:
@@ -154,16 +307,32 @@ class MaxSpeedInferenceEngine:
         self.stage2_model = self.stage2_model.to(self.device)
         self.stage2_model.eval()
         
+        # Apply torch.compile if requested (PyTorch 2.0+ feature)
+        # Note: Only apply to Stage 2 - Stage 1 uses sparse tensors which aren't supported
+        if self.use_compile:
+            if hasattr(torch, 'compile'):
+                print(f'Applying torch.compile to Stage 2 only (mode={self.compile_mode})...')
+                print('  (Stage 1 uses sparse tensors, incompatible with torch.compile)')
+                self.stage2_model = torch.compile(self.stage2_model, mode=self.compile_mode)
+            else:
+                print('Warning: torch.compile not available (requires PyTorch 2.0+)')
+                self.use_compile = False
+        
         # Pre-allocate delta_coord
         N = 2466
         self.delta_coord = self.sample_coord.unsqueeze(0).expand(N, -1, -1).contiguous()
         
         # Extended warmup for cuDNN autotuner
-        print('Warming up GPU (extended)...')
+        print(f'Warming up GPU ({self.warmup_iters} iterations)...')
         self._warmup()
         
         print(f'Stage 1 params: {sum(p.numel() for p in self.stage1_model.parameters()):,}')
         print(f'Stage 2 params: {sum(p.numel() for p in self.stage2_model.parameters()):,}')
+        
+        # Print final status
+        amp_status = "AMP autocast enabled" if self.use_amp else "AMP disabled"
+        compile_status = f"torch.compile ({self.compile_mode})" if self.use_compile else "no compile"
+        print(f'Configuration: {amp_status}, {compile_status}')
         print('Ready for maximum speed inference!')
     
     def _sparse_to_torch(self, idx, stage_data):
@@ -175,20 +344,33 @@ class MaxSpeedInferenceEngine:
         return sparse.to(self.device).coalesce()
     
     def _warmup(self):
+        """Warmup GPU for stable timing measurements.
+        
+        Uses self.warmup_iters iterations and respects AMP setting.
+        Extra iterations recommended when torch.compile is enabled.
+        
+        Note: Stage 1 uses sparse ops (no AMP), Stage 2 uses AMP.
+        """
         dummy_img = torch.randn(3, 3, 224, 224, device=self.device)
         dummy_cam = np.array([[0, 25, 0, 1.9, 25], [162, 25, 0, 1.9, 25], [198, 25, 0, 1.9, 25]])
         
+        # torch.compile requires more warmup for graph compilation
+        iters = self.warmup_iters * 2 if self.use_compile else self.warmup_iters
+        
         with torch.inference_mode():
-            for _ in range(15):
+            for _ in range(iters):
+                # Stage 1: No AMP (sparse ops don't support FP16)
                 _ = self.stage1_model(
                     dummy_img, self.initial_coord,
                     self.supports1, self.supports2, self.supports3,
                     self.pool_idx1, self.pool_idx2,
                     dummy_cam, self.device
                 )
-                _ = self.stage2_model.cnn(dummy_img)
-                x = torch.randn(2466, 43, 339, device=self.device)
-                _ = self.stage2_model.drb1.local_conv1(x, self.sample_adj)
+                # Stage 2: Use AMP if enabled
+                with torch.cuda.amp.autocast(enabled=self.use_amp):
+                    _ = self.stage2_model.cnn(dummy_img)
+                    x = torch.randn(2466, 43, 339, device=self.device)
+                    _ = self.stage2_model.drb1.local_conv1(x, self.sample_adj)
         torch.cuda.synchronize()
     
     def _project_features(self, coord, img_feat, cameras):
@@ -275,6 +457,15 @@ class MaxSpeedInferenceEngine:
     
     @torch.inference_mode()
     def infer(self, imgs, cameras):
+        """Run inference with optional AMP autocast.
+        
+        AMP (Automatic Mixed Precision) uses FP16 for compute while
+        preserving FP32 for numerically sensitive operations.
+        
+        Note: Stage 1 uses sparse matrix operations which don't support FP16,
+        so AMP is only applied to Stage 2 (the CNN and DRB refinement).
+        """
+        # Stage 1: Sparse GCN operations - must stay in FP32
         output = self.stage1_model(
             imgs, self.initial_coord,
             self.supports1, self.supports2, self.supports3,
@@ -283,15 +474,18 @@ class MaxSpeedInferenceEngine:
         )
         coarse_mesh = output['coords3']
         
-        img_feat = self.stage2_model.cnn(imgs)
+        # Stage 2: CNN + DRB - can use AMP
+        with torch.cuda.amp.autocast(enabled=self.use_amp):
+            img_feat = self.stage2_model.cnn(imgs)
+            
+            proj_feat1 = self._project_features(coarse_mesh, img_feat, cameras)
+            blk1_coord = self._run_drb(self.stage2_model.drb1, proj_feat1, coarse_mesh, self.delta_coord)
+            
+            proj_feat2 = self._project_features(blk1_coord, img_feat, cameras)
+            blk2_coord = self._run_drb(self.stage2_model.drb2, proj_feat2, blk1_coord, self.delta_coord)
         
-        proj_feat1 = self._project_features(coarse_mesh, img_feat, cameras)
-        blk1_coord = self._run_drb(self.stage2_model.drb1, proj_feat1, coarse_mesh, self.delta_coord)
-        
-        proj_feat2 = self._project_features(blk1_coord, img_feat, cameras)
-        blk2_coord = self._run_drb(self.stage2_model.drb2, proj_feat2, blk1_coord, self.delta_coord)
-        
-        return blk2_coord
+        # Return in FP32 for metric computation (always cast back)
+        return blk2_coord.float()
 
 
 def load_sample(image_root, sample_id):
@@ -387,13 +581,42 @@ def main():
     parser.add_argument('--output_dir', default='outputs/designB/eval_meshes_v4')
     parser.add_argument('--tau', type=float, default=0.0001, help='Threshold for F1-score')
     
+    # Acceleration options (matching documentation)
+    parser.add_argument('--amp', action='store_true', default=True,
+                        help='Enable AMP autocast for FP16 inference (default: True)')
+    parser.add_argument('--no-amp', action='store_false', dest='amp',
+                        help='Disable AMP autocast')
+    parser.add_argument('--compile', action='store_true', default=False,
+                        help='Enable torch.compile (default: False)')
+    parser.add_argument('--compile-mode', type=str, default='reduce-overhead',
+                        choices=['default', 'reduce-overhead', 'max-autotune'],
+                        help='torch.compile mode (default: reduce-overhead)')
+    parser.add_argument('--force-chamfer-cuda', action='store_true', default=False,
+                        help='Require CUDA Chamfer extension (default: False, uses best available)')
+    parser.add_argument('--no-force-chamfer-cuda', action='store_false', dest='force_chamfer_cuda',
+                        help='Allow PyTorch fallback for Chamfer (default)')
+    parser.add_argument('--warmup-iters', type=int, default=15,
+                        help='Number of warmup iterations (default: 15)')
+    
     args = parser.parse_args()
     
     tau = args.tau
     tau_2 = 2 * tau
     
+    # Print feature banner (matching documentation claims)
+    print(f'\n{"="*70}')
+    print('DESIGN B v4 - ACCELERATION FEATURE STATUS')
+    print(f'{"="*70}')
+    print(f'  AMP Autocast:        {"ENABLED" if args.amp else "DISABLED"}')
+    print(f'  torch.compile:       {"ENABLED (mode={})".format(args.compile_mode) if args.compile else "DISABLED"}')
+    print(f'  Force CUDA Chamfer:  {"YES" if args.force_chamfer_cuda else "NO (allow PyTorch fallback)"}')
+    print(f'  Warmup iterations:   {args.warmup_iters}')
+    print(f'{"="*70}')
+    
     engine = MaxSpeedInferenceEngine(
-        args.stage1_checkpoint, args.stage2_checkpoint, args.mesh_data, device='cuda'
+        args.stage1_checkpoint, args.stage2_checkpoint, args.mesh_data, device='cuda',
+        use_amp=args.amp, use_compile=args.compile, compile_mode=args.compile_mode,
+        warmup_iters=args.warmup_iters
     )
     
     os.makedirs(args.output_dir, exist_ok=True)
@@ -451,8 +674,8 @@ def main():
             # Save ground truth
             np.savetxt(os.path.join(args.output_dir, f'{sample_base}_ground.xyz'), gt_pts)
             
-            # Compute Chamfer Distance
-            cd, d1, d2 = chamfer_distance_pytorch(pred_tensor, gt_tensor)
+            # Compute Chamfer Distance using auto-selected backend (CUDA preferred)
+            cd, d1, d2 = chamfer_distance_auto(pred_tensor, gt_tensor, force_cuda=args.force_chamfer_cuda)
             cd_val = cd.item()
             
             # Compute F1 scores
@@ -508,6 +731,10 @@ def main():
     print(f'Total time: {total_time_ms:.1f}ms ({total_time_s:.2f}s)')
     print(f'Throughput: {len(times)/sum(times):.1f} samples/sec')
     print(f'{"="*70}')
+    print(f'\nAcceleration Features Used:')
+    print(f'  AMP Autocast:    {"ENABLED" if args.amp else "DISABLED"}')
+    print(f'  torch.compile:   {"ENABLED" if args.compile else "DISABLED"}')
+    print(f'  Chamfer Backend: {get_chamfer_backend()}')
     
     if all_results:
         avg_cd = np.mean([r['chamfer_distance'] for r in all_results])

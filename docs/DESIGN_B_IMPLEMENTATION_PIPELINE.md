@@ -466,49 +466,61 @@ loss = chamfer_distance_naive(pred_points, gt_points)
 
 ### 2. AMP (Automatic Mixed Precision)
 
-**Status:** ❌ NOT USED in current implementation
+**Status:** ✅ IMPLEMENTED (Updated 2026-02-03)
 
-**Why not:**
+**Implementation:** `pytorch_impl/fast_inference_v4_metrics.py` L460-491
 
-- TF32 tensor cores already provide speed boost without precision loss
-- AMP (FP16/BF16) could cause numerical instability in graph convolutions
-- Design B achieves 6.8× speedup without AMP
+**CLI Flags:**
 
-**If you want to enable AMP:**
+- `--amp` (default: enabled) - Enable FP16 mixed precision for Stage 2
+- `--no-amp` - Disable AMP, use FP32 only
 
-```python
-from torch.cuda.amp import autocast, GradScaler
+**Technical Notes:**
 
-scaler = GradScaler()  # Only for training, not inference
+- Applied to Stage 2 only (CNN + DRB refinement blocks)
+- Stage 1 excluded because sparse tensor operations don't support FP16
+- Provides ~20% speedup (84.9ms → 70.6ms) with negligible accuracy loss
+- Final mesh vertices cast to float32 before export
 
-with autocast():  # Automatically casts to FP16 where safe
-    output = model(input)
+**Usage:**
+
+```bash
+# With AMP (default)
+python pytorch_impl/fast_inference_v4_metrics.py --test_file data/test.txt --amp
+
+# Without AMP (baseline)
+python pytorch_impl/fast_inference_v4_metrics.py --test_file data/test.txt --no-amp
 ```
-
-**Not found in:** Any `pytorch_impl/` files (grep search returned no matches)
 
 ---
 
 ### 3. torch.compile
 
-**Status:** ❌ NOT USED in current implementation
+**Status:** ✅ IMPLEMENTED (Updated 2026-02-03)
 
-**Why not:**
+**Implementation:** `pytorch_impl/fast_inference_v4_metrics.py` L304-314
 
-- PyTorch 2.0+ feature (requires PyTorch 2.0+, current setup uses 2.0.1)
-- torch.compile adds compilation overhead (first run is slow)
-- Dynamic graph structure (different samples → different graph shapes) reduces compile benefits
-- Already achieving target speedup without compile
+**CLI Flags:**
 
-**If you want to enable torch.compile:**
+- `--compile` (default: disabled) - Enable torch.compile for Stage 2
+- `--compile-mode` - Compilation mode: `default`, `reduce-overhead`, `max-autotune`
 
-```python
-# Compile Stage 1 and Stage 2 models
-self.stage1_model = torch.compile(self.stage1_model, mode='max-autotune')
-self.stage2_model = torch.compile(self.stage2_model, mode='max-autotune')
+**Technical Notes:**
+
+- Applied to Stage 2 only (Stage 1 uses sparse tensors incompatible with dynamo)
+- Disabled by default due to compilation overhead on first run
+- Warmup iterations doubled when compile enabled
+- Minimal speedup observed in benchmarks (~1%)
+
+**Usage:**
+
+```bash
+# With torch.compile
+python pytorch_impl/fast_inference_v4_metrics.py --test_file data/test.txt --compile --compile-mode max-autotune
+
+# Default (no compile)
+python pytorch_impl/fast_inference_v4_metrics.py --test_file data/test.txt
 ```
-
-**Not found in:** Any `pytorch_impl/` files (grep search returned no matches)
 
 ---
 
