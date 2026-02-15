@@ -42,8 +42,7 @@ from modules.models_mvp2m_pytorch import MVP2MNet
 from modules.models_p2mpp_exact import MeshNetPyTorch
 
 
-# ============================================================================
-# CUDA Chamfer Distance Extension (with safe fallback)
+# [DESIGN.B][CAMFM.A3_METRICS] CUDA Chamfer Distance Extension (with safe fallback)
 # ============================================================================
 
 # Global flag to track which backend is in use

@@ -23,7 +23,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import scipy.sparse as sp
 
-# Enable cuDNN autotuner for faster convolutions
+# [DESIGN.B][CAMFM.A2b_STEADY_STATE] cuDNN autotune + TF32 tensor cores
 torch.backends.cudnn.benchmark = True
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
@@ -43,7 +43,7 @@ class MaxSpeedInferenceEngine:
         with open(mesh_data_path, 'rb') as f:
             pkl = pickle.load(f)
         
-        # Pre-load all data to GPU with optimal memory layout
+        # [DESIGN.B][CAMFM.A2a_GPU_RESIDENCY] Pre-load all data to GPU with optimal memory layout
         self.initial_coord = torch.from_numpy(pkl['coord'].astype(np.float32)).to(self.device).contiguous()
         self.supports1 = [self._sparse_to_torch(t, pkl['stage1']) for t in range(2)]
         self.supports2 = [self._sparse_to_torch(t, pkl['stage2']) for t in range(2)]
@@ -81,7 +81,7 @@ class MaxSpeedInferenceEngine:
         self.stage2_model = self.stage2_model.to(self.device)
         self.stage2_model.eval()
         
-        # Pre-allocate delta_coord
+        # [DESIGN.B][CAMFM.A2c_MEM_LAYOUT] Pre-allocate delta_coord buffer
         N = 2466
         self.delta_coord = self.sample_coord.unsqueeze(0).expand(N, -1, -1).contiguous()
         
@@ -102,11 +102,12 @@ class MaxSpeedInferenceEngine:
         return sparse.to(self.device).coalesce()
     
     def _warmup(self):
+        # [DESIGN.B][CAMFM.A2b_STEADY_STATE] Extended warmup for cuDNN autotuner
         dummy_img = torch.randn(3, 3, 224, 224, device=self.device)
         dummy_cam = np.array([[0, 25, 0, 1.9, 25], [162, 25, 0, 1.9, 25], [198, 25, 0, 1.9, 25]])
         
         with torch.inference_mode():
-            for _ in range(15):
+            for _ in range(15):  # [CAMFM.A2b] 15 warmup iterations
                 _ = self.stage1_model(
                     dummy_img, self.initial_coord,
                     self.supports1, self.supports2, self.supports3,
@@ -200,6 +201,7 @@ class MaxSpeedInferenceEngine:
         
         return next_coord
     
+    # [DESIGN.B][CAMFM.A2d_OPTIONAL_ACCEL] torch.inference_mode disables autograd
     @torch.inference_mode()
     def infer(self, imgs, cameras):
         output = self.stage1_model(

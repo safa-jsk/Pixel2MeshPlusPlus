@@ -27,8 +27,7 @@ from utils.tools import construct_feed_dict
 
 
 def main(eval_list_file, output_dir, gpu_id=0):
-    # ============================================================
-    # GPU CONFIGURATION - Enable GPU (Design A was CPU-only)
+    # [DESIGN.A_GPU] GPU CONFIGURATION - Enable GPU (Design A was CPU-only)
     # ============================================================
     os.environ['CUDA_VISIBLE_DEVICES'] = str(gpu_id)
     print('=' * 70)

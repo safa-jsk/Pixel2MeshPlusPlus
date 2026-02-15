@@ -51,6 +51,7 @@ def compute_f1_score(d1, d2, threshold):
     return f1, precision, recall
 
 
+# [DESIGN.A][CAMFM.A3_METRICS] Quality metrics computation
 def main(mesh_dir, tau=0.0001):
     print('=' * 70)
     print('Design A - Quality Metrics Computation')

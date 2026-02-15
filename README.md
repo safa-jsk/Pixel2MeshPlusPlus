@@ -31,6 +31,32 @@ This repository includes two design implementations for comparison:
 
 ---
 
+## 🔗 Pipeline Traceability
+
+This repository is documented with thesis methodology tags (DESIGN._, CAMFM._) for academic reproducibility.
+
+| Document                                              | Description                                                              |
+| ----------------------------------------------------- | ------------------------------------------------------------------------ |
+| [PIPELINE_OVERVIEW.md](docs/PIPELINE_OVERVIEW.md)     | Visual Mermaid diagrams of model pipeline and CAMFM optimization overlay |
+| [DESIGNS.md](docs/DESIGNS.md)                         | Detailed specifications for Design A, A_GPU, B, and C                    |
+| [TRACEABILITY_MATRIX.md](docs/TRACEABILITY_MATRIX.md) | **Code-to-stage mapping**: StageID → file → function → evidence artifact |
+| [BENCHMARK_PROTOCOL.md](docs/BENCHMARK_PROTOCOL.md)   | Timing methodology: warmup, synchronization, exclusions                  |
+
+### In-Code Tags
+
+Critical code sections are tagged with methodology identifiers:
+
+- `[DESIGN.A]` - TensorFlow CPU baseline
+- `[DESIGN.A_GPU]` - TensorFlow GPU enablement
+- `[DESIGN.B]` - PyTorch GPU optimized
+- `[CAMFM.A2a_GPU_RESIDENCY]` - GPU tensor placement
+- `[CAMFM.A2b_STEADY_STATE]` - Warmup + cuDNN/TF32
+- `[CAMFM.A2c_MEM_LAYOUT]` - Contiguous memory + pre-allocation
+- `[CAMFM.A2d_OPTIONAL_ACCEL]` - inference_mode / AMP
+- `[CAMFM.A3_METRICS]` - Quality + performance metrics
+
+---
+
 #### Citation
 
 If you use this code for any purpose, please consider citing:
