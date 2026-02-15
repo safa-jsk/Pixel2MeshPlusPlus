@@ -20,6 +20,7 @@ from utils.tools import construct_feed_dict
 
 
 def main(eval_list_file, output_dir):
+    # [DESIGN.A] Force CPU-only execution (baseline)
     os.environ['CUDA_VISIBLE_DEVICES'] = ''  # Force CPU
     
     print('=' * 70)
@@ -29,6 +30,7 @@ def main(eval_list_file, output_dir):
     print('Output dir: {}'.format(output_dir))
     print('=' * 70)
     
+    # [DESIGN.A][CAMFM.A5_METHOD] Fixed seed for reproducibility
     seed = 123
     np.random.seed(seed)
     tf.set_random_seed(seed)

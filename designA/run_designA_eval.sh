@@ -67,6 +67,21 @@ echo ""
 echo "✓ Stage 2 complete"
 echo ""
 
+# Stage 3: Compute Quality Metrics
+echo "=========================================="
+echo "Stage 3: Computing Quality Metrics"
+echo "  (Chamfer Distance, F1@tau, F1@2tau)"
+echo "=========================================="
+python compute_metrics.py \
+    --mesh-dir ../outputs/designA/eval_meshes \
+    --tau 0.0001
+
+if [ $? -ne 0 ]; then
+    echo "⚠️  Metrics computation failed (non-critical)"
+fi
+
+echo ""
+
 # Display summary
 echo "=========================================="
 echo "Evaluation Complete!"
@@ -81,9 +96,19 @@ else
     echo ""
 fi
 
+if [ -f "../outputs/designA/benchmark/metrics_summary.txt" ]; then
+    echo "Quality Metrics:"
+    cat ../outputs/designA/benchmark/metrics_summary.txt
+    echo ""
+else
+    echo "⚠️  Metrics summary not found"
+    echo ""
+fi
+
 echo "📁 Output files:"
-echo "  Meshes: ../outputs/designA/eval_meshes/"
-echo "  Timing: ../outputs/designA/benchmark/"
+echo "  Meshes:  ../outputs/designA/eval_meshes/"
+echo "  Timing:  ../outputs/designA/benchmark/"
+echo "  Metrics: ../outputs/designA/benchmark/metrics_results.csv"
 echo ""
 
 # Count generated files

@@ -8,6 +8,55 @@ Please check our [paper](https://arxiv.org/abs/1908.01491) and the [project webp
 
 If you have any question, please contact Chao Wen (cwen18 at fudan dot edu dot cn).
 
+---
+
+## 📁 Project Structure
+
+This repository includes two design implementations for comparison:
+
+| Directory              | Description                                                     | Framework       |
+| ---------------------- | --------------------------------------------------------------- | --------------- |
+| [`designA/`](designA/) | **Design A**: Original TensorFlow CPU implementation (baseline) | TensorFlow 1.15 |
+| [`designB/`](designB/) | **Design B**: PyTorch GPU-accelerated implementation            | PyTorch 2.1+    |
+| [`docs/`](docs/)       | All documentation (thesis chapters, design specs, reports)      | -               |
+| [`scripts/`](scripts/) | Utility scripts (timing, tests, shell scripts)                  | -               |
+| [`outputs/`](outputs/) | Evaluation results and benchmark data                           | -               |
+
+### Quick Links
+
+- **Design A Documentation**: [docs/design/Design_A.md](docs/design/Design_A.md)
+- **Design B Documentation**: [designB/README.md](designB/README.md)
+- **Full Project Structure**: [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
+- **Docker Setup**: [docs/setup/Docker_setup.md](docs/setup/Docker_setup.md)
+
+---
+
+## 🔗 Pipeline Traceability
+
+This repository is documented with thesis methodology tags (DESIGN._, CAMFM._) for academic reproducibility.
+
+| Document                                              | Description                                                              |
+| ----------------------------------------------------- | ------------------------------------------------------------------------ |
+| [PIPELINE_OVERVIEW.md](docs/PIPELINE_OVERVIEW.md)     | Visual Mermaid diagrams of model pipeline and CAMFM optimization overlay |
+| [DESIGNS.md](docs/DESIGNS.md)                         | Detailed specifications for Design A, A_GPU, B, and C                    |
+| [TRACEABILITY_MATRIX.md](docs/TRACEABILITY_MATRIX.md) | **Code-to-stage mapping**: StageID → file → function → evidence artifact |
+| [BENCHMARK_PROTOCOL.md](docs/BENCHMARK_PROTOCOL.md)   | Timing methodology: warmup, synchronization, exclusions                  |
+
+### In-Code Tags
+
+Critical code sections are tagged with methodology identifiers:
+
+- `[DESIGN.A]` - TensorFlow CPU baseline
+- `[DESIGN.A_GPU]` - TensorFlow GPU enablement
+- `[DESIGN.B]` - PyTorch GPU optimized
+- `[CAMFM.A2a_GPU_RESIDENCY]` - GPU tensor placement
+- `[CAMFM.A2b_STEADY_STATE]` - Warmup + cuDNN/TF32
+- `[CAMFM.A2c_MEM_LAYOUT]` - Contiguous memory + pre-allocation
+- `[CAMFM.A2d_OPTIONAL_ACCEL]` - inference_mode / AMP
+- `[CAMFM.A3_METRICS]` - Quality + performance metrics
+
+---
+
 #### Citation
 
 If you use this code for any purpose, please consider citing:
@@ -41,7 +90,7 @@ If you use Chamfer Distance for training or evaluation, we have included the cud
 
 We recommend readers to follow the official tutorial of Tensorflow for how to compile the CUDA code. Please refer to [official tutorial](https://www.tensorflow.org/guide/extend/op#gpu_support).
 
-*Addition from author's first documentation*
+_Addition from author's first documentation_
 
 The official tutorial's link doesn't work anymore. I've followed [this link instead](https://www.tensorflow.org/guide/create_op).
 
@@ -58,13 +107,14 @@ The training/testing split can be found in `data/train_list.txt` and `data/test_
 If you are interested in using our data, please check [`./data`](./data) for terms of usage.
 
 ## Pre-trained Model
+
 We provide pre-trained models on ShapeNet datasets. Please check [`./data`](./data) for download links.
 
 ## Quick Demo
 
 First, please refer to the documentation in [`./data`](./data) to download the pre-trained model.
 
-Then, execute the script below, the input images for demo has placed in `data/demo/` and the final mesh will be output to `data/demo/predict.obj`:  
+Then, execute the script below, the input images for demo has placed in `data/demo/` and the final mesh will be output to `data/demo/predict.obj`:
 
 ```
 python demo.py
@@ -81,6 +131,7 @@ Our released code consists of a coarse shape generation and the refined block.
 For training, you should first train the coarse shape generation network, then generate intermediate results, and finally train the multi-view deformation network.
 
 #### Step1
+
 For training coarse shape generation, please set your own configuration in `cfgs/mvp2m.yaml`. Specifically, the meaning of the setting items is as follows. For more details, please refer to `modulles/config.py`.
 
 - `train_file_path`: the path of your own train split file which contains training data name for each instance
@@ -89,11 +140,13 @@ For training coarse shape generation, please set your own configuration in `cfgs
 - `coarse_result_***`: the configuration items related to the coarse intermediate mesh should be same as the training data
 
 Then execute the script:
+
 ```
 python train_mvp2m.py -f cfgs/mvp2m.yaml
 ```
 
 #### Step2
+
 Before training multi-view deformation network, you should generated coarse intermediate mesh.
 
 ```
@@ -101,6 +154,7 @@ python generate_mvp2m_intermediate.py -f cfgs/mvp2m.yaml
 ```
 
 #### Step3
+
 For training multi-view deformation network, please set your own configuration in `cfgs/p2mpp.yaml`.
 
 The configuration item is similar to Step1. In particular, `train_mesh_root` should be set to the output path of intermediate coarse shape generation.
@@ -112,25 +166,30 @@ python train_p2mpp.py -f cfgs/p2mpp.yaml
 
 ## Evaluation
 
-First, download the pre-trained model from the link in [`./data`](./data). 
+First, download the pre-trained model from the link in [`./data`](./data).
 
 Then the model can output predict mesh as follows.
 
 #### Step 1
+
 Generate coarse shape, you also need to set your own configuration in `cfgs/mvp2m.yaml` as mentioned previously, then execute the script:
+
 ```
 python test_mvp2m.py -f cfgs/mvp2m.yaml
 ```
 
 #### Step2
+
 You should set `test_mesh_root` in `cfgs/p2mpp.yaml` to the output folder in step1 and `test_image_path`,`test_file_path` as it mentioned in Training step.
 
 Then execute the script:
+
 ```
 python test_p2mpp.py -f cfgs/p2mpp.yaml
 ```
 
 For evaluate F-score and Chamfer distance you can execute the script below, and the evaluation result will be output and stored in `result/refine_p2mpp/log`:
+
 ```
 python f_score.py -f cfgs/p2mpp.yaml
 python cd_distance.py -f cfgs/p2mpp.yaml
@@ -142,7 +201,7 @@ Due to the stochastic nature during training. The released pre-trained model has
 
 ## Statement
 
-This software is for research purpose only. 
+This software is for research purpose only.
 Please contact us for the licence of commercial purposes. All rights are preserved.
 
 ## License

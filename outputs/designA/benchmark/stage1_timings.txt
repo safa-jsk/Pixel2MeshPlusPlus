@@ -1,9 +1,9 @@
 Stage 1 (Coarse MVP2M) Timing Statistics
 ==================================================
-Total samples: 35
-Total time: 6.56s
-Average time: 0.188s
-Median time: 0.169s
-Min time: 0.149s
-Max time: 0.771s
-Std dev: 0.101s
+Total samples: 1000
+Total time: 205.55s
+Average time: 0.206s
+Median time: 0.201s
+Min time: 0.165s
+Max time: 0.995s
+Std dev: 0.033s
