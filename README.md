@@ -1,67 +1,147 @@
 # Pixel2Mesh++
 
-This is an implementation of the ICCV'19 paper "Pixel2Mesh++: Multi-View 3D Mesh Generation via Deformation".
+Implementation of the ICCV'19 paper "Pixel2Mesh++: Multi-View 3D Mesh Generation via Deformation".
+[Paper](https://arxiv.org/abs/1908.01491) | [Project Page](https://walsvid.github.io/Pixel2MeshPlusPlus)
 
-Our method takes multi-view images as input and the network outputs a refined 3D mesh model via deformation.
-
-Please check our [paper](https://arxiv.org/abs/1908.01491) and the [project webpage](https://walsvid.github.io/Pixel2MeshPlusPlus) for more details.
-
-If you have any question, please contact Chao Wen (cwen18 at fudan dot edu dot cn).
+This repository is organized around **four design variants** for a thesis
+comparison study using the **CAMFM methodology** on Ubuntu 24.04.3.
 
 ---
 
-## 📁 Project Structure
+## Design Variants
 
-This repository includes two design implementations for comparison:
+| Design | Directory | Framework | Description |
+|--------|-----------|-----------|-------------|
+| **A (CPU)** | [`DesignA_CPU/`](DesignA_CPU/) | TensorFlow 1.15 | Original CPU baseline |
+| **A (GPU)** | [`DesignA_GPU/`](DesignA_GPU/) | TensorFlow 1.15 | GPU-enabled via Docker |
+| **B** | [`DesignB/`](DesignB/) | PyTorch 2.1+ | GPU-optimized (CAMFM) |
+| **C** | [`DesignC/`](DesignC/) | PyTorch 2.1+ | FaceScape domain (skeleton) |
 
-| Directory              | Description                                                     | Framework       |
-| ---------------------- | --------------------------------------------------------------- | --------------- |
-| [`designA/`](designA/) | **Design A**: Original TensorFlow CPU implementation (baseline) | TensorFlow 1.15 |
-| [`designB/`](designB/) | **Design B**: PyTorch GPU-accelerated implementation            | PyTorch 2.1+    |
-| [`docs/`](docs/)       | All documentation (thesis chapters, design specs, reports)      | -               |
-| [`scripts/`](scripts/) | Utility scripts (timing, tests, shell scripts)                  | -               |
-| [`outputs/`](outputs/) | Evaluation results and benchmark data                           | -               |
-
-### Quick Links
-
-- **Design A Documentation**: [docs/design/Design_A.md](docs/design/Design_A.md)
-- **Design B Documentation**: [designB/README.md](designB/README.md)
-- **Full Project Structure**: [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
-- **Docker Setup**: [docs/setup/Docker_setup.md](docs/setup/Docker_setup.md)
+Core library code lives in [`src/p2mpp/`](src/p2mpp/) with `tf/` and `torch/` sub-packages.
 
 ---
 
-## 🔗 Pipeline Traceability
+## Quick Start
 
-This repository is documented with thesis methodology tags (DESIGN._, CAMFM._) for academic reproducibility.
+### Design A — CPU Evaluation
 
-| Document                                              | Description                                                              |
-| ----------------------------------------------------- | ------------------------------------------------------------------------ |
-| [PIPELINE_OVERVIEW.md](docs/PIPELINE_OVERVIEW.md)     | Visual Mermaid diagrams of model pipeline and CAMFM optimization overlay |
-| [DESIGNS.md](docs/DESIGNS.md)                         | Detailed specifications for Design A, A_GPU, B, and C                    |
-| [TRACEABILITY_MATRIX.md](docs/TRACEABILITY_MATRIX.md) | **Code-to-stage mapping**: StageID → file → function → evidence artifact |
-| [BENCHMARK_PROTOCOL.md](docs/BENCHMARK_PROTOCOL.md)   | Timing methodology: warmup, synchronization, exclusions                  |
+```bash
+cd DesignA_CPU/scripts
+bash eval.sh            # runs 3-stage evaluation
+# or:  bash quick_start_designA.sh
+```
+
+### Design B — PyTorch GPU Benchmark
+
+```bash
+cd DesignB/scripts
+python infer_speed.py --help
+python infer_with_metrics.py --help
+bash benchmark.sh
+```
+
+### Demo (single-image 3D reconstruction)
+
+```bash
+cd DesignA_CPU/scripts
+bash demo.sh
+# Output: artifacts/outputs/temp/predict.obj
+```
+
+---
+
+## Repository Layout
+
+```
+Pixel2MeshPlusPlus/
+├── src/p2mpp/               # Core library (importable)
+│   ├── tf/                  #   TensorFlow: modules/, utils/, scripts/
+│   └── torch/               #   PyTorch:    modules/, engine/, convert/, utils/
+├── DesignA_CPU/             # Design A CPU scripts & eval lists
+├── DesignA_GPU/             # Design A GPU scripts & Docker
+├── DesignB/                 # Design B wrappers & Docker
+├── DesignC/                 # Design C stubs (FaceScape)
+├── external/                # Custom CUDA ops
+│   ├── tf_ops/              #   TF Chamfer/EMD ops (.so, sources)
+│   └── torch_chamfer/       #   PyTorch Chamfer CUDA extension
+├── configs/                 # YAML configurations
+│   ├── designA/             #   mvp2m.yaml, p2mpp.yaml
+│   └── designB/             #   p2mpp_pytorch.yaml
+├── assets/                  # Static assets
+│   ├── data_templates/      #   iccv_p2mpp.dat, face3.obj
+│   ├── demo_inputs/         #   plane1-3.png, cameras.txt
+│   └── figures/             #   README images
+├── artifacts/               # Runtime outputs (GITIGNORED)
+│   ├── checkpoints/         #   tf/, torch/
+│   └── outputs/             #   designA/, designA_GPU/, temp/
+├── data/                    # Data lists (train_list.txt, test_list.txt)
+├── docker/                  # Dockerfiles (cpu)
+├── env/                     # Environment configs
+├── tests/                   # Smoke tests
+└── docs/                    # Documentation (see docs/index.md)
+```
+
+---
+
+## Documentation
+
+See **[docs/index.md](docs/index.md)** for the full documentation index.
+
+Key documents:
+- [DESIGNS.md](docs/methodology/DESIGNS.md) — All design specifications
+- [PIPELINE_OVERVIEW.md](docs/methodology/PIPELINE_OVERVIEW.md) — Pipeline diagrams
+- [BENCHMARK_PROTOCOL.md](docs/methodology/BENCHMARK_PROTOCOL.md) — CAMFM timing methodology
+- [TRACEABILITY_MATRIX.md](docs/methodology/TRACEABILITY_MATRIX.md) — Code-to-stage mapping
+- [Docker_setup.md](docs/setup/Docker_setup.md) — Container setup
 
 ### In-Code Tags
 
-Critical code sections are tagged with methodology identifiers:
-
-- `[DESIGN.A]` - TensorFlow CPU baseline
-- `[DESIGN.A_GPU]` - TensorFlow GPU enablement
-- `[DESIGN.B]` - PyTorch GPU optimized
-- `[CAMFM.A2a_GPU_RESIDENCY]` - GPU tensor placement
-- `[CAMFM.A2b_STEADY_STATE]` - Warmup + cuDNN/TF32
-- `[CAMFM.A2c_MEM_LAYOUT]` - Contiguous memory + pre-allocation
-- `[CAMFM.A2d_OPTIONAL_ACCEL]` - inference_mode / AMP
-- `[CAMFM.A3_METRICS]` - Quality + performance metrics
+Critical code sections are labelled with methodology identifiers:
+`[DESIGN.A]`, `[DESIGN.B]`, `[CAMFM.A2a_GPU_RESIDENCY]`,
+`[CAMFM.A2b_STEADY_STATE]`, `[CAMFM.A2c_MEM_LAYOUT]`,
+`[CAMFM.A2d_OPTIONAL_ACCEL]`, `[CAMFM.A3_METRICS]`.
 
 ---
 
-#### Citation
+## Training (TensorFlow — Design A)
 
-If you use this code for any purpose, please consider citing:
+1. **Train coarse shape** (Stage 1):
+   ```bash
+   cd DesignA_CPU/scripts && bash train_stage1.sh
+   ```
+2. **Generate intermediate meshes**:
+   ```bash
+   cd src/p2mpp/tf/scripts
+   python generate_mvp2m_intermediate.py -f ../../configs/designA/mvp2m.yaml
+   ```
+3. **Train refinement** (Stage 2):
+   ```bash
+   cd DesignA_CPU/scripts && bash train_stage2.sh
+   ```
 
-```
+## Evaluation
+
+See the Quick Start section above, or each Design's README.
+
+---
+
+## Dataset
+
+[ShapeNet](https://www.shapenet.org/) models with rendered views from
+[3D-R2N2](https://github.com/chrischoy/3D-R2N2). Train/test splits in
+[`data/`](data/).
+
+## Custom CUDA Ops
+
+TensorFlow Chamfer/EMD ops: `external/tf_ops/` — see the included Makefile.
+PyTorch Chamfer extension: `external/torch_chamfer/` — build with
+`cd external/torch_chamfer && python setup.py build_ext --inplace`.
+
+---
+
+## Citation
+
+```bibtex
 @inProceedings{wen2019pixel2mesh++,
   title={Pixel2Mesh++: Multi-View 3D Mesh Generation via Deformation},
   author={Chao Wen and Yinda Zhang and Zhuwen Li and Yanwei Fu},
@@ -70,140 +150,6 @@ If you use this code for any purpose, please consider citing:
 }
 ```
 
-## Dependencies
-
-Requirements:
-
-- Python3.6
-- numpy
-- Tensorflow==1.12.0
-- tflearn==0.3.2
-- opencv-python
-- pyyaml
-- scipy
-
-Our code has been tested with Python 3.6, TensorFlow 1.12.0, CUDA 9.0 on Ubuntu 16.04.
-
-## Compile CUDA-op
-
-If you use Chamfer Distance for training or evaluation, we have included the cuda implementations of [Fan et. al.](https://github.com/fanhqme/PointSetGeneration) in `external/`.
-
-We recommend readers to follow the official tutorial of Tensorflow for how to compile the CUDA code. Please refer to [official tutorial](https://www.tensorflow.org/guide/extend/op#gpu_support).
-
-_Addition from author's first documentation_
-
-The official tutorial's link doesn't work anymore. I've followed [this link instead](https://www.tensorflow.org/guide/create_op).
-
-The `make` command didn't work for me. I had to modify it to compile the code for another CUDA version (10 in my case). I've added archives for the original .so and .cu.o files. There are also changes inside the Makefile file you'll need to look into if you want to compile your own version.
-
-In order to make things work, copy the content from the archive of your CUDA version into the `external` folder.
-
-## Dataset
-
-We used the [ShapeNet](https://www.shapenet.org/) dataset for 3D models, and rendered views from [3D-R2N2](https://github.com/chrischoy/3D-R2N2). When using the provided data make sure to respect the shapenet [license](https://shapenet.org/terms).
-
-The training/testing split can be found in `data/train_list.txt` and `data/test_list.txt`.
-
-If you are interested in using our data, please check [`./data`](./data) for terms of usage.
-
-## Pre-trained Model
-
-We provide pre-trained models on ShapeNet datasets. Please check [`./data`](./data) for download links.
-
-## Quick Demo
-
-First, please refer to the documentation in [`./data`](./data) to download the pre-trained model.
-
-Then, execute the script below, the input images for demo has placed in `data/demo/` and the final mesh will be output to `data/demo/predict.obj`:
-
-```
-python demo.py
-```
-
-#### Input images, coarse shape and shape generated by pixel2mesh++
-
-![](data/demo/plane1.png) ![](data/demo/plane2.png) ![](data/demo/plane3.png) ![](data/figure/coarse.gif) ![](data/figure/final.gif)
-
-## Training
-
-Our released code consists of a coarse shape generation and the refined block.
-
-For training, you should first train the coarse shape generation network, then generate intermediate results, and finally train the multi-view deformation network.
-
-#### Step1
-
-For training coarse shape generation, please set your own configuration in `cfgs/mvp2m.yaml`. Specifically, the meaning of the setting items is as follows. For more details, please refer to `modulles/config.py`.
-
-- `train_file_path`: the path of your own train split file which contains training data name for each instance
-- `train_image_path`: input image path
-- `train_data_path`: ground-truth model path
-- `coarse_result_***`: the configuration items related to the coarse intermediate mesh should be same as the training data
-
-Then execute the script:
-
-```
-python train_mvp2m.py -f cfgs/mvp2m.yaml
-```
-
-#### Step2
-
-Before training multi-view deformation network, you should generated coarse intermediate mesh.
-
-```
-python generate_mvp2m_intermediate.py -f cfgs/mvp2m.yaml
-```
-
-#### Step3
-
-For training multi-view deformation network, please set your own configuration in `cfgs/p2mpp.yaml`.
-
-The configuration item is similar to Step1. In particular, `train_mesh_root` should be set to the output path of intermediate coarse shape generation.
-Then execute the script:
-
-```
-python train_p2mpp.py -f cfgs/p2mpp.yaml
-```
-
-## Evaluation
-
-First, download the pre-trained model from the link in [`./data`](./data).
-
-Then the model can output predict mesh as follows.
-
-#### Step 1
-
-Generate coarse shape, you also need to set your own configuration in `cfgs/mvp2m.yaml` as mentioned previously, then execute the script:
-
-```
-python test_mvp2m.py -f cfgs/mvp2m.yaml
-```
-
-#### Step2
-
-You should set `test_mesh_root` in `cfgs/p2mpp.yaml` to the output folder in step1 and `test_image_path`,`test_file_path` as it mentioned in Training step.
-
-Then execute the script:
-
-```
-python test_p2mpp.py -f cfgs/p2mpp.yaml
-```
-
-For evaluate F-score and Chamfer distance you can execute the script below, and the evaluation result will be output and stored in `result/refine_p2mpp/log`:
-
-```
-python f_score.py -f cfgs/p2mpp.yaml
-python cd_distance.py -f cfgs/p2mpp.yaml
-```
-
-Please check that you config the correct ground truth path, image path and test split file path in yaml config file.
-
-Due to the stochastic nature during training. The released pre-trained model has slightly better F-score 67.23, CD 0.381 compared to F-score 66.48, CD 0.486 in the paper.
-
-## Statement
-
-This software is for research purpose only.
-Please contact us for the licence of commercial purposes. All rights are preserved.
-
 ## License
 
-BSD 3-Clause License
+BSD 3-Clause License. See [LICENSE](LICENSE).

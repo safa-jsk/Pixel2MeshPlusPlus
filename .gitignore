@@ -21,7 +21,7 @@ ShapeNetImages/
 ShapeNetRendering/
 p2mppdata/
 
-# Mesh files
+# Mesh files (generated)
 *.obj
 *.ply
 *.off
@@ -29,6 +29,22 @@ p2mppdata/
 *.mesh
 *.xyz
 
-# Output directories
-outputs/designA/eval_meshes/
+# =========================================
+# Artifacts (checkpoints, outputs, temp)
+# =========================================
+artifacts/**
+
+# Extension build outputs
+external/torch_chamfer/build/
+external/torch_chamfer/*.so
+external/torch_chamfer/*.egg-info/
+external/tf_ops/prebuilt/*.so
+*.so
+
+# Python build artifacts
+*.egg-info/
+dist/
+build/
+*.pyc
+*.pyo
 outputs/designB/
