@@ -6,7 +6,7 @@ set -e
 
 EVAL_LIST="designA_eval_list.txt"
 SOURCE_DAT="../data/p2mppdata/test"
-SOURCE_IMG="../data/ShapeNetImages/ShapeNetRendering"
+SOURCE_IMG="../data/ShapeNetRendering"
 SOURCE_IMG_ONLY="${SOURCE_IMG}/rendering_only"
 DEST_BASE="../data/designA_subset"
 DEST_DAT="${DEST_BASE}/p2mppdata/test"

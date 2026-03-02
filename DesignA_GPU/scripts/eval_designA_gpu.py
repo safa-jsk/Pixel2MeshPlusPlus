@@ -90,10 +90,10 @@ def main(eval_list_file, output_dir, gpu_id=0):
     }
 
     # Paths (relative to project root)
-    model_dir = '../results/refine_p2mpp/models'
+    model_dir = '../artifacts/checkpoints/tf/refine_p2mpp/models'
     data_root = '../data/p2mppdata/test'
-    image_root = '../data/ShapeNetImages/ShapeNetRendering'
-    mesh_root = '../results/coarse_mvp2m/predict/50'
+    image_root = '../data/ShapeNetRendering'
+    mesh_root = '../artifacts/checkpoints/tf/coarse_mvp2m/predict/50'
     
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)

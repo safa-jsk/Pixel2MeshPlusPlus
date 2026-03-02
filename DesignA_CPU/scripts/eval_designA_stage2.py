@@ -72,9 +72,9 @@ def main(eval_list_file, coarse_mesh_dir, output_dir):
         'sample_adj': [tf.placeholder(tf.float32, shape=(43, 43)) for _ in range(num_supports)],
     }
 
-    model_dir = '../results/refine_p2mpp/models'
+    model_dir = '../artifacts/checkpoints/tf/refine_p2mpp/models'
     data_root = '../data/p2mppdata/test'
-    image_root = '../data/ShapeNetImages/ShapeNetRendering'
+    image_root = '../data/ShapeNetRendering'
     
     os.makedirs(output_dir, exist_ok=True)
     

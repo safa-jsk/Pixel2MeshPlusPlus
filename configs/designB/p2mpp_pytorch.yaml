@@ -36,12 +36,12 @@ pre_trained_cnn_path: "artifacts/checkpoints/torch/coarse_mvp2m/models"
 
 # Test paths (will be overridden by command line args)
 test_file_path: "data/test_list.txt"
-test_data_path: "data/demo/p2mppdata/test"
-test_image_path: "data/demo/rendering_only"
+test_data_path: "data/p2mppdata/test"
+test_image_path: "data/ShapeNetRendering"
 test_mesh_root: "artifacts/outputs/pytorch_gpu/meshes"
 
 # Training paths (not used for inference)
 train_file_path: "data/train_list.txt"
-train_data_path: "/home/your_user_name/data/ShapeNetModels/train"
-train_image_path: "/home/your_user_name/data/ShapeNetImages/ShapeNetRendering"
-train_mesh_root: "results/coarse_mvp2m/coarse_intermediate/50"
+train_data_path: "data/p2mppdata/train"
+train_image_path: "data/ShapeNetRendering"
+train_mesh_root: "artifacts/checkpoints/tf/coarse_mvp2m/coarse_intermediate/50"

@@ -79,14 +79,14 @@ RUN mkdir -p /tmp/tf_ops_prebuilt && \
     TF_LFLAGS=$(python3 -c 'import tensorflow as tf; print(" ".join(tf.sysconfig.get_link_flags()))') && \
     # nn_distance (Chamfer)
     nvcc -std=c++17 -c -o tf_nndistance_g.cu.o tf_nndistance_g.cu \
-        $TF_CFLAGS -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2 --expt-relaxed-constexpr && \
+    $TF_CFLAGS -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2 --expt-relaxed-constexpr && \
     g++ -std=c++17 tf_nndistance.cpp tf_nndistance_g.cu.o -o /tmp/tf_ops_prebuilt/tf_nndistance_so.so \
-        -shared -fPIC $TF_CFLAGS -L/usr/local/cuda/lib64 -lcudart $TF_LFLAGS -O2 && \
+    -shared -fPIC $TF_CFLAGS -L/usr/local/cuda/lib64 -lcudart $TF_LFLAGS -O2 && \
     # approxmatch (EMD)
     nvcc -std=c++17 -c -o tf_approxmatch_g.cu.o tf_approxmatch_g.cu \
-        $TF_CFLAGS -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2 --expt-relaxed-constexpr && \
+    $TF_CFLAGS -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2 --expt-relaxed-constexpr && \
     g++ -std=c++17 tf_approxmatch.cpp tf_approxmatch_g.cu.o -o /tmp/tf_ops_prebuilt/tf_approxmatch_so.so \
-        -shared -fPIC $TF_CFLAGS -L/usr/local/cuda/lib64 -lcudart $TF_LFLAGS -O2 && \
+    -shared -fPIC $TF_CFLAGS -L/usr/local/cuda/lib64 -lcudart $TF_LFLAGS -O2 && \
     ls -lh /tmp/tf_ops_prebuilt/*.so && \
     echo "✓ TF custom CUDA ops compiled"
 

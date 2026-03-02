@@ -75,11 +75,11 @@ def main(eval_list_file, output_dir):
         'sample_adj': [tf.placeholder(tf.float32, shape=(43, 43)) for _ in range(num_supports)],
     }
 
-    # Paths (relative to project root - running from designA/ folder)
-    model1_dir = '../results/coarse_mvp2m/models'
-    model2_dir = '../results/refine_p2mpp/models'
-    data_root = '../data/designA_subset/p2mppdata/test'
-    image_root = '../data/designA_subset/ShapeNetRendering/rendering_only'
+    # Paths (relative to project root - running from DesignA_CPU/ folder)
+    model1_dir = '../artifacts/checkpoints/tf/coarse_mvp2m/models'
+    model2_dir = '../artifacts/checkpoints/tf/refine_p2mpp/models'
+    data_root = '../data/p2mppdata/test'
+    image_root = '../data/ShapeNetRendering'
     
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)

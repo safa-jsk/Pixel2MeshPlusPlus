@@ -64,9 +64,9 @@ def main(eval_list_file, output_dir):
         'sample_adj': [tf.placeholder(tf.float32, shape=(43, 43)) for _ in range(num_supports)],
     }
 
-    model_dir = '../results/coarse_mvp2m/models'
+    model_dir = '../artifacts/checkpoints/tf/coarse_mvp2m/models'
     data_root = '../data/p2mppdata/test'
-    image_root = '../data/ShapeNetImages/ShapeNetRendering'
+    image_root = '../data/ShapeNetRendering'
     
     os.makedirs(output_dir, exist_ok=True)
     
