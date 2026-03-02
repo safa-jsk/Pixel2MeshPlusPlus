@@ -75,7 +75,8 @@ Pixel2MeshPlusPlus/
 │   ├── checkpoints/         #   tf/, torch/
 │   └── outputs/             #   designA/, designA_GPU/, temp/
 ├── data/                    # Data lists (train_list.txt, test_list.txt)
-├── docker/                  # Dockerfiles (cpu)
+├── Dockerfile               # Unified Docker image (all designs)
+├── docker/                  # Per-design docker run scripts
 ├── env/                     # Environment configs
 ├── tests/                   # Smoke tests
 └── docs/                    # Documentation (see docs/index.md)
@@ -136,6 +137,23 @@ See the Quick Start section above, or each Design's README.
 TensorFlow Chamfer/EMD ops: `external/tf_ops/` — see the included Makefile.
 PyTorch Chamfer extension: `external/torch_chamfer/` — build with
 `cd external/torch_chamfer && python setup.py build_ext --inplace`.
+
+---
+
+## Docker
+
+A single unified `Dockerfile` at the project root supports all designs:
+
+```bash
+docker build -t p2mpp:latest .        # build once (~15 min)
+bash docker/run_designA_cpu.sh         # Design A — CPU
+bash docker/run_designA_gpu.sh         # Design A — GPU
+bash docker/run_designB.sh             # Design B — PyTorch GPU
+bash docker/run_designC.sh             # Design C — FaceScape (stub)
+```
+
+See [docs/setup/Docker_setup.md](docs/setup/Docker_setup.md) for full details,
+NVIDIA toolkit installation, and troubleshooting.
 
 ---
 
