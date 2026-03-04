@@ -1,11 +1,11 @@
 # ===========================================================================
 # Pixel2Mesh++ — Unified Docker Image
-# Ubuntu 24.04.3 LTS | CUDA 12.4 | cuDNN | TensorFlow 2.16 | PyTorch 2.5
+# Ubuntu 24.04.3 LTS | CUDA 12.6 | cuDNN | TensorFlow 2.16 | PyTorch 2.6
 #
 # Supports ALL designs from a single image:
 #   Design A CPU  — TensorFlow (tf.compat.v1) on CPU
 #   Design A GPU  — TensorFlow (tf.compat.v1) on GPU
-#   Design B      — PyTorch 2.5 + CUDA 12.4
+#   Design B      — PyTorch 2.6 + CUDA 12.6
 #   Design C      — (future) FaceScape domain adaptation
 #
 # Build:
@@ -16,10 +16,10 @@
 #   bash docker/run_designA_gpu.sh
 #   bash docker/run_designB.sh
 # ===========================================================================
-FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu24.04
+FROM nvidia/cuda:12.6.3-cudnn-devel-ubuntu24.04
 
 LABEL maintainer="Pixel2Mesh++ Thesis Project"
-LABEL description="Unified image — TF 2.16 + PyTorch 2.5, CUDA 12.4, Ubuntu 24.04"
+LABEL description="Unified image — TF 2.16 + PyTorch 2.6, CUDA 12.6, Ubuntu 24.04"
 
 # ── Environment ──────────────────────────────────────────────────────────
 ENV DEBIAN_FRONTEND=noninteractive
@@ -35,17 +35,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 python3-pip python3-venv python3-dev \
     build-essential make cmake \
     git curl wget ca-certificates vim bc \
-    libglib2.0-0 libsm6 libxext6 libxrender1 libgl1-mesa-glx \
+    libglib2.0-0 libsm6 libxext6 libxrender1 libgl1 \
     && ln -sf /usr/bin/python3 /usr/bin/python \
     && rm -rf /var/lib/apt/lists/*
 
 # ── Python base ──────────────────────────────────────────────────────────
 RUN pip install --no-cache-dir --break-system-packages --upgrade pip
 
-# ── PyTorch 2.5 + CUDA 12.4 ─────────────────────────────────────────────
+# ── PyTorch 2.6 + CUDA 12.6 ─────────────────────────────────────────────
 RUN pip install --no-cache-dir --break-system-packages \
-    torch==2.5.0 torchvision==0.20.0 torchaudio==2.5.0 \
-    --index-url https://download.pytorch.org/whl/cu124
+    torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
+    --index-url https://download.pytorch.org/whl/cu126
 
 # ── TensorFlow 2.16 (GPU, with tf.compat.v1) ────────────────────────────
 RUN pip install --no-cache-dir --break-system-packages \
@@ -65,11 +65,9 @@ RUN pip install --no-cache-dir --break-system-packages \
     "trimesh>=3.20" \
     networkx imageio fvcore iopath
 
-# ── Optional: PyTorch3D (pre-built wheel, non-fatal if unavailable) ─────
-RUN pip install --no-cache-dir --break-system-packages \
-    --no-index pytorch3d \
-    -f https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py312_cu124_pyt250/download.html 2>/dev/null \
-    || echo "[INFO] PyTorch3D wheel not available — custom Chamfer impl will be used"
+# ── Optional: PyTorch3D (non-fatal if unavailable) ──────────────────────
+RUN pip install --no-cache-dir --break-system-packages pytorch3d 2>/dev/null \
+    || echo "[INFO] PyTorch3D not available — custom Chamfer impl will be used"
 
 # ── Compile TF custom CUDA ops (Chamfer + EMD) ──────────────────────────
 COPY external/tf_ops/src /tmp/tf_ops_src
