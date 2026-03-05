@@ -73,9 +73,9 @@ def main(eval_list_file, coarse_mesh_dir, output_dir):
         'sample_adj': [tf.placeholder(tf.float32, shape=(43, 43)) for _ in range(num_supports)],
     }
 
-    model_dir = '../artifacts/checkpoints/tf/refine_p2mpp/models'
-    data_root = '../data/p2mppdata/test'
-    image_root = '../data/ShapeNetRendering'
+    model_dir = os.path.join(_PROJECT_ROOT, 'artifacts', 'checkpoints', 'tf', 'refine_p2mpp', 'models')
+    data_root = os.path.join(_PROJECT_ROOT, 'data', 'p2mppdata', 'test')
+    image_root = os.path.join(_PROJECT_ROOT, 'data', 'ShapeNetRendering')
     
     os.makedirs(output_dir, exist_ok=True)
     
@@ -118,7 +118,7 @@ def main(eval_list_file, coarse_mesh_dir, output_dir):
     model.load(sess=sess, ckpt_path=model_dir, step=10)
     
     print('=> Loading template mesh...')
-    pkl = pickle.load(open('../data/iccv_p2mpp.dat', 'rb'))
+    pkl = pickle.load(open(os.path.join(_PROJECT_ROOT, 'assets', 'data_templates', 'iccv_p2mpp.dat'), 'rb'))
     feed_dict = construct_feed_dict(pkl, placeholders)
     
     test_number = data.number
@@ -154,7 +154,7 @@ def main(eval_list_file, coarse_mesh_dir, output_dir):
         
         # Convert to .obj format
         obj_path = os.path.join(output_dir, data_id.replace('.dat', '_predict.obj'))
-        xyz2obj(predict_path, obj_path, '../data/face3.obj')
+        xyz2obj(predict_path, obj_path, os.path.join(_PROJECT_ROOT, 'assets', 'data_templates', 'face3.obj'))
         
         print('[{:3d}/{:3d}] {} | Time: {:.2f}s'.format(
             iters + 1, test_number, data_id.split('.')[0][:40], t_elapsed))
@@ -208,9 +208,12 @@ def main(eval_list_file, coarse_mesh_dir, output_dir):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--eval-list', type=str, default='designA_eval_list.txt')
-    parser.add_argument('--coarse-dir', type=str, default='../outputs/designA/eval_meshes')
-    parser.add_argument('--output-dir', type=str, default='../outputs/designA/eval_meshes')
+    parser.add_argument('--eval-list', type=str,
+                        default=os.path.join(os.path.dirname(_SCRIPT_DIR), 'designA_eval_list.txt'))
+    parser.add_argument('--coarse-dir', type=str,
+                        default=os.path.join(_PROJECT_ROOT, 'artifacts', 'outputs', 'designA', 'eval_meshes'))
+    parser.add_argument('--output-dir', type=str,
+                        default=os.path.join(_PROJECT_ROOT, 'artifacts', 'outputs', 'designA', 'eval_meshes'))
     args = parser.parse_args()
     
     main(args.eval_list, args.coarse_dir, args.output_dir)

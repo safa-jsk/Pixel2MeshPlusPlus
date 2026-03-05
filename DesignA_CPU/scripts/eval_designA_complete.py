@@ -76,11 +76,11 @@ def main(eval_list_file, output_dir):
         'sample_adj': [tf.placeholder(tf.float32, shape=(43, 43)) for _ in range(num_supports)],
     }
 
-    # Paths (relative to project root - running from DesignA_CPU/ folder)
-    model1_dir = '../artifacts/checkpoints/tf/coarse_mvp2m/models'
-    model2_dir = '../artifacts/checkpoints/tf/refine_p2mpp/models'
-    data_root = '../data/p2mppdata/test'
-    image_root = '../data/ShapeNetRendering'
+    # Paths anchored to project root
+    model1_dir = os.path.join(_PROJECT_ROOT, 'artifacts', 'checkpoints', 'tf', 'coarse_mvp2m', 'models')
+    model2_dir = os.path.join(_PROJECT_ROOT, 'artifacts', 'checkpoints', 'tf', 'refine_p2mpp', 'models')
+    data_root = os.path.join(_PROJECT_ROOT, 'data', 'p2mppdata', 'test')
+    image_root = os.path.join(_PROJECT_ROOT, 'data', 'ShapeNetRendering')
     
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -130,7 +130,7 @@ def main(eval_list_file, output_dir):
     # ---------------------------------------------------------------
     # Load init ellipsoid
     print('=> Loading mesh template...')
-    pkl = pickle.load(open('../data/iccv_p2mpp.dat', 'rb'))
+    pkl = pickle.load(open(os.path.join(_PROJECT_ROOT, 'assets', 'data_templates', 'iccv_p2mpp.dat'), 'rb'))
     feed_dict = construct_feed_dict(pkl, placeholders)
     initial_coords = pkl['coord']  # Save initial ellipsoid coordinates (156, 3)
     
@@ -192,7 +192,7 @@ def main(eval_list_file, output_dir):
         # Save as OBJ
         obj_path = os.path.join(output_dir, data_id.replace('.dat', '_predict.obj'))
         vert = np.hstack((np.full([stage2_out.shape[0], 1], 'v'), stage2_out))
-        face = np.loadtxt('../data/face3.obj', dtype='|S32')
+        face = np.loadtxt(os.path.join(_PROJECT_ROOT, 'assets', 'data_templates', 'face3.obj'), dtype='|S32')
         mesh_data = np.vstack((vert, face))
         np.savetxt(obj_path, mesh_data, fmt='%s', delimiter=' ')
         
@@ -367,11 +367,11 @@ def main(eval_list_file, output_dir):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Design A Complete Evaluation')
-    parser.add_argument('--eval_list', type=str, 
-                        default='designA_eval_list.txt',
+    parser.add_argument('--eval_list', type=str,
+                        default=os.path.join(os.path.dirname(_SCRIPT_DIR), 'designA_eval_list.txt'),
                         help='Path to evaluation list file')
     parser.add_argument('--output_dir', type=str,
-                        default='../outputs/designA/eval_meshes',
+                        default=os.path.join(_PROJECT_ROOT, 'artifacts', 'outputs', 'designA', 'eval_meshes'),
                         help='Output directory for meshes')
     
     args = parser.parse_args()

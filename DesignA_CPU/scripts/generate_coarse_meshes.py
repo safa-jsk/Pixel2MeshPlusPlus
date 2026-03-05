@@ -47,15 +47,20 @@ def main():
     parser = argparse.ArgumentParser(description='Generate coarse meshes using MVP2M Stage 1')
     parser.add_argument('--test_file', type=str, default='data/designB_eval_test.txt',
                         help='Path to test file list')
-    parser.add_argument('--data_root', type=str, default='data/p2mppdata/test',
+    parser.add_argument('--data_root', type=str,
+                        default=os.path.join(_PROJECT_ROOT, 'data', 'p2mppdata', 'test'),
                         help='Path to test data root')
-    parser.add_argument('--image_root', type=str, default='data/ShapeNetRendering',
+    parser.add_argument('--image_root', type=str,
+                        default=os.path.join(_PROJECT_ROOT, 'data', 'ShapeNetRendering'),
                         help='Path to rendered images')
-    parser.add_argument('--output_dir', type=str, default='artifacts/outputs/designA/coarse_meshes',
+    parser.add_argument('--output_dir', type=str,
+                        default=os.path.join(_PROJECT_ROOT, 'artifacts', 'outputs', 'designA', 'coarse_meshes'),
                         help='Output directory for coarse meshes')
-    parser.add_argument('--model_dir', type=str, default='artifacts/checkpoints/tf/coarse_mvp2m/models',
+    parser.add_argument('--model_dir', type=str,
+                        default=os.path.join(_PROJECT_ROOT, 'artifacts', 'checkpoints', 'tf', 'coarse_mvp2m', 'models'),
                         help='Path to Stage 1 model checkpoint')
-    parser.add_argument('--mesh_data', type=str, default='data/iccv_p2mpp.dat',
+    parser.add_argument('--mesh_data', type=str,
+                        default=os.path.join(_PROJECT_ROOT, 'assets', 'data_templates', 'iccv_p2mpp.dat'),
                         help='Path to initial mesh data')
     args = parser.parse_args()
     

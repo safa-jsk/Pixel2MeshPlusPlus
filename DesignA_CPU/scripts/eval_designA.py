@@ -63,11 +63,11 @@ def main(eval_list_file, output_dir):
         'sample_adj': [tf.placeholder(tf.float32, shape=(43, 43)) for _ in range(num_supports)],
     }
 
-    # Paths (relative to project root)
-    model_dir = '../artifacts/checkpoints/tf/refine_p2mpp/models'
-    data_root = '../data/p2mppdata/test'
-    image_root = '../data/ShapeNetRendering'
-    mesh_root = '../artifacts/checkpoints/tf/coarse_mvp2m/predict/50'
+    # Paths anchored to project root
+    model_dir = os.path.join(_PROJECT_ROOT, 'artifacts', 'checkpoints', 'tf', 'refine_p2mpp', 'models')
+    data_root = os.path.join(_PROJECT_ROOT, 'data', 'p2mppdata', 'test')
+    image_root = os.path.join(_PROJECT_ROOT, 'data', 'ShapeNetRendering')
+    mesh_root = os.path.join(_PROJECT_ROOT, 'artifacts', 'outputs', 'designA', 'eval_meshes')
     
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -105,7 +105,7 @@ def main(eval_list_file, output_dir):
     model.load(sess=sess, ckpt_path=model_dir, step=10)
     # ---------------------------------------------------------------
     # Load init ellipsoid and info about vertices and edges
-    pkl = pickle.load(open('../data/iccv_p2mpp.dat', 'rb'))
+    pkl = pickle.load(open(os.path.join(_PROJECT_ROOT, 'assets', 'data_templates', 'iccv_p2mpp.dat'), 'rb'))
     feed_dict = construct_feed_dict(pkl, placeholders)
     # ---------------------------------------------------------------
     test_number = data.number
@@ -145,7 +145,7 @@ def main(eval_list_file, output_dir):
         # Save as OBJ (vertices only, faces from template)
         obj_path = os.path.join(output_dir, data_id.replace('.dat', '_predict.obj'))
         vert = np.hstack((np.full([out2l.shape[0], 1], 'v'), out2l))
-        face = np.loadtxt('../data/face3.obj', dtype='|S32')
+        face = np.loadtxt(os.path.join(_PROJECT_ROOT, 'assets', 'data_templates', 'face3.obj'), dtype='|S32')
         mesh_data = np.vstack((vert, face))
         np.savetxt(obj_path, mesh_data, fmt='%s', delimiter=' ')
         
@@ -189,7 +189,7 @@ if __name__ == '__main__':
                         default='designA_eval_list.txt',
                         help='Path to evaluation list file')
     parser.add_argument('--output_dir', type=str,
-                        default='../outputs/designA/eval_meshes',
+                        default=os.path.join(_PROJECT_ROOT, 'artifacts', 'outputs', 'designA', 'eval_meshes'),
                         help='Output directory for meshes')
     
     args = parser.parse_args()
