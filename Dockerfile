@@ -65,17 +65,29 @@ RUN pip install --no-cache-dir --break-system-packages \
     "trimesh>=3.20" \
     networkx imageio fvcore iopath
 
-# ── Patch tflearn for TF 2.16+ compatibility ─────────────────────────────
-# tflearn 0.5.0 uses tensorflow.python.util.nest.is_sequence removed in TF 2.16
+# ── Patch tflearn for TF 2.16+ and Pillow 10+ compatibility ──────────────
+# 1) tflearn 0.5.0: is_sequence removed in TF 2.16 → renamed to is_nested
+# 2) tflearn 0.5.0: PIL.Image.ANTIALIAS removed in Pillow 10 → use LANCZOS
 RUN python3 -c "\
 import importlib.util, os; \
 base = list(importlib.util.find_spec('tflearn').submodule_search_locations)[0]; \
-path = os.path.join(base, 'layers', 'recurrent.py'); \
-old = 'from tensorflow.python.util.nest import is_sequence'; \
-new = 'try:\n    from tensorflow.python.util.nest import is_sequence\nexcept ImportError:\n    from tensorflow.python.util.nest import is_nested as is_sequence'; \
-src = open(path).read(); \
-open(path, 'w').write(src.replace(old, new, 1)); \
-print('✓ tflearn patched for TF 2.16+') \
+\
+path1 = os.path.join(base, 'layers', 'recurrent.py'); \
+old1 = 'from tensorflow.python.util.nest import is_sequence'; \
+new1 = 'try:\n    from tensorflow.python.util.nest import is_sequence\nexcept ImportError:\n    from tensorflow.python.util.nest import is_nested as is_sequence'; \
+src1 = open(path1).read(); \
+open(path1, 'w').write(src1.replace(old1, new1, 1)); \
+print('✓ tflearn is_sequence patched for TF 2.16+'); \
+\
+path2 = os.path.join(base, 'data_utils.py'); \
+src2 = open(path2).read(); \
+import PIL.Image; \
+if not hasattr(PIL.Image, 'ANTIALIAS'): \
+    src2 = src2.replace('Image.ANTIALIAS', 'Image.LANCZOS'); \
+    open(path2, 'w').write(src2); \
+    print('✓ tflearn ANTIALIAS patched for Pillow 10+'); \
+else: \
+    print('✓ tflearn ANTIALIAS — no patch needed (Pillow < 10)'); \
 "
 
 # ── Optional: PyTorch3D (non-fatal if unavailable) ──────────────────────
