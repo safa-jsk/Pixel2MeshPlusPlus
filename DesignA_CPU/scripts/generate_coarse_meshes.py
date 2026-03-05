@@ -33,7 +33,8 @@ if _PROJECT_ROOT not in sys.path:
 # Suppress TensorFlow warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import tflearn
 
 from modules.config import create_parser
