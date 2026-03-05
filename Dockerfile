@@ -40,7 +40,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # ── Python base ──────────────────────────────────────────────────────────
-RUN pip install --no-cache-dir --break-system-packages --upgrade pip
+RUN pip install --no-cache-dir --break-system-packages --ignore-installed --upgrade pip
 
 # ── PyTorch 2.6 + CUDA 12.6 ─────────────────────────────────────────────
 RUN pip install --no-cache-dir --break-system-packages \
@@ -71,26 +71,42 @@ RUN pip install --no-cache-dir --break-system-packages pytorch3d 2>/dev/null \
 
 # ── Compile TF custom CUDA ops (Chamfer + EMD) ──────────────────────────
 COPY external/tf_ops/src /tmp/tf_ops_src
-RUN mkdir -p /tmp/tf_ops_prebuilt && \
+RUN apt-get update && apt-get install -y --no-install-recommends libeigen3-dev && \
+    rm -rf /var/lib/apt/lists/* && \
+    mkdir -p /tmp/tf_ops_prebuilt && \
     cd /tmp/tf_ops_src && \
-    TF_CFLAGS=$(python3 -c 'import tensorflow as tf; print(" ".join(tf.sysconfig.get_compile_flags()))') && \
+    TF_INC=$(python3 -c 'import tensorflow as tf; print(tf.sysconfig.get_include())') && \
+    TF_LIB=$(python3 -c 'import tensorflow as tf; print(tf.sysconfig.get_lib())') && \
+    CUDA_INC=/usr/local/cuda/include && \
+    echo "TF_INC=$TF_INC  TF_LIB=$TF_LIB" && \
     TF_LFLAGS=$(python3 -c 'import tensorflow as tf; print(" ".join(tf.sysconfig.get_link_flags()))') && \
-    # nn_distance (Chamfer)
+    echo "TF_LFLAGS=$TF_LFLAGS" && \
+    # TF 2.16 pip package no longer bundles Eigen — symlink system Eigen to match old TF include path
+    mkdir -p "$TF_INC/third_party" && \
+    ln -sfn /usr/include/eigen3 "$TF_INC/third_party/eigen3" && \
     nvcc -std=c++17 -c -o tf_nndistance_g.cu.o tf_nndistance_g.cu \
-    $TF_CFLAGS -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2 --expt-relaxed-constexpr && \
-    g++ -std=c++17 tf_nndistance.cpp tf_nndistance_g.cu.o -o /tmp/tf_ops_prebuilt/tf_nndistance_so.so \
-    -shared -fPIC $TF_CFLAGS -L/usr/local/cuda/lib64 -lcudart $TF_LFLAGS -O2 && \
-    # approxmatch (EMD)
+        -I"$TF_INC" -I"$CUDA_INC" \
+        -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2 --expt-relaxed-constexpr && \
+    g++ -std=c++17 tf_nndistance.cpp tf_nndistance_g.cu.o \
+        -o /tmp/tf_ops_prebuilt/tf_nndistance_so.so \
+        -shared -fPIC -I"$TF_INC" -L/usr/local/cuda/lib64 -lcudart \
+        $TF_LFLAGS -O2 && \
     nvcc -std=c++17 -c -o tf_approxmatch_g.cu.o tf_approxmatch_g.cu \
-    $TF_CFLAGS -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2 --expt-relaxed-constexpr && \
-    g++ -std=c++17 tf_approxmatch.cpp tf_approxmatch_g.cu.o -o /tmp/tf_ops_prebuilt/tf_approxmatch_so.so \
-    -shared -fPIC $TF_CFLAGS -L/usr/local/cuda/lib64 -lcudart $TF_LFLAGS -O2 && \
+        -I"$TF_INC" -I"$CUDA_INC" \
+        -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2 --expt-relaxed-constexpr && \
+    g++ -std=c++17 tf_approxmatch.cpp tf_approxmatch_g.cu.o \
+        -o /tmp/tf_ops_prebuilt/tf_approxmatch_so.so \
+        -shared -fPIC -I"$TF_INC" -L/usr/local/cuda/lib64 -lcudart \
+        $TF_LFLAGS -O2 && \
     ls -lh /tmp/tf_ops_prebuilt/*.so && \
     echo "✓ TF custom CUDA ops compiled"
 
 # ── Compile PyTorch Chamfer CUDA extension ───────────────────────────────
+# Set TORCH_CUDA_ARCH_LIST to avoid GPU auto-detect failure during build
+# Covers: Volta(7.0), Turing(7.5), Ampere(8.0/8.6), Ada(8.9), Hopper(9.0)
 COPY external/torch_chamfer /tmp/torch_chamfer
 RUN cd /tmp/torch_chamfer && \
+    TORCH_CUDA_ARCH_LIST="7.0;7.5;8.0;8.6;8.9;9.0" \
     python setup.py build_ext --inplace && \
     ls -lh *.so 2>/dev/null && \
     echo "✓ PyTorch Chamfer extension compiled" \
