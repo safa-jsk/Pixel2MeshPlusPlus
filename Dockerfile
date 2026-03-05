@@ -65,6 +65,19 @@ RUN pip install --no-cache-dir --break-system-packages \
     "trimesh>=3.20" \
     networkx imageio fvcore iopath
 
+# ── Patch tflearn for TF 2.16+ compatibility ─────────────────────────────
+# tflearn 0.5.0 uses tensorflow.python.util.nest.is_sequence removed in TF 2.16
+RUN python3 -c "\
+import importlib.util, os; \
+base = list(importlib.util.find_spec('tflearn').submodule_search_locations)[0]; \
+path = os.path.join(base, 'layers', 'recurrent.py'); \
+old = 'from tensorflow.python.util.nest import is_sequence'; \
+new = 'try:\n    from tensorflow.python.util.nest import is_sequence\nexcept ImportError:\n    from tensorflow.python.util.nest import is_nested as is_sequence'; \
+src = open(path).read(); \
+open(path, 'w').write(src.replace(old, new, 1)); \
+print('✓ tflearn patched for TF 2.16+') \
+"
+
 # ── Optional: PyTorch3D (non-fatal if unavailable) ──────────────────────
 RUN pip install --no-cache-dir --break-system-packages pytorch3d 2>/dev/null \
     || echo "[INFO] PyTorch3D not available — custom Chamfer impl will be used"

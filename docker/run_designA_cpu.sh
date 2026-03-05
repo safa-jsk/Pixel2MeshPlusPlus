@@ -12,6 +12,8 @@ echo "════════════════════════�
 echo "  Design A · CPU  |  Image: ${IMAGE_NAME}"
 echo "══════════════════════════════════════════════════"
 
+docker rm -f p2mpp-designA-cpu 2>/dev/null || true
+
 docker run --rm -it \
     --name p2mpp-designA-cpu \
     -e CUDA_VISIBLE_DEVICES="" \

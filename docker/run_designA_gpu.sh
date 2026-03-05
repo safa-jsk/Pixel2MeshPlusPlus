@@ -12,6 +12,8 @@ echo "════════════════════════�
 echo "  Design A · GPU  |  Image: ${IMAGE_NAME}"
 echo "══════════════════════════════════════════════════"
 
+docker rm -f p2mpp-designA-gpu 2>/dev/null || true
+
 docker run --rm -it \
     --gpus all \
     --name p2mpp-designA-gpu \
