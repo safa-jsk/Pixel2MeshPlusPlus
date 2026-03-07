@@ -110,9 +110,19 @@ def main(eval_list_file, output_dir):
     print('=' * 70)
     
     timings = []
+    skipped = 0
     
     for iters in range(test_number):
         img_all_view, labels, poses, data_id, mesh = data.fetch()
+
+        # Resume: skip samples already written to disk
+        predict_path = os.path.join(output_dir, data_id.replace('.dat', '_predict.xyz'))
+        if os.path.exists(predict_path):
+            skipped += 1
+            print('[{:3d}/{:3d}] SKIP (already done): {}'.format(
+                iters + 1, test_number, data_id.split('.')[0][:40]))
+            continue
+
         feed_dict.update({placeholders['img_inp']: img_all_view})
         feed_dict.update({placeholders['labels']: labels})
         feed_dict.update({placeholders['cameras']: poses})
@@ -127,11 +137,12 @@ def main(eval_list_file, output_dir):
         np.savetxt(label_path, labels)
         
         # Save coarse prediction (named _predict.xyz for Stage 2 compatibility)
-        predict_path = os.path.join(output_dir, data_id.replace('.dat', '_predict.xyz'))
         np.savetxt(predict_path, out3)
         
         print('[{:3d}/{:3d}] {} | Time: {:.2f}s'.format(
             iters + 1, test_number, data_id.split('.')[0][:40], t_elapsed))
+    
+    print('Skipped {} already-completed samples.'.format(skipped))
     
     data.shutdown()
     
