@@ -8,7 +8,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-from .chamfer_pytorch import chamfer_distance
+try:
+    from .chamfer_pytorch import chamfer_distance
+except ImportError:
+    chamfer_distance = None
 
 
 class GraphConvolution(nn.Module):
