@@ -41,18 +41,37 @@ echo ""
 
 cd "$SCRIPT_DIR"
 
-# Stage 1: Coarse MVP2M
+# Stage 1: Coarse MVP2M  (auto-retry with resume until all samples are done)
 echo "==========================================  "
 echo "Stage 1: Coarse MVP2M Inference"
 echo "=========================================="
-python eval_designA_stage1.py \
-    --eval-list "$DESIGN_DIR/designA_eval_list.txt" \
-    --output-dir "$ARTIFACTS/outputs/designA/eval_meshes"
-
-if [ $? -ne 0 ]; then
-    echo "❌ Stage 1 failed!"
-    exit 1
-fi
+TOTAL_SAMPLES=$(wc -l < "$DESIGN_DIR/designA_eval_list.txt")
+MAX_ATTEMPTS=20
+attempt=1
+while true; do
+    DONE=$(ls "$ARTIFACTS/outputs/designA/eval_meshes/"*_predict.xyz 2>/dev/null | wc -l)
+    echo "[Stage 1] Attempt $attempt — $DONE / $TOTAL_SAMPLES done"
+    if [ "$DONE" -ge "$TOTAL_SAMPLES" ]; then
+        echo "✓ All $TOTAL_SAMPLES samples complete"
+        break
+    fi
+    python eval_designA_stage1.py \
+        --eval-list "$DESIGN_DIR/designA_eval_list.txt" \
+        --output-dir "$ARTIFACTS/outputs/designA/eval_meshes"
+    EXIT_CODE=$?
+    DONE=$(ls "$ARTIFACTS/outputs/designA/eval_meshes/"*_predict.xyz 2>/dev/null | wc -l)
+    if [ "$DONE" -ge "$TOTAL_SAMPLES" ]; then
+        echo "✓ Stage 1 complete ($DONE samples)"
+        break
+    fi
+    if [ $attempt -ge $MAX_ATTEMPTS ]; then
+        echo "❌ Stage 1 failed after $MAX_ATTEMPTS attempts ($DONE/$TOTAL_SAMPLES done)"
+        exit 1
+    fi
+    echo "⚠ Crashed at sample $DONE/$TOTAL_SAMPLES (exit $EXIT_CODE) — resuming..."
+    attempt=$((attempt + 1))
+    sleep 2
+done
 
 echo ""
 echo "✓ Stage 1 complete"

@@ -104,21 +104,28 @@ def main(eval_list_file, output_dir):
     
     test_number = data.number
     tflearn.is_training(False, sess)
-    
+
+    # Build set of already-completed sample IDs so we can resume after a crash
+    done = set()
+    for f in os.listdir(output_dir):
+        if f.endswith('_predict.xyz'):
+            done.add(f.replace('_predict.xyz', '.dat'))
+    skipped = len(done)
+    if skipped:
+        print('[RESUME] {} samples already done, skipping them.'.format(skipped))
+
     print('=' * 70)
-    print('Starting Stage 1 inference on {} samples'.format(test_number))
+    print('Starting Stage 1 inference on {} samples ({} remaining)'.format(
+        test_number, test_number - skipped))
     print('=' * 70)
-    
+
     timings = []
-    skipped = 0
-    
+
     for iters in range(test_number):
         img_all_view, labels, poses, data_id, mesh = data.fetch()
 
-        # Resume: skip samples already written to disk
-        predict_path = os.path.join(output_dir, data_id.replace('.dat', '_predict.xyz'))
-        if os.path.exists(predict_path):
-            skipped += 1
+        # Skip already-completed samples
+        if data_id in done:
             print('[{:3d}/{:3d}] SKIP (already done): {}'.format(
                 iters + 1, test_number, data_id.split('.')[0][:40]))
             continue
@@ -126,23 +133,22 @@ def main(eval_list_file, output_dir):
         feed_dict.update({placeholders['img_inp']: img_all_view})
         feed_dict.update({placeholders['labels']: labels})
         feed_dict.update({placeholders['cameras']: poses})
-        
+
         t_start = time.time()
         out3 = sess.run(model.output3, feed_dict=feed_dict)
         t_elapsed = time.time() - t_start
         timings.append(t_elapsed)
-        
+
         # Save ground truth
         label_path = os.path.join(output_dir, data_id.replace('.dat', '_ground.xyz'))
         np.savetxt(label_path, labels)
-        
+
         # Save coarse prediction (named _predict.xyz for Stage 2 compatibility)
+        predict_path = os.path.join(output_dir, data_id.replace('.dat', '_predict.xyz'))
         np.savetxt(predict_path, out3)
-        
+
         print('[{:3d}/{:3d}] {} | Time: {:.2f}s'.format(
             iters + 1, test_number, data_id.split('.')[0][:40], t_elapsed))
-    
-    print('Skipped {} already-completed samples.'.format(skipped))
     
     data.shutdown()
     
