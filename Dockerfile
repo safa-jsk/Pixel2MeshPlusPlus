@@ -68,27 +68,28 @@ RUN pip install --no-cache-dir --break-system-packages \
 # ── Patch tflearn for TF 2.16+ and Pillow 10+ compatibility ──────────────
 # 1) tflearn 0.5.0: is_sequence removed in TF 2.16 → renamed to is_nested
 # 2) tflearn 0.5.0: PIL.Image.ANTIALIAS removed in Pillow 10 → use LANCZOS
-RUN python3 -c "\
-import importlib.util, os; \
-base = list(importlib.util.find_spec('tflearn').submodule_search_locations)[0]; \
-\
-path1 = os.path.join(base, 'layers', 'recurrent.py'); \
-old1 = 'from tensorflow.python.util.nest import is_sequence'; \
-new1 = 'try:\n    from tensorflow.python.util.nest import is_sequence\nexcept ImportError:\n    from tensorflow.python.util.nest import is_nested as is_sequence'; \
-src1 = open(path1).read(); \
-open(path1, 'w').write(src1.replace(old1, new1, 1)); \
-print('✓ tflearn is_sequence patched for TF 2.16+'); \
-\
-path2 = os.path.join(base, 'data_utils.py'); \
-src2 = open(path2).read(); \
-import PIL.Image; \
-if not hasattr(PIL.Image, 'ANTIALIAS'): \
-    src2 = src2.replace('Image.ANTIALIAS', 'Image.LANCZOS'); \
-    open(path2, 'w').write(src2); \
-    print('✓ tflearn ANTIALIAS patched for Pillow 10+'); \
-else: \
-    print('✓ tflearn ANTIALIAS — no patch needed (Pillow < 10)'); \
-"
+RUN python3 << 'PYEOF'
+import importlib.util, os
+base = list(importlib.util.find_spec('tflearn').submodule_search_locations)[0]
+
+# Patch 1: is_sequence → is_nested
+path1 = os.path.join(base, 'layers', 'recurrent.py')
+old1 = 'from tensorflow.python.util.nest import is_sequence'
+new1 = ('try:\n    from tensorflow.python.util.nest import is_sequence\n'
+        'except ImportError:\n    from tensorflow.python.util.nest import is_nested as is_sequence')
+src1 = open(path1).read()
+open(path1, 'w').write(src1.replace(old1, new1, 1))
+print('✓ tflearn is_sequence patched for TF 2.16+')
+
+# Patch 2: Image.ANTIALIAS → Image.LANCZOS (Pillow 10+ removed ANTIALIAS)
+path2 = os.path.join(base, 'data_utils.py')
+src2 = open(path2).read()
+if 'Image.ANTIALIAS' in src2:
+    open(path2, 'w').write(src2.replace('Image.ANTIALIAS', 'Image.LANCZOS'))
+    print('✓ tflearn ANTIALIAS patched for Pillow 10+')
+else:
+    print('✓ tflearn ANTIALIAS — no patch needed')
+PYEOF
 
 # ── Optional: PyTorch3D (non-fatal if unavailable) ──────────────────────
 RUN pip install --no-cache-dir --break-system-packages pytorch3d 2>/dev/null \
@@ -110,19 +111,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends libeigen3-dev &
     mkdir -p "$TF_INC/third_party" && \
     ln -sfn /usr/include/eigen3 "$TF_INC/third_party/eigen3" && \
     nvcc -std=c++17 -c -o tf_nndistance_g.cu.o tf_nndistance_g.cu \
-        -I"$TF_INC" -I"$CUDA_INC" \
-        -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2 --expt-relaxed-constexpr && \
+    -I"$TF_INC" -I"$CUDA_INC" \
+    -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2 --expt-relaxed-constexpr && \
     g++ -std=c++17 tf_nndistance.cpp tf_nndistance_g.cu.o \
-        -o /tmp/tf_ops_prebuilt/tf_nndistance_so.so \
-        -shared -fPIC -I"$TF_INC" -L/usr/local/cuda/lib64 -lcudart \
-        $TF_LFLAGS -O2 && \
+    -o /tmp/tf_ops_prebuilt/tf_nndistance_so.so \
+    -shared -fPIC -I"$TF_INC" -L/usr/local/cuda/lib64 -lcudart \
+    $TF_LFLAGS -O2 && \
     nvcc -std=c++17 -c -o tf_approxmatch_g.cu.o tf_approxmatch_g.cu \
-        -I"$TF_INC" -I"$CUDA_INC" \
-        -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2 --expt-relaxed-constexpr && \
+    -I"$TF_INC" -I"$CUDA_INC" \
+    -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2 --expt-relaxed-constexpr && \
     g++ -std=c++17 tf_approxmatch.cpp tf_approxmatch_g.cu.o \
-        -o /tmp/tf_ops_prebuilt/tf_approxmatch_so.so \
-        -shared -fPIC -I"$TF_INC" -L/usr/local/cuda/lib64 -lcudart \
-        $TF_LFLAGS -O2 && \
+    -o /tmp/tf_ops_prebuilt/tf_approxmatch_so.so \
+    -shared -fPIC -I"$TF_INC" -L/usr/local/cuda/lib64 -lcudart \
+    $TF_LFLAGS -O2 && \
     ls -lh /tmp/tf_ops_prebuilt/*.so && \
     echo "✓ TF custom CUDA ops compiled"
 
