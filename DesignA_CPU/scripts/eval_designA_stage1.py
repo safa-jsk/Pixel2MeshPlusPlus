@@ -105,6 +105,21 @@ def main(eval_list_file, output_dir):
     test_number = data.number
     tflearn.is_training(False, sess)
 
+    benchmark_dir = output_dir.replace('eval_meshes', 'benchmark')
+    os.makedirs(benchmark_dir, exist_ok=True)
+    timing_csv = os.path.join(benchmark_dir, 'stage1_timings_per_sample.csv')
+
+    # Load already-recorded per-sample timings (survive crashes)
+    recorded = {}  # data_id -> elapsed_sec
+    if os.path.exists(timing_csv):
+        with open(timing_csv, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('sample_id'):
+                    parts = line.split(',')
+                    if len(parts) == 2:
+                        recorded[parts[0]] = float(parts[1])
+
     # Build set of already-completed sample IDs so we can resume after a crash
     done = set()
     for f in os.listdir(output_dir):
@@ -119,7 +134,10 @@ def main(eval_list_file, output_dir):
         test_number, test_number - skipped))
     print('=' * 70)
 
-    timings = []
+    # Open timing CSV in append mode so partial runs accumulate
+    timing_fh = open(timing_csv, 'a')
+    if os.path.getsize(timing_csv) == 0:
+        timing_fh.write('sample_id,elapsed_sec\n')
 
     for iters in range(test_number):
         img_all_view, labels, poses, data_id, mesh = data.fetch()
@@ -137,7 +155,11 @@ def main(eval_list_file, output_dir):
         t_start = time.time()
         out3 = sess.run(model.output3, feed_dict=feed_dict)
         t_elapsed = time.time() - t_start
-        timings.append(t_elapsed)
+        recorded[data_id] = t_elapsed
+
+        # Persist timing immediately so a crash doesn't lose it
+        timing_fh.write('{},{:.6f}\n'.format(data_id, t_elapsed))
+        timing_fh.flush()
 
         # Save ground truth
         label_path = os.path.join(output_dir, data_id.replace('.dat', '_ground.xyz'))
@@ -149,29 +171,31 @@ def main(eval_list_file, output_dir):
 
         print('[{:3d}/{:3d}] {} | Time: {:.2f}s'.format(
             iters + 1, test_number, data_id.split('.')[0][:40], t_elapsed))
-    
+
+    timing_fh.close()
     data.shutdown()
-    
-    # Save timing statistics
-    benchmark_dir = output_dir.replace('eval_meshes', 'benchmark')
-    os.makedirs(benchmark_dir, exist_ok=True)
-    
+
+    # Compute stats from ALL recorded timings (across all runs/resumes)
+    all_times = list(recorded.values())
+
     with open(os.path.join(benchmark_dir, 'stage1_timings.txt'), 'w') as f:
         f.write('Stage 1 (Coarse MVP2M) Timing Statistics\n')
+        f.write('(accumulated across all runs — true total)\n')
         f.write('=' * 50 + '\n')
-        f.write('Total samples: {}\n'.format(len(timings)))
-        f.write('Total time: {:.2f}s\n'.format(sum(timings)))
-        f.write('Average time: {:.3f}s\n'.format(np.mean(timings)))
-        f.write('Median time: {:.3f}s\n'.format(np.median(timings)))
-        f.write('Min time: {:.3f}s\n'.format(np.min(timings)))
-        f.write('Max time: {:.3f}s\n'.format(np.max(timings)))
-        f.write('Std dev: {:.3f}s\n'.format(np.std(timings)))
-    
+        f.write('Total samples: {}\n'.format(len(all_times)))
+        f.write('Total time: {:.2f}s\n'.format(sum(all_times)))
+        f.write('Average time: {:.3f}s\n'.format(np.mean(all_times)))
+        f.write('Median time: {:.3f}s\n'.format(np.median(all_times)))
+        f.write('Min time: {:.3f}s\n'.format(np.min(all_times)))
+        f.write('Max time: {:.3f}s\n'.format(np.max(all_times)))
+        f.write('Std dev: {:.3f}s\n'.format(np.std(all_times)))
+
     print('=' * 70)
     print('Stage 1 Complete!')
     print('Coarse meshes saved to: {}'.format(output_dir))
     print('  (saved as *_predict.xyz for Stage 2 compatibility)')
-    print('Timing stats: {:.2f}s total, {:.3f}s avg'.format(sum(timings), np.mean(timings)))
+    print('Timing stats ({} samples): {:.2f}s total, {:.3f}s avg'.format(
+        len(all_times), sum(all_times), np.mean(all_times)))
     print('=' * 70)
 
 
