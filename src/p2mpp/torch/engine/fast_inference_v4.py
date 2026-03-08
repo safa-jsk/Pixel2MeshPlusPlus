@@ -271,12 +271,12 @@ def save_mesh_obj(vertices, faces, filepath):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--stage1_checkpoint', default='pytorch_impl/checkpoints/mvp2m_converted.npz')
-    parser.add_argument('--stage2_checkpoint', default='pytorch_impl/checkpoints/meshnet_converted.npz')
-    parser.add_argument('--mesh_data', default='data/iccv_p2mpp.dat')
-    parser.add_argument('--test_file', default='data/designB_eval_full.txt')
-    parser.add_argument('--image_root', default='data/designA_subset/ShapeNetRendering/rendering_only')
-    parser.add_argument('--output_dir', default='outputs/designB/eval_meshes_v4')
+    parser.add_argument('--stage1_checkpoint', default='artifacts/checkpoints/torch/mvp2m_converted.npz')
+    parser.add_argument('--stage2_checkpoint', default='artifacts/checkpoints/torch/meshnet_converted.npz')
+    parser.add_argument('--mesh_data', default='assets/data_templates/iccv_p2mpp.dat')
+    parser.add_argument('--test_file', default='DesignB/designB_eval_list.txt')
+    parser.add_argument('--image_root', default='data/ShapeNetRendering')
+    parser.add_argument('--output_dir', default='artifacts/outputs/designB/eval_meshes')
     
     args = parser.parse_args()
     

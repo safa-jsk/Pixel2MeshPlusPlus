@@ -579,13 +579,13 @@ CATEGORY_NAMES = {
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--stage1_checkpoint', default='pytorch_impl/checkpoints/mvp2m_converted.npz')
-    parser.add_argument('--stage2_checkpoint', default='pytorch_impl/checkpoints/meshnet_converted.npz')
-    parser.add_argument('--mesh_data', default='data/iccv_p2mpp.dat')
-    parser.add_argument('--test_file', default='data/designB_eval_full.txt')
-    parser.add_argument('--image_root', default='data/designA_subset/ShapeNetRendering/rendering_only')
-    parser.add_argument('--gt_root', default='data/designA_subset/p2mppdata/test')
-    parser.add_argument('--output_dir', default='outputs/designB/eval_meshes_v4')
+    parser.add_argument('--stage1_checkpoint', default='artifacts/checkpoints/torch/mvp2m_converted.npz')
+    parser.add_argument('--stage2_checkpoint', default='artifacts/checkpoints/torch/meshnet_converted.npz')
+    parser.add_argument('--mesh_data', default='assets/data_templates/iccv_p2mpp.dat')
+    parser.add_argument('--test_file', default='DesignB/designB_eval_list.txt')
+    parser.add_argument('--image_root', default='data/ShapeNetRendering')
+    parser.add_argument('--gt_root', default='data/p2mppdata/test')
+    parser.add_argument('--output_dir', default='artifacts/outputs/designB/eval_meshes')
     parser.add_argument('--tau', type=float, default=0.0001, help='Threshold for F1-score')
     
     # Acceleration options (matching documentation)
@@ -651,6 +651,35 @@ def main():
     category_metrics = {}
     
     for idx, sample_id in enumerate(test_list):
+        sample_base = sample_id.replace('.dat', '')
+        pred_xyz   = os.path.join(args.output_dir, f'{sample_base}_predict.xyz')
+        ground_xyz = os.path.join(args.output_dir, f'{sample_base}_ground.xyz')
+
+        # ── RESUME: skip samples already on disk ──────────────────────────
+        if os.path.exists(pred_xyz) and os.path.exists(ground_xyz):
+            mesh    = np.loadtxt(pred_xyz)
+            gt_res  = np.loadtxt(ground_xyz)
+            pred_t  = torch.from_numpy(mesh.astype(np.float32)).to(device)
+            gt_t    = torch.from_numpy(gt_res.astype(np.float32)).to(device)
+            cd, d1, d2 = chamfer_distance_auto(pred_t, gt_t, force_cuda=args.force_chamfer_cuda)
+            cd_val = cd.item()
+            f1_tau, prec_tau, rec_tau   = compute_f1_score(d1, d2, tau)
+            f1_2tau, prec_2tau, rec_2tau = compute_f1_score(d1, d2, tau_2)
+            all_results.append({'sample_id': sample_id, 'inference_time_ms': 0.0,
+                'chamfer_distance': cd_val, 'f1_tau': f1_tau, 'f1_2tau': f1_2tau,
+                'precision_tau': prec_tau, 'recall_tau': rec_tau,
+                'precision_2tau': prec_2tau, 'recall_2tau': rec_2tau})
+            cat_id = sample_base.split('_')[0]
+            if cat_id not in category_metrics:
+                category_metrics[cat_id] = {'cd': [], 'f1_tau': [], 'f1_2tau': [], 'time': []}
+            category_metrics[cat_id]['cd'].append(cd_val)
+            category_metrics[cat_id]['f1_tau'].append(f1_tau)
+            category_metrics[cat_id]['f1_2tau'].append(f1_2tau)
+            category_metrics[cat_id]['time'].append(0.0)
+            print(f'{sample_base[:45]:<45} {"RESUMED":>10} {cd_val*1000:>12.4f} {f1_tau:>10.2f} {f1_2tau:>10.2f}', flush=True)
+            continue
+        # ── END RESUME ────────────────────────────────────────────────────
+
         # Load input images
         imgs, poses = load_sample(args.image_root, sample_id)
         imgs_tensor = torch.from_numpy(imgs.transpose(0, 3, 1, 2)).to(device)
@@ -664,7 +693,6 @@ def main():
         times.append(elapsed)
         
         mesh = mesh_gpu.cpu().numpy()
-        sample_base = sample_id.replace('.dat', '')
         
         # Save mesh outputs
         save_mesh_obj(mesh, engine.faces, os.path.join(args.output_dir, f'{sample_base}_predict.obj'))
