@@ -98,11 +98,11 @@ def main(eval_list_file, output_dir, gpu_id=0):
         'sample_adj': [tf.placeholder(tf.float32, shape=(43, 43)) for _ in range(num_supports)],
     }
 
-    # Paths (relative to project root - running from DesignA_GPU/ folder)
-    model1_dir = '../artifacts/checkpoints/tf/coarse_mvp2m/models'
-    model2_dir = '../artifacts/checkpoints/tf/refine_p2mpp/models'
-    data_root = '../data/p2mppdata/test'
-    image_root = '../data/ShapeNetRendering'
+    # Paths — use _PROJECT_ROOT so the script works regardless of cwd
+    model1_dir = os.path.join(_PROJECT_ROOT, 'artifacts', 'checkpoints', 'tf', 'coarse_mvp2m', 'models')
+    model2_dir = os.path.join(_PROJECT_ROOT, 'artifacts', 'checkpoints', 'tf', 'refine_p2mpp', 'models')
+    data_root  = os.path.join(_PROJECT_ROOT, 'data', 'p2mppdata', 'test')
+    image_root = os.path.join(_PROJECT_ROOT, 'data', 'ShapeNetRendering')
     
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -153,7 +153,7 @@ def main(eval_list_file, output_dir, gpu_id=0):
     # ---------------------------------------------------------------
     # Load init ellipsoid
     print('=> Loading mesh template...')
-    pkl = pickle.load(open('../data/iccv_p2mpp.dat', 'rb'))
+    pkl = pickle.load(open(os.path.join(_PROJECT_ROOT, 'assets', 'data_templates', 'iccv_p2mpp.dat'), 'rb'))
     feed_dict = construct_feed_dict(pkl, placeholders)
     initial_coords = pkl['coord']  # Save initial ellipsoid coordinates (156, 3)
     
@@ -201,7 +201,43 @@ def main(eval_list_file, output_dir, gpu_id=0):
     for iters in range(test_number):
         # Fetch data
         img_all_view, labels, poses, data_id, _ = data.fetch()
-        
+
+        pred_path  = os.path.join(output_dir, data_id.replace('.dat', '_predict.xyz'))
+        label_path = os.path.join(output_dir, data_id.replace('.dat', '_ground.xyz'))
+
+        # ── RESUME: skip samples already on disk ──────────────────────────
+        if os.path.exists(pred_path) and os.path.exists(label_path):
+            stage2_out    = np.loadtxt(pred_path)
+            saved_labels  = np.loadtxt(label_path)
+            # Use saved GT for metrics (in case in-memory labels differ)
+            gt_pts  = saved_labels[:, :3]
+            pred_pts = stage2_out
+            d1, _, d2, _ = sess.run(
+                [dist1_op, idx1_op, dist2_op, idx2_op],
+                feed_dict={xyz1_ph: pred_pts, xyz2_ph: gt_pts}
+            )
+            d1 = np.squeeze(d1); d2 = np.squeeze(d2)
+            chamfer_dist    = np.mean(d1) + np.mean(d2)
+            precision_tau   = 100.0 * (np.sum(d1 <= TAU)   / len(d1))
+            recall_tau      = 100.0 * (np.sum(d2 <= TAU)   / len(d2))
+            f1_tau          = (2 * precision_tau * recall_tau) / (precision_tau + recall_tau + 1e-6)
+            precision_2tau  = 100.0 * (np.sum(d1 <= TAU_2) / len(d1))
+            recall_2tau     = 100.0 * (np.sum(d2 <= TAU_2) / len(d2))
+            f1_2tau         = (2 * precision_2tau * recall_2tau) / (precision_2tau + recall_2tau + 1e-6)
+            metrics_results.append({'sample_id': data_id, 'chamfer_distance': chamfer_dist,
+                'f1_tau': f1_tau, 'f1_2tau': f1_2tau,
+                'precision_tau': precision_tau, 'recall_tau': recall_tau})
+            category_id = data_id.split('_')[0]
+            if category_id not in category_metrics:
+                category_metrics[category_id] = {'cd': [], 'f1_tau': [], 'f1_2tau': []}
+            category_metrics[category_id]['cd'].append(chamfer_dist)
+            category_metrics[category_id]['f1_tau'].append(f1_tau)
+            category_metrics[category_id]['f1_2tau'].append(f1_2tau)
+            print('[{:4d}/{:4d}] {} | RESUMED from disk | CD: {:.6f} | F1@tau: {:.1f}%'.format(
+                iters + 1, test_number, data_id[:35], chamfer_dist, f1_tau), flush=True)
+            continue
+        # ── END RESUME ────────────────────────────────────────────────────
+
         # Reset features to initial ellipsoid for Stage 1
         feed_dict.update({placeholders['features']: initial_coords})
         feed_dict.update({placeholders['img_inp']: img_all_view})
@@ -225,21 +261,19 @@ def main(eval_list_file, output_dir, gpu_id=0):
         timing_results.append((data_id, t1_elapsed, t2_elapsed, total_elapsed))
         
         # Save ground truth
-        label_path = os.path.join(output_dir, data_id.replace('.dat', '_ground.xyz'))
         np.savetxt(label_path, labels)
         
         # Save coarse prediction (stage 1)
         coarse_path = os.path.join(output_dir, data_id.replace('.dat', '_coarse.xyz'))
         np.savetxt(coarse_path, stage1_out3)
         
-        # Save refined prediction (stage 2)
-        pred_path = os.path.join(output_dir, data_id.replace('.dat', '_predict.xyz'))
+        # Save refined prediction (stage 2)  [pred_path already defined above for resume check]
         np.savetxt(pred_path, stage2_out)
         
         # Save as OBJ
         obj_path = os.path.join(output_dir, data_id.replace('.dat', '_predict.obj'))
         vert = np.hstack((np.full([stage2_out.shape[0], 1], 'v'), stage2_out))
-        face = np.loadtxt('../data/face3.obj', dtype='|S32')
+        face = np.loadtxt(os.path.join(_PROJECT_ROOT, 'assets', 'data_templates', 'face3.obj'), dtype='|S32')
         mesh_data = np.vstack((vert, face))
         np.savetxt(obj_path, mesh_data, fmt='%s', delimiter=' ')
         
@@ -295,8 +329,8 @@ def main(eval_list_file, output_dir, gpu_id=0):
     # ---------------------------------------------------------------
     data.shutdown()
     
-    # Create benchmark directory
-    benchmark_dir = os.path.join(output_dir, '../benchmark')
+    # Create benchmark directory (sibling of eval_meshes under e.g. artifacts/outputs/designA_GPU/)
+    benchmark_dir = os.path.join(os.path.dirname(output_dir), 'benchmark')
     os.makedirs(benchmark_dir, exist_ok=True)
     
     # Save detailed timing results
@@ -322,16 +356,18 @@ def main(eval_list_file, output_dir, gpu_id=0):
     avg_f1_tau = np.mean([m['f1_tau'] for m in metrics_results])
     avg_f1_2tau = np.mean([m['f1_2tau'] for m in metrics_results])
     
-    # Calculate timing statistics
+    # Calculate timing statistics (only freshly-inferred samples, not resumed ones)
     total_times = [t for _, _, _, t in timing_results]
-    avg_time = np.mean(total_times)
-    std_time = np.std(total_times)
-    min_time = np.min(total_times)
-    max_time = np.max(total_times)
+    fresh_times = [t for t in total_times if t > 0]  # 0.0 entries are from resume
+    times_for_stats = fresh_times if fresh_times else total_times  # fallback if all resumed
+    avg_time = np.mean(times_for_stats)
+    std_time = np.std(times_for_stats)
+    min_time = np.min(times_for_stats)
+    max_time = np.max(times_for_stats)
     throughput = 1.0 / avg_time if avg_time > 0 else 0
     
-    avg_stage1 = np.mean(stage1_times)
-    avg_stage2 = np.mean(stage2_times)
+    avg_stage1 = np.mean(stage1_times) if stage1_times else 0.0
+    avg_stage2 = np.mean(stage2_times) if stage2_times else 0.0
     
     # Save summary statistics
     summary_file = os.path.join(benchmark_dir, 'summary_stats.txt')
@@ -427,11 +463,11 @@ def main(eval_list_file, output_dir, gpu_id=0):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Design A GPU Complete Evaluation')
-    parser.add_argument('--eval_list', type=str, 
-                        default='../data/designA_eval_1000.txt',
+    parser.add_argument('--eval_list', type=str,
+                        default=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'designA_eval_list.txt'),
                         help='Path to evaluation list file')
     parser.add_argument('--output_dir', type=str,
-                        default='../outputs/designA_GPU/eval_1000',
+                        default=os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')), 'artifacts', 'outputs', 'designA_GPU', 'eval_meshes'),
                         help='Output directory for meshes')
     parser.add_argument('--gpu_id', type=int, default=0,
                         help='GPU ID to use')
